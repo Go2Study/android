@@ -3,8 +3,6 @@ package lol.go2study.go2study;
 import android.net.Uri;
 import android.util.Log;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -59,7 +57,6 @@ public class OAuthSettings
     private void setAccessToken(String token)
     {
         accessToken = token;
-
     }
 
     public void SaveAccessToken(Uri uri)
@@ -80,9 +77,9 @@ public class OAuthSettings
             }
             setAccessToken(dictionary.get("access_token"));
             Log.v("Access_Token:::::", getAccess_Token());
-            //Store Access Token
-            //  settings.SaveAccessToken(dictionary.get("access_token"));
-            //    Log.v("Access_token", settings.getAccess_Token());
+
+
+
         }
     }
 
