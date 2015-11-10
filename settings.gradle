@@ -1,3 +1,4 @@
-include ':app', ':FontysAPI-Client'
-project(':FontysAPI-Client').projectDir = new File('libs/FontysAPI-Client')
+include ':app', ':FontysAPI-Client-v2'
+//project(':FontysAPI-Client').projectDir = new File('libs/FontysAPI-Client')
+project(':FontysAPI-Client-v2').projectDir = new File('libs/FontysAPI-Client-v2')
 //project(':volley').projectDir = new File('libs/volley')

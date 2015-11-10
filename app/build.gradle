@@ -42,5 +42,5 @@ dependencies {
     //compile files('libs/google-http-client-android-1.20.0.jar')
     //compile files('src/libs/httpclient-4.0.1.jar')
     //compile files('src/libs/httpcore-4.0.1.jar')
-    compile project(":FontysAPI-Client")
+    compile project(":FontysAPI-Client-v2")
 }

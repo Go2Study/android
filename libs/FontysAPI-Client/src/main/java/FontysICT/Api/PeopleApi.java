@@ -164,6 +164,7 @@ public class PeopleApi {
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
     // header params
+    Log.v("query params",queryParams);
     Map<String, String> headerParams = new HashMap<String, String>();
     headerParams.put("Authorization", "Bearer " + accessToken);
     Log.v("Authz", headerParams.get("Authorization"));
@@ -193,6 +194,7 @@ public class PeopleApi {
 
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      Log.v("invoke response",response);
       if(response != null){
         Log.v("RAW RESPONSE: ", response.toString());
         return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
