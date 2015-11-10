@@ -40,7 +40,7 @@ public class PermissionsApi {
    * 
    * @return List<KeyValuePair>
    */
-  public List<KeyValuePair>  permissionsClaims () throws ApiException {
+  public List<KeyValuePair>  permissionsClaims (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -85,7 +85,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<KeyValuePair>) ApiInvoker.deserialize(response, "array", KeyValuePair.class);
       }
@@ -102,7 +102,7 @@ public class PermissionsApi {
    * 
    * @return List<String>
    */
-  public List<String>  permissionsRoles () throws ApiException {
+  public List<String>  permissionsRoles (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -147,7 +147,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
       }
@@ -164,7 +164,7 @@ public class PermissionsApi {
    * 
    * @return List<String>
    */
-  public List<String>  permissionsScopes () throws ApiException {
+  public List<String>  permissionsScopes (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -209,7 +209,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
       }

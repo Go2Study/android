@@ -62,7 +62,7 @@ public  class LoginActivity extends Activity
 
             try{
                 PeopleApi peopleApi = new PeopleApi();
-                peopleApi.peopleSearch("maas", pref.getString("AccessToken", null));
+                peopleApi.peopleSearch(pref.getString("AccessToken", "020f29750b369d70c4fd8318d8ce3789"),"maas");
             }
             catch (ApiException e){
                 Log.v("ApiException",e.getMessage());

@@ -3,15 +3,21 @@ package FontysICT.Api;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Invoker.Pair;
+
+import FontysICT.Models.*;
+
+import java.util.*;
+
 import FontysICT.Models.Person;
+
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
 
 public class PeopleApi {
@@ -40,7 +46,7 @@ public class PeopleApi {
    * This endpoint also supports oData queries for filtering, ordering and paging
    * @return List<Person>
    */
-  public List<Person>  peopleList () throws ApiException {
+  public List<Person>  peopleList (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -85,7 +91,7 @@ public class PeopleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
       }
@@ -102,7 +108,7 @@ public class PeopleApi {
    * Only works if you requested the personal scope
    * @return Person
    */
-  public Person  peopleMe () throws ApiException {
+  public Person  peopleMe (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -147,7 +153,7 @@ public class PeopleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Person) ApiInvoker.deserialize(response, "", Person.class);
       }
@@ -165,7 +171,7 @@ public class PeopleApi {
    * @param query Part of name/office, start of PersonalTitle/Id/Department
    * @return List<Person>
    */
-  public String  peopleSearch (String query, String accessToken) throws ApiException {
+  public List<Person>  peopleSearch (String accessToken, String query) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'query' is set
@@ -217,8 +223,7 @@ public class PeopleApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
-        //return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
-        return response;
+        return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
       }
       else {
         return null;
@@ -234,7 +239,7 @@ public class PeopleApi {
    * @param id Username of the user
    * @return Person
    */
-  public Person  peopleById (String id) throws ApiException {
+  public Person  peopleById (String accessToken, String id) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -284,7 +289,7 @@ public class PeopleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Person) ApiInvoker.deserialize(response, "", Person.class);
       }

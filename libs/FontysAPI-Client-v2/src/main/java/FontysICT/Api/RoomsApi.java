@@ -48,7 +48,7 @@ public class RoomsApi {
    * @param date Specify the date you want to compute the date for. (2015-07-28) [default = today]
    * @return List<RoomOccupancy>
    */
-  public List<RoomOccupancy>  roomsOccupancy (Date date) throws ApiException {
+  public List<RoomOccupancy>  roomsOccupancy (String accessToken, Date date) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'date' is set
@@ -98,7 +98,7 @@ public class RoomsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<RoomOccupancy>) ApiInvoker.deserialize(response, "array", RoomOccupancy.class);
       }

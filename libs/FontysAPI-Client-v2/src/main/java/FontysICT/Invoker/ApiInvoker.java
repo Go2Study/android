@@ -4,13 +4,12 @@ package FontysICT.Invoker;
 import android.util.Log;
 
 import com.google.gson.JsonParseException;
-import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.Callback;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -248,6 +247,7 @@ public class ApiInvoker {
           try {
             formParamBuilder.append(URLEncoder.encode(key, "utf8")).append("=").append(URLEncoder.encode(value, "utf8"));
           }
+
           catch (Exception e) {
             // move on to next
           }
@@ -260,112 +260,114 @@ public class ApiInvoker {
     OkHttpClient client = new OkHttpClient();
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    try {
-      if ("GET".equals(method)) {
-
+    Log.v("Access token sent", accessToken);
+    if ("GET".equals(method)) {
           Request request = new Request.Builder()
-        .url(url)
-        .header("Authorization", accessToken)
-        .build();
+      .url(url)
+      .header("Authorization", "Bearer " + accessToken)
+      .build();
 
-        client.newCall(request).enqueue(new Callback() {
-          @Override
-          public void onFailure(Request request, IOException e) {
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
 
-          }
+        }
 
-          @Override public void onResponse(Response response) throws IOException {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            Log.v("ResponseBody:",response.body().string());
-          }
-        });
-      }
-      else if ("POST".equals(method)) {
-
-
-        RequestBody reqBody = RequestBody.create(JSON, formParamStr);
-        Request request = new Request.Builder()
-            .url(url)
-            .post(reqBody)//formParamStr alternative body
-            .header("Content-Type", contentType)
-            .build();
-
-            try { 
-              Response response = client.newCall(request).execute();
-              return response.body().string();
-            }
-            catch (IOException e) {
-              return e.getMessage();
-            }
-                  
-            
-      }
-      else if ("PUT".equals(method)) {
-        /*HttpPut put = new HttpPut(url);
-        if (formParamStr != null) {
-          put.setHeader("Content-Type", contentType);
-          put.setEntity(new StringEntity(formParamStr, "UTF-8"));
-        } else if (body != null) {
-          put.setHeader("Content-Type", contentType);
-          put.setEntity(new StringEntity(serialize(body), "UTF-8"));
+        @Override public void onResponse(Response response) throws IOException {
+          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+          Log.v("ResponseBody:",response.body().string());
         }
-        for(String key : headers.keySet()) {
-          put.setHeader(key, headers.get(key));
-        }
-        response = client.execute(put);*/
-      }
-      else if ("DELETE".equals(method)) {
-      /*
-        HttpDelete delete = new HttpDelete(url);
-        for(String key : headers.keySet()) {
-          delete.setHeader(key, headers.get(key));
-        }
-        response = client.execute(delete);*/
-      }
-      else if ("PATCH".equals(method)) {
-        /*HttpPatch patch = new HttpPatch(url);
-        if (formParamStr != null) {
-          patch.setHeader("Content-Type", contentType);
-          patch.setEntity(new StringEntity(formParamStr, "UTF-8"));
-        } else if (body != null) {
-          patch.setHeader("Content-Type", contentType);
-          patch.setEntity(new StringEntity(serialize(body), "UTF-8"));
-        }
-        for(String key : headers.keySet()) {
-          patch.setHeader(key, headers.get(key));
-        }
-        response = client.execute(patch);
-        */
-      }
-
-      /*int code = response.getStatusLine().getStatusCode();
-      String responseString = null;
-      if(code == 204) {
-        responseString = "";
-        return responseString;
-      }
-      else if(code >= 200 && code < 300) {
-        if(response.getEntity() != null) {
-          HttpEntity resEntity = response.getEntity();
-          responseString = EntityUtils.toString(resEntity);
-        }
-        return responseString;
-      }
-      else {
-        if(response.getEntity() != null) {
-          HttpEntity resEntity = response.getEntity();
-          responseString = EntityUtils.toString(resEntity);
-        }
-        else
-          responseString = "no data";
-      }
-      throw new ApiException(code, responseString);
-    }*/
-    
-  }
-    catch (Exception e){
-      return e.getMessage();
+      });
     }
+    else if ("POST".equals(method)) {
+
+
+      RequestBody reqBody = RequestBody.create(JSON, JsonUtil.serialize(formParams));
+        Request request = new Request.Builder()
+      .url(url)
+      .header("Authorization", accessToken)
+      .post(reqBody)
+      .header("Content-Type", contentType)
+      .build();
+
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override public void onResponse(Response response) throws IOException {
+          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+          Log.v("ResponseBody:",response.body().string());
+        }
+      });
+    }
+    else if ("PUT".equals(method)) {
+
+      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
+        Request request = new Request.Builder()
+      .url(url)
+      .header("Authorization", accessToken)
+      .put(reqBody)
+      .header("Content-Type", contentType)
+      .build();
+
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override public void onResponse(Response response) throws IOException {
+          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+          Log.v("Response:",response.body().string());
+        }
+      });
+    }
+    else if ("DELETE".equals(method)) {
+
+      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
+      Request request = new Request.Builder()
+      .url(url)
+      .header("Authorization", accessToken)
+      .delete(reqBody)
+      .header("Content-Type", contentType)
+      .build();
+
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override public void onResponse(Response response) throws IOException {
+          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+          Log.v("Response:",response.body().string());
+        }
+      });
+    }
+    else if ("PATCH".equals(method)) {
+      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
+      Request request = new Request.Builder()
+      .url(url)
+      .header("Authorization", accessToken)
+      .patch(reqBody)
+      .header("Content-Type", contentType)
+      .build();
+
+      client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override public void onResponse(Response response) throws IOException {
+          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+          Log.v("Response:",response.body().string());
+        }
+      });
+    }
+
     return "";
   }
 }

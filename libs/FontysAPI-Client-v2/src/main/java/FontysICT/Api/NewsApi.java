@@ -47,7 +47,7 @@ public class NewsApi {
    * 
    * @return List<NewsFeed>
    */
-  public List<NewsFeed>  newsListFeeds () throws ApiException {
+  public List<NewsFeed>  newsListFeeds (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -92,7 +92,7 @@ public class NewsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<NewsFeed>) ApiInvoker.deserialize(response, "array", NewsFeed.class);
       }
@@ -110,7 +110,7 @@ public class NewsApi {
    * @param imgKey The key of the image
    * @return Object
    */
-  public Object  newsImage (String imgKey) throws ApiException {
+  public Object  newsImage (String accessToken, String imgKey) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'imgKey' is set
@@ -160,7 +160,7 @@ public class NewsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Object) ApiInvoker.deserialize(response, "", Object.class);
       }
@@ -179,7 +179,7 @@ public class NewsApi {
    * @param items Number off items to include in the response (15 = default).
    * @return NewsFeed
    */
-  public NewsFeed  newsFeed (String type, Integer items) throws ApiException {
+  public NewsFeed  newsFeed (String accessToken, String type, Integer items) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'type' is set
@@ -231,7 +231,7 @@ public class NewsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (NewsFeed) ApiInvoker.deserialize(response, "", NewsFeed.class);
       }
@@ -249,7 +249,7 @@ public class NewsApi {
    * @param type The type requested from the list query.
    * @return List<NewsItem>
    */
-  public List<NewsItem>  newsPosts (String type) throws ApiException {
+  public List<NewsItem>  newsPosts (String accessToken, String type) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'type' is set
@@ -299,7 +299,7 @@ public class NewsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<NewsItem>) ApiInvoker.deserialize(response, "array", NewsItem.class);
       }

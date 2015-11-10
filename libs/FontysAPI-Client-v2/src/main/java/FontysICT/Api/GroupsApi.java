@@ -46,7 +46,7 @@ public class GroupsApi {
    * 
    * @return List<Group>
    */
-  public List<Group>  groupsList () throws ApiException {
+  public List<Group>  groupsList (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -91,7 +91,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -110,7 +110,7 @@ public class GroupsApi {
    * @param includeMembers Whether or not the members should be included.
    * @return Group
    */
-  public Group  groupsGetById (String id, Boolean includeMembers) throws ApiException {
+  public Group  groupsGetById (String accessToken, String id, Boolean includeMembers) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -162,7 +162,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Group) ApiInvoker.deserialize(response, "", Group.class);
       }

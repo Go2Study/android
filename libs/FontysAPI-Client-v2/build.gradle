@@ -59,8 +59,6 @@ dependencies {
     compile "com.google.code.gson:gson:$gson_version"
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     testCompile "junit:junit:$junit_version"
-    compile 'com.android.support:support-v4:23.1.0'
-    compile 'com.android.support:appcompat-v7:23.1.0'
 }
 
 afterEvaluate {

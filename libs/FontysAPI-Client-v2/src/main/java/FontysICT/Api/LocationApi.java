@@ -47,7 +47,7 @@ public class LocationApi {
    * Returns partial data from Cisco MSE for the current user https://developer.cisco.com/site/cmx-mobility-services/documents/api-reference-manual/index.gsp#get-location
    * @return WirelessLocation
    */
-  public WirelessLocation  locationCurrent () throws ApiException {
+  public WirelessLocation  locationCurrent (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -92,7 +92,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (WirelessLocation) ApiInvoker.deserialize(response, "", WirelessLocation.class);
       }
@@ -109,7 +109,7 @@ public class LocationApi {
    * Returns partial data from Cisco MSE for the current user https://developer.cisco.com/site/cmx-mobility-services/documents/api-reference-manual/index.gsp#get-location-history
    * @return List<WirelessLocation>
    */
-  public List<WirelessLocation>  locationHistory () throws ApiException {
+  public List<WirelessLocation>  locationHistory (String accessToken) throws ApiException {
     Object postBody = null;
     
 
@@ -154,7 +154,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (List<WirelessLocation>) ApiInvoker.deserialize(response, "array", WirelessLocation.class);
       }
@@ -174,7 +174,7 @@ public class LocationApi {
    * @param floor Name of the floor
    * @return Object
    */
-  public Object  locationMapImage (String campus, String building, String floor) throws ApiException {
+  public Object  locationMapImage (String accessToken, String campus, String building, String floor) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'campus' is set
@@ -234,7 +234,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Object) ApiInvoker.deserialize(response, "", Object.class);
       }
@@ -252,7 +252,7 @@ public class LocationApi {
    * @param source Source as returned from current location
    * @return Object
    */
-  public Object  locationMapImage_1 (String source) throws ApiException {
+  public Object  locationMapImage_1 (String accessToken, String source) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'source' is set
@@ -302,7 +302,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Object) ApiInvoker.deserialize(response, "", Object.class);
       }
@@ -320,7 +320,7 @@ public class LocationApi {
    * @param source Source as returned from current location
    * @return Object
    */
-  public Object  locationMapImage_2 (String source) throws ApiException {
+  public Object  locationMapImage_2 (String accessToken, String source) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'source' is set
@@ -370,7 +370,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Object) ApiInvoker.deserialize(response, "", Object.class);
       }
@@ -390,7 +390,7 @@ public class LocationApi {
    * @param floor Name of the floor
    * @return Floor
    */
-  public Floor  locationMapInfo (String campus, String building, String floor) throws ApiException {
+  public Floor  locationMapInfo (String accessToken, String campus, String building, String floor) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'campus' is set
@@ -450,7 +450,7 @@ public class LocationApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
       if(response != null){
         return (Floor) ApiInvoker.deserialize(response, "", Floor.class);
       }
