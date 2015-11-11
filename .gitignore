@@ -7,4 +7,7 @@
 /build
 /captures
 /libs/FontysAPI-Client-v2/build
-/libs/Go2StudyAPI/build
+/libs/Go2Study-API/build
+*.iml
+app/app.iml
+app/app.iml
