@@ -77,38 +77,28 @@ public class OAuthSettings
         //Default
         return "";
     }
-    public String getAccessTokenFromJSON(String accessJSON) {
-
-        try {
-            JSONObject accessToken = new JSONObject(accessJSON);
-            return accessToken.getString("accessToken");
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
 
     public String getAccessTokenFromSharedPreferences(SharedPreferences pref) {
-        try {
-            JSONObject accessJSON = new JSONObject(pref.getString("AccessToken","{}"));
-            String accessToken = accessJSON.getString("accessToken");
-            return accessToken;
-        }
-        catch (JSONException e){
-            e.printStackTrace();
+        if (!pref.getString("AccessToken","").equals("")) {
+            try {
+                JSONObject accessJSON = new JSONObject(pref.getString("AccessToken", "{}"));
+                String accessToken = accessJSON.getString("accessToken");
+                return accessToken;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }
 
     public JSONObject getAccessTokenJSONFromSharedPreferences(SharedPreferences pref){
-        try {
-            JSONObject accessJSON = new JSONObject(pref.getString("AccessToken","{}"));
-            return accessJSON;
-        }
-        catch (JSONException e){
-            e.printStackTrace();
+        if (!pref.getString("AccessToken","").equals("")) {
+            try {
+                JSONObject accessJSON = new JSONObject(pref.getString("AccessToken", "{}"));
+                return accessJSON;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

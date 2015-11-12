@@ -41,10 +41,10 @@ public class WelcomeActivity extends AppCompatActivity {
         final Button btnLogin = (Button) findViewById(R.id.btnLoginFontys);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
-                startActivity(browserIntent);
+            browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
+            startActivity(browserIntent);
 
-                btnLogin.setText("Redirecting to Fontys...");
+            btnLogin.setText("Redirecting to Fontys...");
             }
         });
 
@@ -97,14 +97,15 @@ public class WelcomeActivity extends AppCompatActivity {
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
 
-        if (isLoggedIn(accessJSON) && isValidToken(accessToken)){
-            Log.v("Logged", "TRUE");
+        if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
+            if (isLoggedIn(accessJSON) && isValidToken(accessToken)) {
+                Log.v("Logged", "TRUE");
 
-            if (isExistingUser(getPCN())){
-                startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
-            }
-            else {
-                startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                if (isExistingUser(getPCN())) {
+                    startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                } else {
+                    startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                }
             }
         }
     }
