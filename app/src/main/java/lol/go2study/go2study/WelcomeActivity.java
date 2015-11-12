@@ -24,6 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     Intent browserIntent;
     private OAuthSettings settings;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
         settings = new OAuthSettings();
 
         //Initialize shared preferences, used for storing the access token and other authorizations
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
 
         //Add button event click to redirect to Fontys oAuth webpage
         final Button btnLogin = (Button) findViewById(R.id.btnLoginFontys);
@@ -47,27 +48,59 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        // If the activity was started with intent data (redirected back from Fontys)
-        Uri uri = getIntent().getData();
-        if (uri != null) {
+        //Check if there is existing access Token saved already. If there is - redirect to User Account Creation / Home
+        JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
+        String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
+
+        if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")){
+            if (isLoggedIn(accessJSON) && isValidToken(accessToken)){
+                for (int i=0;i<=10;i++){
+                    Log.v("Logged", "TRUE");
+                }
+
+                if (isExistingUser(getPCN())){
+                    startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                }
+                else {
+                    startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                }
+            }
+        } else {
+            Log.v("Not logged", "TRUE");
+        }
+
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (this.getIntent()!=null && this.getIntent().getData()!=null) {
+            Uri uri = getIntent().getData();
+
+            final Button btnLogin = (Button) findViewById(R.id.btnLoginFontys);
+            btnLogin.setText("Logging in...");
+
             //Save and extract the access token from the URL
-            settings.SaveAccessToken(uri);
-            Log.v("TOOKEN", settings.getAccess_Token());
+            addAccessTokenToConfig(settings.extractAccessToken(uri));
 
             //Make a test call to make sure that the access token works
-            if (!isValidToken(settings.getAccess_Token())) {
+            if (!isValidToken(settings.getAccessTokenFromSharedPreferences(pref))) {
                 browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
                 startActivity(browserIntent);
 
                 btnLogin.setText("Redirecting to Fontys...");
             }
-
-            addAccessTokenToConfig(settings.getAccess_Token(), pref);
         }
 
         //Check if there is existing access Token saved already. If there is - redirect to User Account Creation / Home
-        if (isLoggedIn(pref)){
-            if (isExistingUser(settings.getAccess_Token())){
+        JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
+        String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
+
+        if (isLoggedIn(accessJSON) && isValidToken(accessToken)){
+            Log.v("Logged", "TRUE");
+
+            if (isExistingUser(getPCN())){
                 startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
             }
             else {
@@ -76,6 +109,8 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
+
+
     // HELPER METHODS
 
     // Checks validity of a token
@@ -83,7 +118,6 @@ public class WelcomeActivity extends AppCompatActivity {
         try{
             PeopleApi peopleApi = new PeopleApi();
             Person p = peopleApi.peopleMe(accessToken);
-            Log.v("Me", p.toString());
             if (p == null)
                 return false;
         }
@@ -92,14 +126,14 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         return true;
     }
-    private void addAccessTokenToConfig(String accessToken, SharedPreferences pref){
-        //Time now + 1 hour converted to UNIX timestamp
-        String expiryTimestamp = String.valueOf((System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)) / 1000l);
+    private void addAccessTokenToConfig(String accessToken){
+        //Expiry timestamp is 2 hours from time now
+        String expiryTimestamp = String.valueOf((System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2)) / 1000l);
 
         //Create JSON containing the access token and its expiry timestamp
         JSONObject access = new JSONObject();
         try {
-            access.put("accessToken", settings.getAccess_Token());
+            access.put("accessToken", accessToken);
             access.put("expiration", expiryTimestamp);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -108,16 +142,15 @@ public class WelcomeActivity extends AppCompatActivity {
         //Save the access token in the shared preferences
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("AccessToken", String.valueOf(access));// Store Access Token
-        editor.commit();
+        editor.apply();
     }
 
-    private boolean isLoggedIn(SharedPreferences pref){
-        String storedToken = pref.getString("accessToken", "0");
-        if (storedToken != null){
+    private boolean isLoggedIn(JSONObject accessJSON){
+
+        if (accessJSON.length() != 0){
             try{
-                JSONObject accessJson = new JSONObject(storedToken);
                 long timestampNow = System.currentTimeMillis()/1000l;
-                long timestampExpiry = Long.valueOf(accessJson.get("expiration").toString());
+                long timestampExpiry = Long.valueOf(accessJSON.get("expiration").toString());
 
                 //If the session is expired
                 if (timestampNow >= timestampExpiry){
@@ -133,22 +166,14 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         return false;
     }
-    private boolean isExistingUser(String accessToken){
+    private boolean isValidAccessToken(String accessToken){
         PeopleApi peopleApi = new PeopleApi();
-        UsersApi usersApi = new UsersApi();
-        String personPcn = "";
-        try{
-            //Try to find the data of the user, who holds this token
-            Person p = peopleApi.peopleMe(accessToken);
-            if (p != null){
-                personPcn = p.getId();
-            }
-            else
-                return false;
 
-            // Try to find the user by pcn from the existing users
-            User u = usersApi.usersPcnGet(personPcn);
-            if (u != null){
+        try {
+            // Find the data of the user, who holds this token
+            Person p = peopleApi.peopleMe(accessToken);
+
+            if (p != null){
                 return true;
             }
             else
@@ -157,11 +182,38 @@ public class WelcomeActivity extends AppCompatActivity {
         catch (ApiException e){
             e.printStackTrace();
         }
-        catch (Go2Study.Invoker.ApiException g2se){
-            g2se.printStackTrace();
+        return false;
+    }
+    private boolean isExistingUser(String pcn){
+        UsersApi usersApi = new UsersApi();
+        String personPcn;
+
+        try {
+            // Find the user by pcn from the existing users
+            User u = usersApi.usersPcnGet(pcn);
+            if (u != null){
+                return true;
+            }
+            else
+                return false;
+        }
+        catch (Go2Study.Invoker.ApiException e){
+            e.printStackTrace();
         }
 
         return false;
+    }
+
+    private String getPCN(){
+        PeopleApi peopleApi = new PeopleApi();
+        try {
+            Person p = peopleApi.peopleMe(settings.getAccessTokenFromSharedPreferences(pref));
+            return p.getId();
+        }
+        catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 
