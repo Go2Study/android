@@ -16,7 +16,8 @@ import FontysICT.Invoker.ApiException;
 import FontysICT.Models.ScheduleQueryItem;
 
 public class CreateUserActivity extends AppCompatActivity {
-
+    SharedPreferences pref;
+    OAuthSettings settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,30 +26,36 @@ public class CreateUserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Get the access token from the shared settings
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-        String accessToken = pref.getString("AccessToken", "unauthorized");
+        pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
 
-        //Initialize empty list for the names of classes, which are obtained through the Fontys API
-        List<String> classNames = new ArrayList<>();
+        //Extract the accessToken from the JSON shared pref
+        String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
 
-        try{
-            ScheduleApi schedule = new ScheduleApi();
-            List<ScheduleQueryItem> classes = schedule.scheduleAutoComplete(accessToken,"class","");
+        //If there is an access token obtained, proceed with populating the class
+        if (!accessToken.equals("")) {
+            //Initialize empty list for the names of classes, which are obtained through the Fontys API
+            List<String> classNames = new ArrayList<>();
 
-            // Save the names of classes, provided by Fontys
-            for (ScheduleQueryItem c : classes) {
-                classNames.add(c.getName());
+            try {
+                ScheduleApi schedule = new ScheduleApi();
+                List<ScheduleQueryItem> classes = schedule.scheduleAutoComplete(accessToken, "class", "");
+
+                if (classes != null) {
+                    // Save the names of classes, provided by Fontys
+                    for (ScheduleQueryItem c : classes) {
+                        classNames.add(c.getName());
+                    }
+                }
+            } catch (ApiException e) {
+                Log.v("Error", e.getMessage());
             }
-        }
-        catch (ApiException e){
-            Log.v("Error",e.getMessage());
-        }
 
-        //Populate the spinner
-        Spinner s = (Spinner) findViewById(R.id.classesSelector);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, classNames);
-        s.setAdapter(adapter);
+            //Populate the spinner
+            Spinner s = (Spinner) findViewById(R.id.classesSelector);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, classNames);
+            s.setAdapter(adapter);
+        }
     }
 
 }
