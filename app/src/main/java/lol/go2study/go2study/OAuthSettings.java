@@ -1,7 +1,10 @@
 package lol.go2study.go2study;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -22,17 +25,12 @@ public class OAuthSettings
     public OAuthSettings()
     {
         clientID = "i271628-go2study-implicit";
-        requestedScopes = "fhict";
+        requestedScopes = "fhict+fhict_personal+fhict_location";
         callbackURL = "go2study://oauth/authorize";
         oauthURL = "https://tas.fhict.nl/identity/connect/authorize?client_id="+clientID+ "&scope="+ requestedScopes + "&response_type=token&redirect_uri="+ callbackURL;
         baseUrl = "https://tas.fhict.nl:443/api/v1/";
-        peopleEndPoint = "people";
     }
 
-    public String getPeopleEndPoint()
-    {
-        return peopleEndPoint;
-    }
 
     public Uri getRequestUri()
     {
@@ -59,12 +57,10 @@ public class OAuthSettings
         accessToken = token;
     }
 
-    public void SaveAccessToken(Uri uri)
+    public String extractAccessToken(Uri uri)
     {
-       // accessToken = token;
         if (uri != null)
         {
-
             String[] temp = String.valueOf(uri).split("#");
             String[] urlComponents = temp[1].split("&");
             Dictionary<String, String> dictionary = new Hashtable<>();
@@ -75,13 +71,45 @@ public class OAuthSettings
                 String value = pairComponents[1];
                 dictionary.put(key,value);
             }
-            setAccessToken(dictionary.get("access_token"));
-            Log.v("Access_Token:::::", getAccess_Token());
-
-
-
+            return dictionary.get("access_token");
         }
+
+        //Default
+        return "";
+    }
+    public String getAccessTokenFromJSON(String accessJSON) {
+
+        try {
+            JSONObject accessToken = new JSONObject(accessJSON);
+            return accessToken.getString("accessToken");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
+    public String getAccessTokenFromSharedPreferences(SharedPreferences pref) {
+        try {
+            JSONObject accessJSON = new JSONObject(pref.getString("AccessToken","{}"));
+            String accessToken = accessJSON.getString("accessToken");
+            return accessToken;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return "";
+    }
 
+    public JSONObject getAccessTokenJSONFromSharedPreferences(SharedPreferences pref){
+        try {
+            JSONObject accessJSON = new JSONObject(pref.getString("AccessToken","{}"));
+            return accessJSON;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
