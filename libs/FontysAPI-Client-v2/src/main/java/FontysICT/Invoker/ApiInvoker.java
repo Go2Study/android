@@ -260,7 +260,6 @@ public class ApiInvoker {
     OkHttpClient client = new OkHttpClient();
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    Log.v("Access token sent", accessToken);
     if ("GET".equals(method)) {
           Request request = new Request.Builder()
       .url(url)
