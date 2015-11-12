@@ -37,9 +37,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    //compile files('libs/google-http-client-android-1.20.0.jar')
-    //compile files('src/libs/httpclient-4.0.1.jar')
-    //compile files('src/libs/httpcore-4.0.1.jar')
     compile project(":FontysAPI-Client-v2")
     compile project(":Go2Study-API")
     compile 'com.android.support:appcompat-v7:23.1.0'
