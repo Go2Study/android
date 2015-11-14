@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\cinjo\Documents\GitHub\android\libs\FontysAPI-Client\src\main\res"/><source path="C:\Users\cinjo\Documents\GitHub\android\libs\FontysAPI-Client\build\generated\res\rs\release"/><source path="C:\Users\cinjo\Documents\GitHub\android\libs\FontysAPI-Client\build\generated\res\resValues\release"/></dataSet><dataSet config="release"><source path="C:\Users\cinjo\Documents\GitHub\android\libs\FontysAPI-Client\src\release\res"/></dataSet><mergedItems/></merger>
