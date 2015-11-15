@@ -12,18 +12,24 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
+import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.ScheduleQueryItem;
 
 public class CreateUserActivity extends AppCompatActivity implements Callback{
     SharedPreferences pref;
     OAuthSettings settings;
     private String userCreated;
+    ScheduleApi schedule;
+    List<String> classNames;
 
     // CALLBACK METHODS
     @Override
@@ -35,7 +41,36 @@ public class CreateUserActivity extends AppCompatActivity implements Callback{
     @Override
     public void onResponse(Response response) throws IOException {
         if (response.isSuccessful()) {
-            userCreated = response.body().string();
+            try {
+                JSONArray responseRaw = new JSONArray(response.body().string());
+                if (responseRaw.get(0).toString().contains("kind")) {
+                    List<ScheduleQueryItem> classes = (List<ScheduleQueryItem>) ApiInvoker.deserialize(responseRaw.toString(), "list", ScheduleQueryItem.class);
+
+                    for (ScheduleQueryItem c : classes) {
+                        classNames.add(c.getName());
+                    }
+
+                    runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Populate the class selector spinner
+                        Spinner s = (Spinner) findViewById(R.id.classesSelector);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateUserActivity.this,
+                                android.R.layout.simple_spinner_item, classNames);
+                        s.setAdapter(adapter);
+                        }
+                    });
+
+                } else {
+                    userCreated = responseRaw.toString();
+                }
+            }
+            catch (JSONException j) {
+                j.printStackTrace();
+            }
+            catch (ApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -45,6 +80,9 @@ public class CreateUserActivity extends AppCompatActivity implements Callback{
         setContentView(R.layout.activity_create_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        settings = new OAuthSettings();
+        schedule = new ScheduleApi();
+        classNames = new ArrayList();
 
         //Get the access token from the shared settings
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
@@ -54,28 +92,11 @@ public class CreateUserActivity extends AppCompatActivity implements Callback{
 
         //If there is an access token obtained, proceed with populating the class
         if (!accessToken.equals("")) {
-            //Initialize empty list for the names of classes, which are obtained through the Fontys API
-            List<String> classNames = new ArrayList<>();
-
             try {
-                ScheduleApi schedule = new ScheduleApi();
-                List<ScheduleQueryItem> classes = schedule.scheduleAutoComplete(accessToken, this, "class", "");
-
-                if (classes != null) {
-                    // Save the names of classes, provided by Fontys
-                    for (ScheduleQueryItem c : classes) {
-                        classNames.add(c.getName());
-                    }
-                }
+                schedule.scheduleAutoComplete(accessToken, this, "class", "");
             } catch (ApiException e) {
                 Log.v("Error", e.getMessage());
             }
-
-            //Populate the spinner
-            Spinner s = (Spinner) findViewById(R.id.classesSelector);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, classNames);
-            s.setAdapter(adapter);
         }
     }
 
