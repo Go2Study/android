@@ -92,14 +92,18 @@ public class OAuthSettings
     }
 
     public JSONObject getAccessTokenJSONFromSharedPreferences(SharedPreferences pref){
-        if (!pref.getString("AccessToken","").equals("")) {
-            try {
+        try {
+            if (!pref.getString("AccessToken", "").equals("")) {
                 JSONObject accessJSON = new JSONObject(pref.getString("AccessToken", "{}"));
                 return accessJSON;
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } else {
+                return new JSONObject("{}");
             }
         }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }

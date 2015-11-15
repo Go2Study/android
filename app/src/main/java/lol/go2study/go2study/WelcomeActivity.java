@@ -21,16 +21,19 @@ import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
-import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
-import Go2Study.Models.User;
 
 public class WelcomeActivity extends AppCompatActivity implements Callback {
 
     Intent browserIntent;
     private OAuthSettings settings;
     SharedPreferences pref;
-    private String loggedIn;
+
+    private PeopleApi peopleApi; // Fontys
+    private JSONObject person;
+
+    private UsersApi usersApi; // Go2Study db
+    private JSONObject user;
 
 
     // CALLBACK METHODS
@@ -42,14 +45,31 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
     @Override
     public void onResponse(Response response) throws IOException {
         if (response.isSuccessful()) {
-            loggedIn = response.body().string();
-        }
+                 // If it's response from Fontys
+                String responseRaw = response.body().string();
+                try {
+                    JSONObject responseJSON = new JSONObject(responseRaw);
+                    if (responseJSON.getString("initials") != null) {
+                        person = responseJSON;
+                    } else {
+                        user = responseJSON;
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //API clients
+        peopleApi = new PeopleApi();
+        usersApi = new UsersApi();
+
         setContentView(R.layout.activity_welcome);
 
         //Initialize helper class, which is used for the Fontys oAuth
@@ -73,14 +93,13 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
 
-        if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")){
-            if (isLoggedIn(accessJSON) ) {
-                Log.v("Access token", accessToken);
+        if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
+            if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
                         Log.v("VALIDDDD::::", "TRUE");
 
-                        if (isExistingUser(getPCN())) {
+                        if (isExistingUser(person.getString("id"))) {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -89,9 +108,10 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                catch (JSONException j) {
+                    j.printStackTrace();
+                }
             }
-        } else {
-            Log.v("Not logged", "TRUE");
         }
 
     }
@@ -121,7 +141,8 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                     if (isValidAccessToken(accessToken)) {
                         Log.v("VALIDDDD::::", "TRUE");
 
-                        if (isExistingUser(getPCN())) {
+                        if (isExistingUser(person.getString("id"))) {
+
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -129,6 +150,8 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (JSONException j) {
+                    j.printStackTrace();
                 }
             }
         }
@@ -136,6 +159,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
 
     // HELPER METHODS
+
     private void addAccessTokenToConfig(String accessToken){
         //Expiry timestamp is 2 hours from time now
         String expiryTimestamp = String.valueOf((System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2)) / 1000l);
@@ -155,7 +179,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
         editor.apply();
     }
 
-    private boolean isLoggedIn(JSONObject accessJSON){
+    private boolean isLoggedIn(JSONObject accessJSON) {
 
         if (accessJSON.length() != 0){
             try{
@@ -176,6 +200,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
         }
         return false;
     }
+
     private boolean isValidAccessToken(String accessToken) throws InterruptedException {
         PeopleApi peopleApi = new PeopleApi();
 
@@ -189,49 +214,33 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
         long timestampNow = System.currentTimeMillis();
 
-        while (loggedIn == null){
-            Thread.sleep(100);
-            if (System.currentTimeMillis() >= timestampNow + 3000l){
-                loggedIn = "false";
-                break;
-            }
-        }
-        if (!loggedIn.equals("false")){
-            return true;
-        }
-
-        return false;
-    }
-    private boolean isExistingUser(String pcn){
-        UsersApi usersApi = new UsersApi();
-        String personPcn;
-
-        try {
-            // Find the user by pcn from the existing users
-            User u = usersApi.usersPcnGet(pcn);
-            if (u != null){
-                return true;
-            }
-            else
+        while (person == null){
+            if (System.currentTimeMillis() - timestampNow >= 3000l){
                 return false;
+            }
+        }
+
+        return true;
+    }
+    private boolean isExistingUser(String pcn) throws InterruptedException {
+
+        // Async HTTP GET user
+        try {
+            usersApi.usersPcnGet(this, pcn);
         }
         catch (Go2Study.Invoker.ApiException e){
             e.printStackTrace();
         }
 
-        return false;
-    }
+        long timestampNow = System.currentTimeMillis();
 
-    private String getPCN(){
-        PeopleApi peopleApi = new PeopleApi();
-        try {
-            Person p = peopleApi.peopleMe(settings.getAccessTokenFromSharedPreferences(pref), this);
-            return p.getId();
+        while (user == null){
+            if (System.currentTimeMillis() - timestampNow >= 3000l){
+                return false;
+            }
         }
-        catch (ApiException e) {
-            e.printStackTrace();
-        }
-        return "";
+        Log.v("STATUS::::::::::::", "EXISTS");
+        return true;
     }
 
 
