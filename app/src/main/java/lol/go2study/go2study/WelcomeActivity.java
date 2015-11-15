@@ -9,9 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
@@ -20,11 +25,27 @@ import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity implements Callback {
 
     Intent browserIntent;
     private OAuthSettings settings;
     SharedPreferences pref;
+    private String loggedIn;
+
+
+    // CALLBACK METHODS
+    @Override
+    public void onFailure(Request request, IOException e) {
+        //do something to indicate error
+    }
+
+    @Override
+    public void onResponse(Response response) throws IOException {
+        if (response.isSuccessful()) {
+            loggedIn = response.body().string();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +62,10 @@ public class WelcomeActivity extends AppCompatActivity {
         final Button btnLogin = (Button) findViewById(R.id.btnLoginFontys);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
-            startActivity(browserIntent);
+                browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
+                startActivity(browserIntent);
 
-            btnLogin.setText("Redirecting to Fontys...");
+                btnLogin.setText("Redirecting to Fontys...");
             }
         });
 
@@ -53,16 +74,20 @@ public class WelcomeActivity extends AppCompatActivity {
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
 
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")){
-            if (isLoggedIn(accessJSON) && isValidToken(accessToken)){
-                for (int i=0;i<=10;i++){
-                    Log.v("Logged", "TRUE");
-                }
+            if (isLoggedIn(accessJSON) ) {
+                Log.v("Access token", accessToken);
+                try {
+                    if (isValidAccessToken(accessToken)) {
+                        Log.v("VALIDDDD::::", "TRUE");
 
-                if (isExistingUser(getPCN())){
-                    startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
-                }
-                else {
-                    startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                        if (isExistingUser(getPCN())) {
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                        } else {
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         } else {
@@ -84,13 +109,6 @@ public class WelcomeActivity extends AppCompatActivity {
             //Save and extract the access token from the URL
             addAccessTokenToConfig(settings.extractAccessToken(uri));
 
-            //Make a test call to make sure that the access token works
-            if (!isValidToken(settings.getAccessTokenFromSharedPreferences(pref))) {
-                browserIntent = new Intent(Intent.ACTION_VIEW, settings.getRequestUri());
-                startActivity(browserIntent);
-
-                btnLogin.setText("Redirecting to Fontys...");
-            }
         }
 
         //Check if there is existing access Token saved already. If there is - redirect to User Account Creation / Home
@@ -98,35 +116,26 @@ public class WelcomeActivity extends AppCompatActivity {
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
 
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
-            if (isLoggedIn(accessJSON) && isValidToken(accessToken)) {
-                Log.v("Logged", "TRUE");
+            if (isLoggedIn(accessJSON)) {
+                try {
+                    if (isValidAccessToken(accessToken)) {
+                        Log.v("VALIDDDD::::", "TRUE");
 
-                if (isExistingUser(getPCN())) {
-                    startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
-                } else {
-                    startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                        if (isExistingUser(getPCN())) {
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                        } else {
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
 
-
     // HELPER METHODS
-
-    // Checks validity of a token
-    private boolean isValidToken(String accessToken){
-        try{
-            PeopleApi peopleApi = new PeopleApi();
-            Person p = peopleApi.peopleMe(accessToken);
-            if (p == null)
-                return false;
-        }
-        catch (ApiException e){
-            e.printStackTrace();
-        }
-        return true;
-    }
     private void addAccessTokenToConfig(String accessToken){
         //Expiry timestamp is 2 hours from time now
         String expiryTimestamp = String.valueOf((System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2)) / 1000l);
@@ -157,7 +166,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (timestampNow >= timestampExpiry){
                     return false;
                 }
-
+                Log.v("STATUS::::::::::::","LOGGED IN");
                 //The user is logged in and the session has not expired
                 return true;
             } catch (JSONException e){
@@ -167,22 +176,30 @@ public class WelcomeActivity extends AppCompatActivity {
         }
         return false;
     }
-    private boolean isValidAccessToken(String accessToken){
+    private boolean isValidAccessToken(String accessToken) throws InterruptedException {
         PeopleApi peopleApi = new PeopleApi();
 
         try {
             // Find the data of the user, who holds this token
-            Person p = peopleApi.peopleMe(accessToken);
-
-            if (p != null){
-                return true;
-            }
-            else
-                return false;
+            peopleApi.peopleMe(accessToken, this);
         }
         catch (ApiException e){
             e.printStackTrace();
         }
+
+        long timestampNow = System.currentTimeMillis();
+
+        while (loggedIn == null){
+            Thread.sleep(100);
+            if (System.currentTimeMillis() >= timestampNow + 3000l){
+                loggedIn = "false";
+                break;
+            }
+        }
+        if (!loggedIn.equals("false")){
+            return true;
+        }
+
         return false;
     }
     private boolean isExistingUser(String pcn){
@@ -208,7 +225,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private String getPCN(){
         PeopleApi peopleApi = new PeopleApi();
         try {
-            Person p = peopleApi.peopleMe(settings.getAccessTokenFromSharedPreferences(pref));
+            Person p = peopleApi.peopleMe(settings.getAccessTokenFromSharedPreferences(pref), this);
             return p.getId();
         }
         catch (ApiException e) {

@@ -8,6 +8,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +20,25 @@ import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Models.ScheduleQueryItem;
 
-public class CreateUserActivity extends AppCompatActivity {
+public class CreateUserActivity extends AppCompatActivity implements Callback{
     SharedPreferences pref;
     OAuthSettings settings;
+    private String userCreated;
+
+    // CALLBACK METHODS
+    @Override
+    public void onFailure(Request request, IOException e) {
+        //do something to indicate error
+        userCreated = request.body().toString();
+    }
+
+    @Override
+    public void onResponse(Response response) throws IOException {
+        if (response.isSuccessful()) {
+            userCreated = response.body().string();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +59,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
             try {
                 ScheduleApi schedule = new ScheduleApi();
-                List<ScheduleQueryItem> classes = schedule.scheduleAutoComplete(accessToken, "class", "");
+                List<ScheduleQueryItem> classes = schedule.scheduleAutoComplete(accessToken, this, "class", "");
 
                 if (classes != null) {
                     // Save the names of classes, provided by Fontys
