@@ -1,26 +1,39 @@
 package FontysICT.Invoker;
 
 
-import android.util.Log;
-
-import com.google.gson.JsonParseException;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.squareup.okhttp.Callback;
 
-import java.io.IOException;
+import android.util.Log;
+
+
+import java.io.File;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Collection;
-import java.util.Date;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.TimeZone;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.google.gson.JsonParseException;
 
 public class ApiInvoker {
   private static ApiInvoker INSTANCE = new ApiInvoker();
@@ -199,7 +212,7 @@ public class ApiInvoker {
     }
   }
 
-  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, String accessToken) throws ApiException {
+  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, String accessToken, Callback callback) throws ApiException {
 
     StringBuilder b = new StringBuilder();
     b.append("?");
@@ -247,7 +260,6 @@ public class ApiInvoker {
           try {
             formParamBuilder.append(URLEncoder.encode(key, "utf8")).append("=").append(URLEncoder.encode(value, "utf8"));
           }
-
           catch (Exception e) {
             // move on to next
           }
@@ -260,28 +272,19 @@ public class ApiInvoker {
     OkHttpClient client = new OkHttpClient();
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    
     if ("GET".equals(method)) {
           Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", "Bearer " + accessToken)
+      .header("Authorization", "Bearer "+accessToken)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("ResponseBody:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("POST".equals(method)) {
 
 
-      RequestBody reqBody = RequestBody.create(JSON, JsonUtil.serialize(formParams));
+      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
         Request request = new Request.Builder()
       .url(url)
       .header("Authorization", accessToken)
@@ -289,17 +292,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("ResponseBody:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("PUT".equals(method)) {
 
@@ -311,17 +304,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("DELETE".equals(method)) {
 
@@ -333,17 +316,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("PATCH".equals(method)) {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
@@ -354,17 +327,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
 
     return "";

@@ -1,5 +1,6 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -46,7 +47,7 @@ public class GroupsApi {
    * 
    * @return List<Group>
    */
-  public List<Group>  groupsList (String accessToken) throws ApiException {
+  public List<Group>  groupsList (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -91,7 +92,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -110,7 +111,7 @@ public class GroupsApi {
    * @param includeMembers Whether or not the members should be included.
    * @return Group
    */
-  public Group  groupsGetById (String accessToken, String id, Boolean includeMembers) throws ApiException {
+  public Group  groupsGetById (String accessToken, Callback callback, String id, Boolean includeMembers) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -162,7 +163,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Group) ApiInvoker.deserialize(response, "", Group.class);
       }

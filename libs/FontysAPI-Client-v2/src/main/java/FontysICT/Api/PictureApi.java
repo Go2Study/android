@@ -1,5 +1,6 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -47,7 +48,7 @@ public class PictureApi {
    * @param size Size of the image [small/medium/large (default)]
    * @return Object
    */
-  public Object  pictureImage (String accessToken, String username, String size) throws ApiException {
+  public Object  pictureImage (String accessToken, Callback callback, String username, String size) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'username' is set
@@ -102,7 +103,7 @@ public class PictureApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Object) ApiInvoker.deserialize(response, "", Object.class);
       }

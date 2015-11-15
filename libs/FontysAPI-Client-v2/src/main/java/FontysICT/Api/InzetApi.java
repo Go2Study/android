@@ -1,5 +1,6 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -47,7 +48,7 @@ public class InzetApi {
    * @param username 
    * @return List<InzetItem>
    */
-  public List<InzetItem>  inzetDocent (String accessToken, String username) throws ApiException {
+  public List<InzetItem>  inzetDocent (String accessToken, Callback callback, String username) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'username' is set
@@ -97,7 +98,7 @@ public class InzetApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<InzetItem>) ApiInvoker.deserialize(response, "array", InzetItem.class);
       }

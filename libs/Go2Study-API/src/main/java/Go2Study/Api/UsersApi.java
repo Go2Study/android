@@ -3,25 +3,19 @@ package Go2Study.Api;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
-
-import Go2Study.Models.*;
-
-import java.util.*;
-
 import Go2Study.Models.User;
 
 
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
-
-
 public class UsersApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://go2study.lol/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {

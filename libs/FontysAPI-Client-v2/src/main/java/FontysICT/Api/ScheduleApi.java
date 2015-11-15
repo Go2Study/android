@@ -1,26 +1,21 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Invoker.Pair;
-
-import FontysICT.Models.*;
-
-import java.util.*;
-
-import FontysICT.Models.ScheduleQueryItem;
 import FontysICT.Models.Period;
 import FontysICT.Models.Schedule;
-import java.util.Date;
-
-
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
+import FontysICT.Models.ScheduleQueryItem;
 
 
 public class ScheduleApi {
@@ -51,7 +46,7 @@ public class ScheduleApi {
    * @param filter Filter the possible values [name.ToLower().Contains(filter)]
    * @return List<ScheduleQueryItem>
    */
-  public List<ScheduleQueryItem>  scheduleAutoComplete (String accessToken, String kind, String filter) throws ApiException {
+  public List<ScheduleQueryItem>  scheduleAutoComplete (String accessToken, Callback callback, String kind, String filter) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -103,7 +98,7 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<ScheduleQueryItem>) ApiInvoker.deserialize(response, "array", ScheduleQueryItem.class);
       }
@@ -120,7 +115,7 @@ public class ScheduleApi {
    * 
    * @return List<Period>
    */
-  public List<Period>  scheduleHolidays (String accessToken) throws ApiException {
+  public List<Period>  scheduleHolidays (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -165,7 +160,7 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<Period>) ApiInvoker.deserialize(response, "array", Period.class);
       }
@@ -186,7 +181,7 @@ public class ScheduleApi {
    * @param startLastMonday Request the schedule starting last monday. This overrides the start parameter (default = false)
    * @return Schedule
    */
-  public Schedule  scheduleMe (String accessToken, Boolean expandTeacher, Integer days, Date start, Boolean startLastMonday) throws ApiException {
+  public Schedule  scheduleMe (String accessToken, Callback callback, Boolean expandTeacher, Integer days, Date start, Boolean startLastMonday) throws ApiException {
     Object postBody = null;
     
 
@@ -239,7 +234,7 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Schedule) ApiInvoker.deserialize(response, "", Schedule.class);
       }
@@ -256,7 +251,7 @@ public class ScheduleApi {
    * 
    * @return List<Period>
    */
-  public List<Period>  scheduleWeeks (String accessToken) throws ApiException {
+  public List<Period>  scheduleWeeks (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -301,7 +296,7 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<Period>) ApiInvoker.deserialize(response, "array", Period.class);
       }
@@ -324,7 +319,7 @@ public class ScheduleApi {
    * @param startLastMonday Request the schedule starting last monday (default = false)
    * @return Schedule
    */
-  public Schedule  scheduleForQuery (String accessToken, String kind, String query, Integer days, Boolean expandTeacher, Date start, Boolean startLastMonday) throws ApiException {
+  public Schedule  scheduleForQuery (String accessToken, Callback callback, String kind, String query, Integer days, Boolean expandTeacher, Date start, Boolean startLastMonday) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -387,7 +382,7 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Schedule) ApiInvoker.deserialize(response, "", Schedule.class);
       }

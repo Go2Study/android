@@ -1,5 +1,6 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -40,7 +41,7 @@ public class PermissionsApi {
    * 
    * @return List<KeyValuePair>
    */
-  public List<KeyValuePair>  permissionsClaims (String accessToken) throws ApiException {
+  public List<KeyValuePair>  permissionsClaims (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -85,7 +86,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<KeyValuePair>) ApiInvoker.deserialize(response, "array", KeyValuePair.class);
       }
@@ -102,7 +103,7 @@ public class PermissionsApi {
    * 
    * @return List<String>
    */
-  public List<String>  permissionsRoles (String accessToken) throws ApiException {
+  public List<String>  permissionsRoles (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -147,7 +148,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
       }
@@ -164,7 +165,7 @@ public class PermissionsApi {
    * 
    * @return List<String>
    */
-  public List<String>  permissionsScopes (String accessToken) throws ApiException {
+  public List<String>  permissionsScopes (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -209,7 +210,7 @@ public class PermissionsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
       }
