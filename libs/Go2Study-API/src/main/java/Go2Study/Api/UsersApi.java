@@ -1,5 +1,6 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -15,7 +16,7 @@ import Go2Study.Models.User;
 
 
 public class UsersApi {
-  String basePath = "http://go2study.lol/api";
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -41,7 +42,7 @@ public class UsersApi {
    * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
    * @return List<User>
    */
-  public List<User>  usersGet (String query) throws ApiException {
+   public List<User>  usersGet (Callback callback, String query) throws ApiException { {
     Object postBody = null;
     
 
@@ -88,7 +89,7 @@ public class UsersApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<User>) ApiInvoker.deserialize(response, "array", User.class);
       }
@@ -99,6 +100,7 @@ public class UsersApi {
       throw ex;
     }
   }
+}
   
   /**
    * Create User
@@ -111,7 +113,7 @@ public class UsersApi {
    * @param ipaddress The current IP address, which the client can be identified with. Default value = \&quot;deactivate\&quot; - removes the currently set IP address, this way marking him as not online and delegating all communications through push notifications.
    * @return void
    */
-  public void  usersPost (String firstName, String lastName, String accountpcn, String email, String photo, String ipaddress) throws ApiException {
+   public void  usersPost (Callback callback, String firstName, String lastName, String accountpcn, String email, String photo, String ipaddress) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'firstName' is set
@@ -203,7 +205,7 @@ public class UsersApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -214,6 +216,7 @@ public class UsersApi {
       throw ex;
     }
   }
+}
   
   /**
    * Get user by pcn
@@ -221,7 +224,7 @@ public class UsersApi {
    * @param pcn User ID
    * @return User
    */
-  public User  usersPcnGet (String pcn) throws ApiException {
+   public User  usersPcnGet (Callback callback, String pcn) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -271,7 +274,7 @@ public class UsersApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (User) ApiInvoker.deserialize(response, "", User.class);
       }
@@ -282,6 +285,7 @@ public class UsersApi {
       throw ex;
     }
   }
+}
   
   /**
    * Update user
@@ -290,7 +294,7 @@ public class UsersApi {
    * @param photo Photograph
    * @return void
    */
-  public void  usersPcnPut (String pcn, String photo) throws ApiException {
+   public void  usersPcnPut (Callback callback, String pcn, String photo) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -342,7 +346,7 @@ public class UsersApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -353,6 +357,7 @@ public class UsersApi {
       throw ex;
     }
   }
+}
   
 }
 

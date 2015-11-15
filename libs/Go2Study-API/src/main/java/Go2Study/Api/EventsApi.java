@@ -1,24 +1,19 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
-
-import Go2Study.Models.*;
-
-import java.util.*;
-
 import Go2Study.Models.Event;
-import java.util.Date;
-
-
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
 
 
 public class EventsApi {
@@ -48,7 +43,7 @@ public class EventsApi {
    * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
    * @return List<Event>
    */
-  public List<Event>  eventsGet (String query) throws ApiException {
+   public List<Event>  eventsGet (Callback callback, String query) throws ApiException { {
     Object postBody = null;
     
 
@@ -95,7 +90,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
@@ -106,6 +101,7 @@ public class EventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Create a new event
@@ -117,7 +113,7 @@ public class EventsApi {
    * @param description Description of event.
    * @return void
    */
-  public void  eventsPost (String name, Date startime, String location, Double startimeopt, String description) throws ApiException {
+   public void  eventsPost (Callback callback, String name, Date startime, String location, Double startimeopt, String description) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'name' is set
@@ -202,7 +198,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -213,6 +209,7 @@ public class EventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Get event by id
@@ -220,7 +217,7 @@ public class EventsApi {
    * @param id ID of unspecified type. Used for events/groups identification.
    * @return Event
    */
-  public Event  eventsIdGet (Integer id) throws ApiException {
+   public Event  eventsIdGet (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -270,7 +267,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (Event) ApiInvoker.deserialize(response, "", Event.class);
       }
@@ -281,6 +278,7 @@ public class EventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Update details about an existing event
@@ -293,7 +291,7 @@ public class EventsApi {
    * @param locationopt Location of the event.
    * @return void
    */
-  public void  eventsIdPut (Integer id, String nameopt, Date startimeopt, Double durationopt, String description, String locationopt) throws ApiException {
+   public void  eventsIdPut (Callback callback, Integer id, String nameopt, Date startimeopt, Double durationopt, String description, String locationopt) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -368,7 +366,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -379,6 +377,7 @@ public class EventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Remove event from my calendar
@@ -386,7 +385,7 @@ public class EventsApi {
    * @param id ID of unspecified type. Used for events/groups identification.
    * @return void
    */
-  public void  eventsIdDelete (Integer id) throws ApiException {
+   public void  eventsIdDelete (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -436,7 +435,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -447,6 +446,7 @@ public class EventsApi {
       throw ex;
     }
   }
+}
   
 }
 

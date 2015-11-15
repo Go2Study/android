@@ -1,5 +1,6 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -48,7 +49,7 @@ public class UserEventsApi {
    * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
    * @return List<Event>
    */
-  public List<Event>  usersPcnEventsGet (String pcn, String query) throws ApiException {
+   public List<Event>  usersPcnEventsGet (Callback callback, String pcn, String query) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -100,7 +101,7 @@ public class UserEventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
@@ -111,6 +112,7 @@ public class UserEventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Update information about an existing event, which the user is part of
@@ -120,7 +122,7 @@ public class UserEventsApi {
    * @param name Name of group/event
    * @return void
    */
-  public void  usersPcnEventsIdPut (String pcn, Integer id, String name) throws ApiException {
+   public void  usersPcnEventsIdPut (Callback callback, String pcn, Integer id, String name) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -185,7 +187,7 @@ public class UserEventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -196,6 +198,7 @@ public class UserEventsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Remove user from favourites list
@@ -204,7 +207,7 @@ public class UserEventsApi {
    * @param id ID of unspecified type. Used for events/groups identification.
    * @return void
    */
-  public void  usersPcnEventsIdDelete (String pcn, Integer id) throws ApiException {
+   public void  usersPcnEventsIdDelete (Callback callback, String pcn, Integer id) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -259,7 +262,7 @@ public class UserEventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -270,6 +273,7 @@ public class UserEventsApi {
       throw ex;
     }
   }
+}
   
 }
 

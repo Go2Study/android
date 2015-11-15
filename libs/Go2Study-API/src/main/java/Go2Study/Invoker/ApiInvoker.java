@@ -212,7 +212,7 @@ public class ApiInvoker {
     }
   }
 
-  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType) throws ApiException {
+  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, Callback callback) throws ApiException {
 
     StringBuilder b = new StringBuilder();
     b.append("?");
@@ -278,17 +278,7 @@ public class ApiInvoker {
       .url(url)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("ResponseBody:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("POST".equals(method)) {
 
@@ -300,17 +290,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("ResponseBody:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("PUT".equals(method)) {
 
@@ -321,17 +301,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("DELETE".equals(method)) {
 
@@ -342,17 +312,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
     else if ("PATCH".equals(method)) {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
@@ -362,17 +322,7 @@ public class ApiInvoker {
       .header("Content-Type", contentType)
       .build();
 
-      client.newCall(request).enqueue(new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override public void onResponse(Response response) throws IOException {
-          if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-          Log.v("Response:",response.body().string());
-        }
-      });
+      client.newCall(request).enqueue(callback);
     }
 
     return "";

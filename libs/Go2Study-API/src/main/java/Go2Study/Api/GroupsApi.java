@@ -1,21 +1,28 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
+
+import Go2Study.Models.*;
+
+import java.util.*;
+
 import Go2Study.Models.Group;
 
 
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
+
+
 public class GroupsApi {
-  String basePath = "http://go2study.lol/api";
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -41,7 +48,7 @@ public class GroupsApi {
    * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
    * @return List<Group>
    */
-  public List<Group>  groupsGet (String query) throws ApiException {
+   public List<Group>  groupsGet (Callback callback, String query) throws ApiException { {
     Object postBody = null;
     
 
@@ -88,7 +95,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -99,6 +106,7 @@ public class GroupsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Create a new group
@@ -108,7 +116,7 @@ public class GroupsApi {
    * @param description Description of event.
    * @return void
    */
-  public void  groupsPost (String name, List<Integer> pcnlist, String description) throws ApiException {
+   public void  groupsPost (Callback callback, String name, List<Integer> pcnlist, String description) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'name' is set
@@ -178,7 +186,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -189,6 +197,7 @@ public class GroupsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Get group by id
@@ -196,7 +205,7 @@ public class GroupsApi {
    * @param groupid ID of unspecified type. Used for events/groups identification.
    * @return List<Group>
    */
-  public List<Group>  groupsGroupidGet (Integer groupid) throws ApiException {
+   public List<Group>  groupsGroupidGet (Callback callback, Integer groupid) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'groupid' is set
@@ -246,7 +255,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -257,6 +266,7 @@ public class GroupsApi {
       throw ex;
     }
   }
+}
   
   /**
    * Update details about an existing group
@@ -266,7 +276,7 @@ public class GroupsApi {
    * @param description Description of event.
    * @return void
    */
-  public void  groupsGroupidPut (Integer groupid, String name, String description) throws ApiException {
+   public void  groupsGroupidPut (Callback callback, Integer groupid, String name, String description) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'groupid' is set
@@ -331,7 +341,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -342,6 +352,7 @@ public class GroupsApi {
       throw ex;
     }
   }
+}
   
 }
 

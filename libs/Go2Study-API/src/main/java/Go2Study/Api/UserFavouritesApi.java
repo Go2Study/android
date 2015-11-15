@@ -1,5 +1,6 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -47,7 +48,7 @@ public class UserFavouritesApi {
    * @param pcn User ID
    * @return Pcnlist
    */
-  public Pcnlist  usersPcnFavouritesGet (String pcn) throws ApiException {
+   public Pcnlist  usersPcnFavouritesGet (Callback callback, String pcn) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -97,7 +98,7 @@ public class UserFavouritesApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (Pcnlist) ApiInvoker.deserialize(response, "", Pcnlist.class);
       }
@@ -108,6 +109,7 @@ public class UserFavouritesApi {
       throw ex;
     }
   }
+}
   
   /**
    * Add a user to your list of favourites
@@ -116,7 +118,7 @@ public class UserFavouritesApi {
    * @param favouritepcn Pcn of the user to be added as favourite
    * @return void
    */
-  public void  usersPcnFavouritesPost (String pcn, String favouritepcn) throws ApiException {
+   public void  usersPcnFavouritesPost (Callback callback, String pcn, String favouritepcn) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -176,7 +178,7 @@ public class UserFavouritesApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -187,6 +189,7 @@ public class UserFavouritesApi {
       throw ex;
     }
   }
+}
   
   /**
    * Remove user from favourites list
@@ -195,7 +198,7 @@ public class UserFavouritesApi {
    * @param favpcn Pcn of the user to be removed from favourites
    * @return void
    */
-  public void  usersPcnFavouritesFavpcnDelete (String pcn, String favpcn) throws ApiException {
+   public void  usersPcnFavouritesFavpcnDelete (Callback callback, String pcn, String favpcn) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'pcn' is set
@@ -250,7 +253,7 @@ public class UserFavouritesApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -261,6 +264,7 @@ public class UserFavouritesApi {
       throw ex;
     }
   }
+}
   
 }
 

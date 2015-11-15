@@ -1,5 +1,6 @@
 package Go2Study.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -47,7 +48,7 @@ public class GroupEventsApi {
    * @param id ID of unspecified type. Used for events/groups identification.
    * @return List<Event>
    */
-  public List<Event>  groupsIdEventsGet (Integer id) throws ApiException {
+   public List<Event>  groupsIdEventsGet (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -97,7 +98,7 @@ public class GroupEventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
@@ -108,6 +109,7 @@ public class GroupEventsApi {
       throw ex;
     }
   }
+}
   
 }
 
