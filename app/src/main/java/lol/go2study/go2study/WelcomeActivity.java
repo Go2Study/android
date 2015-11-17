@@ -139,10 +139,8 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-                        Log.v("VALIDDDD::::", "TRUE");
 
                         if (isExistingUser(person.getString("id"))) {
-
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -202,7 +200,6 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
     }
 
     private boolean isValidAccessToken(String accessToken) throws InterruptedException {
-        PeopleApi peopleApi = new PeopleApi();
 
         try {
             // Find the data of the user, who holds this token
