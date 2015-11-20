@@ -6,32 +6,43 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.google.android.gms.plus.People;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import FontysICT.Api.PeopleApi;
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
+import FontysICT.Models.Person;
 import FontysICT.Models.ScheduleQueryItem;
+import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
 
 public class CreateUserActivity extends AppCompatActivity {
     SharedPreferences pref;
     OAuthSettings settings;
-    private String userCreated;
+    private JSONObject userCreated;
     ScheduleApi schedule;
-    List<String> classNames;
+    UsersApi usersApi;
+    ArrayList classNames;
+    private MyDBHandler dbHandler;
+
 
     private Callback classCallback = new Callback() {
         @Override
@@ -44,7 +55,7 @@ public class CreateUserActivity extends AppCompatActivity {
             if (response.isSuccessful()) {
                 try {
                     String responseRaw = response.body().string();
-                    List<ScheduleQueryItem> classes = (List<ScheduleQueryItem>) ApiInvoker.deserialize(responseRaw, "list", ScheduleQueryItem.class);
+                    List<ScheduleQueryItem> classes = (List<ScheduleQueryItem>)ApiInvoker.deserialize(responseRaw, "list", ScheduleQueryItem.class);
 
                     for (ScheduleQueryItem c : classes) {
                         classNames.add(c.getName());
@@ -79,14 +90,11 @@ public class CreateUserActivity extends AppCompatActivity {
             if (response.isSuccessful()) {
                 try {
                     String responseRaw = response.body().string();
-                    User user = (User) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "", User.class);
+                    userCreated = new JSONObject(responseRaw);
 
-                    if (user != null) {
-                        startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
-                    }
-
-
-                } catch (Go2Study.Invoker.ApiException e) {
+                    startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
+                }
+                catch(JSONException e){
                     e.printStackTrace();
                 }
             }
@@ -99,9 +107,14 @@ public class CreateUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        usersApi = new UsersApi();
+
         settings = new OAuthSettings();
         schedule = new ScheduleApi();
         classNames = new ArrayList();
+
+        //Initialize DB helper
+        dbHandler = new MyDBHandler(this, "People", null, 1);
 
         //Get the access token from the shared settings
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
@@ -117,6 +130,26 @@ public class CreateUserActivity extends AppCompatActivity {
                 Log.v("Error", e.getMessage());
             }
         }
+
+        Button createButton = (Button)findViewById(R.id.btnCreateUser);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Spinner classSpinner = (Spinner)findViewById(R.id.classesSelector);
+                String className = classSpinner.getSelectedItem().toString();
+                Person p = dbHandler.getPerson();
+                Log.v("Person from DB:", p.toString());
+                try {
+                    UsersApi apiUser = new UsersApi();
+                    apiUser.usersPost(userCreateCallback, p.getGivenName(), p.getSurName(), p.getId(), className, p.getMail(), "", "");
+                }
+                catch (Go2Study.Invoker.ApiException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
     }
 
 }
