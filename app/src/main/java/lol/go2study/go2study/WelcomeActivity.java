@@ -21,7 +21,10 @@ import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
+import FontysICT.Invoker.ApiInvoker;
+import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
+import Go2Study.Models.User;
 
 public class WelcomeActivity extends AppCompatActivity implements Callback {
 
@@ -34,6 +37,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
     private UsersApi usersApi; // Go2Study db
     private JSONObject user;
+    private MyDBHandler dbHandler;
 
 
     // CALLBACK METHODS
@@ -45,20 +49,22 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
     @Override
     public void onResponse(Response response) throws IOException {
         if (response.isSuccessful()) {
-                 // If it's response from Fontys
-                String responseRaw = response.body().string();
-                try {
-                    JSONObject responseJSON = new JSONObject(responseRaw);
-                    if (responseJSON.getString("initials") != null) {
-                        person = responseJSON;
-                    } else {
-                        user = responseJSON;
-                    }
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
+             // If it's response from Fontys
+            String responseRaw = response.body().string();
+            try {
+                JSONObject responseJSON = new JSONObject(responseRaw);
+                if (responseJSON.getString("initials") != null) {
+                    person = responseJSON;
+                    dbHandler.AddPerson(person);
+                } else {
+                    user = responseJSON;
+                    Log.v("user", user.toString());
                 }
             }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -69,6 +75,9 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
         //API clients
         peopleApi = new PeopleApi();
         usersApi = new UsersApi();
+
+        //DB Helper
+        dbHandler = new MyDBHandler(this, "People", null, 1);
 
         setContentView(R.layout.activity_welcome);
 
@@ -97,11 +106,10 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-                        Log.v("VALIDDDD::::", "TRUE");
-
                         if (isExistingUser(person.getString("id"))) {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
+                            //CreateUserActivity
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
                     }
@@ -139,7 +147,6 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-
                         if (isExistingUser(person.getString("id"))) {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
@@ -148,7 +155,8 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                } catch (JSONException j) {
+                }
+                catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
@@ -157,7 +165,6 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
 
     // HELPER METHODS
-
     private void addAccessTokenToConfig(String accessToken){
         //Expiry timestamp is 2 hours from time now
         String expiryTimestamp = String.valueOf((System.currentTimeMillis() + TimeUnit.HOURS.toMillis(2)) / 1000l);
@@ -177,7 +184,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
         editor.apply();
     }
 
-    private boolean isLoggedIn(JSONObject accessJSON) {
+    public static boolean isLoggedIn(JSONObject accessJSON) {
 
         if (accessJSON.length() != 0){
             try{
