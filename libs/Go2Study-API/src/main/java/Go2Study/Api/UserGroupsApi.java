@@ -1,18 +1,18 @@
-package FontysICT.Api;
+package Go2Study.Api;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Invoker.Pair;
+import Go2Study.Invoker.ApiException;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Invoker.Pair;
 
-import FontysICT.Models.*;
+import Go2Study.Models.*;
 
 import java.util.*;
 
-import FontysICT.Models.Group;
+import Go2Study.Models.Group;
 
 
 
@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.io.File;
 
 
-public class GroupsApi {
-  String basePath = "https://tas.fhict.nl:443/api/v1";
+public class UserGroupsApi {
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -43,16 +43,23 @@ public class GroupsApi {
 
   
   /**
-   * All the groups your allowed to see.
+   * Get list of all groups, which you are part of
    * 
+   * @param pcn User ID
+   * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
    * @return List<Group>
    */
-  public List<Group>  groupsList (String accessToken, Callback callback) throws ApiException {
+   public List<Group>  usersPcnGroupsGet (Callback callback, String pcn, String query) throws ApiException { {
     Object postBody = null;
+    
+    // verify the required parameter 'pcn' is set
+    if (pcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'pcn' when calling usersPcnGroupsGet");
+    }
     
 
     // create path and map variables
-    String path = "/groups".replaceAll("\\{format\\}","json");
+    String path = "/users/{pcn}/groups".replaceAll("\\{format\\}","json").replaceAll("\\{" + "pcn" + "\\}", apiInvoker.escapeString(pcn.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -61,6 +68,8 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "query", query));
     
 
     
@@ -92,7 +101,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -103,25 +112,31 @@ public class GroupsApi {
       throw ex;
     }
   }
+}
   
   /**
-   * Details about a specific group.
+   * Remove myself from a group
    * 
-   * @param id ID of the group
-   * @param includeMembers Whether or not the members should be included.
-   * @return Group
+   * @param pcn User ID
+   * @param groupid ID of unspecified type. Used for events/groups identification.
+   * @return void
    */
-  public Group  groupsGetById (String accessToken, Callback callback, String id, Boolean includeMembers) throws ApiException {
+   public void  usersPcnGroupsGroupidDelete (Callback callback, String pcn, Integer groupid) throws ApiException { {
     Object postBody = null;
     
-    // verify the required parameter 'id' is set
-    if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling groupsGetById");
+    // verify the required parameter 'pcn' is set
+    if (pcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'pcn' when calling usersPcnGroupsGroupidDelete");
+    }
+    
+    // verify the required parameter 'groupid' is set
+    if (groupid == null) {
+       throw new ApiException(400, "Missing the required parameter 'groupid' when calling usersPcnGroupsGroupidDelete");
     }
     
 
     // create path and map variables
-    String path = "/groups/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/users/{pcn}/groups/{groupid}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "pcn" + "\\}", apiInvoker.escapeString(pcn.toString())).replaceAll("\\{" + "groupid" + "\\}", apiInvoker.escapeString(groupid.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -130,8 +145,6 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "includeMembers", includeMembers));
     
 
     
@@ -163,17 +176,18 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (Group) ApiInvoker.deserialize(response, "", Group.class);
+        return ;
       }
       else {
-        return null;
+        return ;
       }
     } catch (ApiException ex) {
       throw ex;
     }
   }
+}
   
 }
 

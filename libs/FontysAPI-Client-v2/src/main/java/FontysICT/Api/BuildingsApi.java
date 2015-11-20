@@ -1,23 +1,18 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Invoker.Pair;
-
-import FontysICT.Models.*;
-
-import java.util.*;
-
 import FontysICT.Models.Building;
-
-
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
 
 
 public class BuildingsApi {
@@ -46,7 +41,7 @@ public class BuildingsApi {
    * 
    * @return List<Building>
    */
-  public List<Building>  buildingsGet (String accessToken) throws ApiException {
+  public List<Building>  buildingsGet (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -91,7 +86,7 @@ public class BuildingsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<Building>) ApiInvoker.deserialize(response, "array", Building.class);
       }
@@ -110,7 +105,7 @@ public class BuildingsApi {
    * @param longitude Longitude to search for
    * @return List<Building>
    */
-  public List<Building>  buildingsNearby (String accessToken, Double latitude, Double longitude) throws ApiException {
+  public List<Building>  buildingsNearby (String accessToken, Callback callback, Double latitude, Double longitude) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'latitude' is set
@@ -169,7 +164,7 @@ public class BuildingsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<Building>) ApiInvoker.deserialize(response, "array", Building.class);
       }
@@ -187,7 +182,7 @@ public class BuildingsApi {
    * @param id The ID of the building
    * @return Building
    */
-  public Building  buildingsGetById (String accessToken, String id) throws ApiException {
+  public Building  buildingsGetById (String accessToken, Callback callback, String id) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'id' is set
@@ -237,7 +232,7 @@ public class BuildingsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Building) ApiInvoker.deserialize(response, "", Building.class);
       }

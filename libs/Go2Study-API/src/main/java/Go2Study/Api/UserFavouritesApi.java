@@ -1,18 +1,18 @@
-package FontysICT.Api;
+package Go2Study.Api;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Invoker.Pair;
+import Go2Study.Invoker.ApiException;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Invoker.Pair;
 
-import FontysICT.Models.*;
+import Go2Study.Models.*;
 
 import java.util.*;
 
-import FontysICT.Models.Person;
+import Go2Study.Models.Pcnlist;
 
 
 
@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.io.File;
 
 
-public class PeopleApi {
-  String basePath = "https://tas.fhict.nl:443/api/v1";
+public class UserFavouritesApi {
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -43,146 +43,22 @@ public class PeopleApi {
 
   
   /**
-   * List all teachers and staff.
-   * This endpoint also supports oData queries for filtering, ordering and paging
-   * @return List<Person>
-   */
-  public List<Person>  peopleList (String accessToken, Callback callback) throws ApiException {
-    Object postBody = null;
-    
-
-    // create path and map variables
-    String path = "/people".replaceAll("\\{format\\}","json");
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    
-
-    
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      /*
-      RequestBody requestBody = new MultipartBuilder()
-        .type(MultipartBuilder.FORM)
-        .addPart(
-            Headers.of("Content-Disposition", "form-data; name=\"title\""),
-            RequestBody.create(null, "Square Logo"))
-        .addPart(
-            Headers.of("Content-Disposition", "form-data; name=\"image\""),
-            RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
-        .build();
-        */
-      postBody = "";
-    } else {
-      // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
-      
-        .build();
-      
-    }
-
-    try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
-      if(response != null){
-        return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
-      }
-      else {
-        return null;
-      }
-    } catch (ApiException ex) {
-      throw ex;
-    }
-  }
-  
-  /**
-   * Information about the user who authorized the request.
-   * Only works if you requested the personal scope
-   * @return Person
-   */
-  public Person  peopleMe (String accessToken, Callback callback) throws ApiException {
-    Object postBody = null;
-    
-
-    // create path and map variables
-    String path = "/people/me".replaceAll("\\{format\\}","json");
-
-    // query params
-    List<Pair> queryParams = new ArrayList<Pair>();
-    // header params
-    Map<String, String> headerParams = new HashMap<String, String>();
-    // form params
-    Map<String, String> formParams = new HashMap<String, String>();
-
-    
-
-    
-
-    String[] contentTypes = {
-      
-    };
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-
-    if (contentType.startsWith("multipart/form-data")) {
-      /*
-      RequestBody requestBody = new MultipartBuilder()
-        .type(MultipartBuilder.FORM)
-        .addPart(
-            Headers.of("Content-Disposition", "form-data; name=\"title\""),
-            RequestBody.create(null, "Square Logo"))
-        .addPart(
-            Headers.of("Content-Disposition", "form-data; name=\"image\""),
-            RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
-        .build();
-        */
-      postBody = "";
-    } else {
-      // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
-      
-        .build();
-      
-    }
-
-    try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
-      if(response != null){
-        return (Person) ApiInvoker.deserialize(response, "", Person.class);
-      }
-      else {
-        return null;
-      }
-    } catch (ApiException ex) {
-      throw ex;
-    }
-  }
-  
-  /**
-   * Search for faculty and staff
+   * Get list of all favourite users
    * 
-   * @param query Part of name/office, start of PersonalTitle/Id/Department
-   * @return List<Person>
+   * @param pcn User ID
+   * @return Pcnlist
    */
-  public List<Person>  peopleSearch (String accessToken, Callback callback, String query) throws ApiException {
+   public Pcnlist  usersPcnFavouritesGet (Callback callback, String pcn) throws ApiException { {
     Object postBody = null;
     
-    // verify the required parameter 'query' is set
-    if (query == null) {
-       throw new ApiException(400, "Missing the required parameter 'query' when calling peopleSearch");
+    // verify the required parameter 'pcn' is set
+    if (pcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'pcn' when calling usersPcnFavouritesGet");
     }
     
 
     // create path and map variables
-    String path = "/people/search/{query}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "query" + "\\}", apiInvoker.escapeString(query.toString()));
+    String path = "/users/{pcn}/favourites".replaceAll("\\{format\\}","json").replaceAll("\\{" + "pcn" + "\\}", apiInvoker.escapeString(pcn.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -222,9 +98,9 @@ public class PeopleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (List<Person>) ApiInvoker.deserialize(response, "array", Person.class);
+        return (Pcnlist) ApiInvoker.deserialize(response, "", Pcnlist.class);
       }
       else {
         return null;
@@ -233,24 +109,111 @@ public class PeopleApi {
       throw ex;
     }
   }
+}
   
   /**
-   * Information about a specific user
+   * Add a user to your list of favourites
    * 
-   * @param id Username of the user
-   * @return Person
+   * @param pcn User ID
+   * @param favouritepcn Pcn of the user to be added as favourite
+   * @return void
    */
-  public Person  peopleById (String accessToken, Callback callback, String id) throws ApiException {
+   public void  usersPcnFavouritesPost (Callback callback, String pcn, String favouritepcn) throws ApiException { {
     Object postBody = null;
     
-    // verify the required parameter 'id' is set
-    if (id == null) {
-       throw new ApiException(400, "Missing the required parameter 'id' when calling peopleById");
+    // verify the required parameter 'pcn' is set
+    if (pcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'pcn' when calling usersPcnFavouritesPost");
+    }
+    
+    // verify the required parameter 'favouritepcn' is set
+    if (favouritepcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'favouritepcn' when calling usersPcnFavouritesPost");
     }
     
 
     // create path and map variables
-    String path = "/people/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
+    String path = "/users/{pcn}/favourites".replaceAll("\\{format\\}","json").replaceAll("\\{" + "pcn" + "\\}", apiInvoker.escapeString(pcn.toString()));
+
+    // query params
+    List<Pair> queryParams = new ArrayList<Pair>();
+    // header params
+    Map<String, String> headerParams = new HashMap<String, String>();
+    // form params
+    Map<String, String> formParams = new HashMap<String, String>();
+
+    
+
+    
+
+    String[] contentTypes = {
+      
+    };
+    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
+
+    if (contentType.startsWith("multipart/form-data")) {
+      /*
+      if (favouritepcn != null) {
+        builder.addTextBody("favouritepcn", ApiInvoker.parameterToString(favouritepcn), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      RequestBody requestBody = new MultipartBuilder()
+        .type(MultipartBuilder.FORM)
+        .addPart(
+            Headers.of("Content-Disposition", "form-data; name=\"title\""),
+            RequestBody.create(null, "Square Logo"))
+        .addPart(
+            Headers.of("Content-Disposition", "form-data; name=\"image\""),
+            RequestBody.create(MEDIA_TYPE_PNG, new File("website/static/logo-square.png")))
+        .build();
+        */
+      postBody = "";
+    } else {
+      // normal form params
+      RequestBody formBody = new FormEncodingBuilder()
+      .add("favouritepcn", ApiInvoker.parameterToString(favouritepcn))
+      
+        .build();
+      
+    }
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      throw ex;
+    }
+  }
+}
+  
+  /**
+   * Remove user from favourites list
+   * 
+   * @param pcn User ID
+   * @param favpcn Pcn of the user to be removed from favourites
+   * @return void
+   */
+   public void  usersPcnFavouritesFavpcnDelete (Callback callback, String pcn, String favpcn) throws ApiException { {
+    Object postBody = null;
+    
+    // verify the required parameter 'pcn' is set
+    if (pcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'pcn' when calling usersPcnFavouritesFavpcnDelete");
+    }
+    
+    // verify the required parameter 'favpcn' is set
+    if (favpcn == null) {
+       throw new ApiException(400, "Missing the required parameter 'favpcn' when calling usersPcnFavouritesFavpcnDelete");
+    }
+    
+
+    // create path and map variables
+    String path = "/users/{pcn}/favourites/{favpcn}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "pcn" + "\\}", apiInvoker.escapeString(pcn.toString())).replaceAll("\\{" + "favpcn" + "\\}", apiInvoker.escapeString(favpcn.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -290,17 +253,18 @@ public class PeopleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (Person) ApiInvoker.deserialize(response, "", Person.class);
+        return ;
       }
       else {
-        return null;
+        return ;
       }
     } catch (ApiException ex) {
       throw ex;
     }
   }
+}
   
 }
 

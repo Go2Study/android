@@ -1,17 +1,18 @@
-package FontysICT.Api;
+package Go2Study.Api;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Invoker.Pair;
+import Go2Study.Invoker.ApiException;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Invoker.Pair;
 
-import FontysICT.Models.*;
+import Go2Study.Models.*;
 
 import java.util.*;
 
+import Go2Study.Models.Event;
 
 
 
@@ -20,8 +21,8 @@ import java.util.HashMap;
 import java.io.File;
 
 
-public class PictureApi {
-  String basePath = "https://tas.fhict.nl:443/api/v1";
+public class GroupEventsApi {
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -42,28 +43,22 @@ public class PictureApi {
 
   
   /**
-   * Request an users image.
+   * Get all events of a specified group
    * 
-   * @param username Username of the user you want to get the image for
-   * @param size Size of the image [small/medium/large (default)]
-   * @return Object
+   * @param id ID of unspecified type. Used for events/groups identification.
+   * @return List<Event>
    */
-  public Object  pictureImage (String accessToken, Callback callback, String username, String size) throws ApiException {
+   public List<Event>  groupsIdEventsGet (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
     
-    // verify the required parameter 'username' is set
-    if (username == null) {
-       throw new ApiException(400, "Missing the required parameter 'username' when calling pictureImage");
-    }
-    
-    // verify the required parameter 'size' is set
-    if (size == null) {
-       throw new ApiException(400, "Missing the required parameter 'size' when calling pictureImage");
+    // verify the required parameter 'id' is set
+    if (id == null) {
+       throw new ApiException(400, "Missing the required parameter 'id' when calling groupsIdEventsGet");
     }
     
 
     // create path and map variables
-    String path = "/pictures/{username}/{size}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "username" + "\\}", apiInvoker.escapeString(username.toString())).replaceAll("\\{" + "size" + "\\}", apiInvoker.escapeString(size.toString()));
+    String path = "/groups/{id}/events".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -103,9 +98,9 @@ public class PictureApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (Object) ApiInvoker.deserialize(response, "", Object.class);
+        return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
       else {
         return null;
@@ -114,6 +109,7 @@ public class PictureApi {
       throw ex;
     }
   }
+}
   
 }
 

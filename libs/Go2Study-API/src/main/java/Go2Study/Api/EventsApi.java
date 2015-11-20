@@ -1,4 +1,4 @@
-package FontysICT.Api;
+package Go2Study.Api;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -10,16 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Invoker.Pair;
-import FontysICT.Models.Period;
-import FontysICT.Models.Schedule;
-import FontysICT.Models.ScheduleQueryItem;
+import Go2Study.Invoker.ApiException;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Invoker.Pair;
+import Go2Study.Models.Event;
 
 
-public class ScheduleApi {
-  String basePath = "https://tas.fhict.nl:443/api/v1";
+public class EventsApi {
+  String basePath = "https://api.go2study.lol/1.0";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -40,23 +38,17 @@ public class ScheduleApi {
 
   
   /**
-   * Get all possible values to query the schedule
+   * Get list of events, according to the search query. Default \&quot;all\&quot; - returns all public events
    * 
-   * @param kind What kind of autocomplete are you requesting [Any,Class,Room,Subject,Teacher]
-   * @param filter Filter the possible values [name.ToLower().Contains(filter)]
-   * @return List<ScheduleQueryItem>
+   * @param query Non-specific query search term. Can be used for filtering the results by name of group, event, pcn, class, department &amp; more.
+   * @return List<Event>
    */
-  public List<ScheduleQueryItem>  scheduleAutoComplete (String accessToken, Callback callback, String kind, String filter) throws ApiException {
+   public List<Event>  eventsGet (Callback callback, String query) throws ApiException { {
     Object postBody = null;
-    
-    // verify the required parameter 'kind' is set
-    if (kind == null) {
-       throw new ApiException(400, "Missing the required parameter 'kind' when calling scheduleAutoComplete");
-    }
     
 
     // create path and map variables
-    String path = "/schedule/autocomplete/{kind}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "kind" + "\\}", apiInvoker.escapeString(kind.toString()));
+    String path = "/events".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -66,7 +58,7 @@ public class ScheduleApi {
     Map<String, String> formParams = new HashMap<String, String>();
 
     
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "filter", filter));
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "query", query));
     
 
     
@@ -98,9 +90,9 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (List<ScheduleQueryItem>) ApiInvoker.deserialize(response, "array", ScheduleQueryItem.class);
+        return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
       else {
         return null;
@@ -109,18 +101,39 @@ public class ScheduleApi {
       throw ex;
     }
   }
+}
   
   /**
-   * Request school holidays
+   * Create a new event
    * 
-   * @return List<Period>
+   * @param name Name of group/event
+   * @param startime Start time of an event
+   * @param location Location of the event
+   * @param startimeopt Start time of an event
+   * @param description Description of event.
+   * @return void
    */
-  public List<Period>  scheduleHolidays (String accessToken, Callback callback) throws ApiException {
+   public void  eventsPost (Callback callback, String name, Date startime, String location, Double startimeopt, String description) throws ApiException { {
     Object postBody = null;
+    
+    // verify the required parameter 'name' is set
+    if (name == null) {
+       throw new ApiException(400, "Missing the required parameter 'name' when calling eventsPost");
+    }
+    
+    // verify the required parameter 'startime' is set
+    if (startime == null) {
+       throw new ApiException(400, "Missing the required parameter 'startime' when calling eventsPost");
+    }
+    
+    // verify the required parameter 'location' is set
+    if (location == null) {
+       throw new ApiException(400, "Missing the required parameter 'location' when calling eventsPost");
+    }
     
 
     // create path and map variables
-    String path = "/schedule/holidays".replaceAll("\\{format\\}","json");
+    String path = "/events".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -140,6 +153,26 @@ public class ScheduleApi {
 
     if (contentType.startsWith("multipart/form-data")) {
       /*
+      if (name != null) {
+        builder.addTextBody("name", ApiInvoker.parameterToString(name), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (startime != null) {
+        builder.addTextBody("startime", ApiInvoker.parameterToString(startime), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (startimeopt != null) {
+        builder.addTextBody("startimeopt", ApiInvoker.parameterToString(startimeopt), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (description != null) {
+        builder.addTextBody("description", ApiInvoker.parameterToString(description), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (location != null) {
+        builder.addTextBody("location", ApiInvoker.parameterToString(location), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
       RequestBody requestBody = new MultipartBuilder()
         .type(MultipartBuilder.FORM)
         .addPart(
@@ -154,39 +187,47 @@ public class ScheduleApi {
     } else {
       // normal form params
       RequestBody formBody = new FormEncodingBuilder()
+      .add("name", ApiInvoker.parameterToString(name))
+      .add("startime", ApiInvoker.parameterToString(startime))
+      .add("startimeopt", ApiInvoker.parameterToString(startimeopt))
+      .add("description", ApiInvoker.parameterToString(description))
+      .add("location", ApiInvoker.parameterToString(location))
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (List<Period>) ApiInvoker.deserialize(response, "array", Period.class);
+        return ;
       }
       else {
-        return null;
+        return ;
       }
     } catch (ApiException ex) {
       throw ex;
     }
   }
+}
   
   /**
-   * Get your personal schedule.
-   * 
-   * @param expandTeacher Expand the teacher information (default = false)
-   * @param days Number of days to retrieve (default = 14)
-   * @param start First day to request format yyyy-mm-dd (defaults = today)
-   * @param startLastMonday Request the schedule starting last monday. This overrides the start parameter (default = false)
-   * @return Schedule
+   * Get event by id
+   * Get an event by id
+   * @param id ID of unspecified type. Used for events/groups identification.
+   * @return Event
    */
-  public Schedule  scheduleMe (String accessToken, Callback callback, Boolean expandTeacher, Integer days, Date start, Boolean startLastMonday) throws ApiException {
+   public Event  eventsIdGet (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
+    
+    // verify the required parameter 'id' is set
+    if (id == null) {
+       throw new ApiException(400, "Missing the required parameter 'id' when calling eventsIdGet");
+    }
     
 
     // create path and map variables
-    String path = "/schedule/me".replaceAll("\\{format\\}","json");
+    String path = "/events/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -195,14 +236,6 @@ public class ScheduleApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "expandTeacher", expandTeacher));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "days", days));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "start", start));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "startLastMonday", startLastMonday));
     
 
     
@@ -234,9 +267,9 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (Schedule) ApiInvoker.deserialize(response, "", Schedule.class);
+        return (Event) ApiInvoker.deserialize(response, "", Event.class);
       }
       else {
         return null;
@@ -245,18 +278,30 @@ public class ScheduleApi {
       throw ex;
     }
   }
+}
   
   /**
-   * Request school week numbers
+   * Update details about an existing event
    * 
-   * @return List<Period>
+   * @param id ID of unspecified type. Used for events/groups identification.
+   * @param nameopt Name of group/event (used in PUT calls)
+   * @param startimeopt Start time of an event
+   * @param durationopt Duration of the event (used in PUT calls)
+   * @param description Description of event.
+   * @param locationopt Location of the event.
+   * @return void
    */
-  public List<Period>  scheduleWeeks (String accessToken, Callback callback) throws ApiException {
+   public void  eventsIdPut (Callback callback, Integer id, String nameopt, Date startimeopt, Double durationopt, String description, String locationopt) throws ApiException { {
     Object postBody = null;
+    
+    // verify the required parameter 'id' is set
+    if (id == null) {
+       throw new ApiException(400, "Missing the required parameter 'id' when calling eventsIdPut");
+    }
     
 
     // create path and map variables
-    String path = "/schedule/weeks".replaceAll("\\{format\\}","json");
+    String path = "/events/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -276,6 +321,26 @@ public class ScheduleApi {
 
     if (contentType.startsWith("multipart/form-data")) {
       /*
+      if (nameopt != null) {
+        builder.addTextBody("nameopt", ApiInvoker.parameterToString(nameopt), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (startimeopt != null) {
+        builder.addTextBody("startimeopt", ApiInvoker.parameterToString(startimeopt), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (durationopt != null) {
+        builder.addTextBody("durationopt", ApiInvoker.parameterToString(durationopt), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (description != null) {
+        builder.addTextBody("description", ApiInvoker.parameterToString(description), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
+      if (locationopt != null) {
+        builder.addTextBody("locationopt", ApiInvoker.parameterToString(locationopt), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
       RequestBody requestBody = new MultipartBuilder()
         .type(MultipartBuilder.FORM)
         .addPart(
@@ -290,51 +355,47 @@ public class ScheduleApi {
     } else {
       // normal form params
       RequestBody formBody = new FormEncodingBuilder()
+      .add("nameopt", ApiInvoker.parameterToString(nameopt))
+      .add("startimeopt", ApiInvoker.parameterToString(startimeopt))
+      .add("durationopt", ApiInvoker.parameterToString(durationopt))
+      .add("description", ApiInvoker.parameterToString(description))
+      .add("locationopt", ApiInvoker.parameterToString(locationopt))
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (List<Period>) ApiInvoker.deserialize(response, "array", Period.class);
+        return ;
       }
       else {
-        return null;
+        return ;
       }
     } catch (ApiException ex) {
       throw ex;
     }
   }
+}
   
   /**
-   * Query the schedule for a specific class/room/subject/teacher
+   * Remove event from my calendar
    * 
-   * @param kind What kind of schedule are you requesting [Any,Class,Room,Subject,Teacher,User]
-   * @param query The class/room/subject/teacher abbreviation/user
-   * @param days Number of days to retrieve (default = 14)
-   * @param expandTeacher Expand the teacher information (default = false)
-   * @param start First day to request format yyyy-mm-dd (default = today)
-   * @param startLastMonday Request the schedule starting last monday (default = false)
-   * @return Schedule
+   * @param id ID of unspecified type. Used for events/groups identification.
+   * @return void
    */
-  public Schedule  scheduleForQuery (String accessToken, Callback callback, String kind, String query, Integer days, Boolean expandTeacher, Date start, Boolean startLastMonday) throws ApiException {
+   public void  eventsIdDelete (Callback callback, Integer id) throws ApiException { {
     Object postBody = null;
     
-    // verify the required parameter 'kind' is set
-    if (kind == null) {
-       throw new ApiException(400, "Missing the required parameter 'kind' when calling scheduleForQuery");
-    }
-    
-    // verify the required parameter 'query' is set
-    if (query == null) {
-       throw new ApiException(400, "Missing the required parameter 'query' when calling scheduleForQuery");
+    // verify the required parameter 'id' is set
+    if (id == null) {
+       throw new ApiException(400, "Missing the required parameter 'id' when calling eventsIdDelete");
     }
     
 
     // create path and map variables
-    String path = "/schedule/{kind}/{query}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "kind" + "\\}", apiInvoker.escapeString(kind.toString())).replaceAll("\\{" + "query" + "\\}", apiInvoker.escapeString(query.toString()));
+    String path = "/events/{id}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "id" + "\\}", apiInvoker.escapeString(id.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -343,14 +404,6 @@ public class ScheduleApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "days", days));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "expandTeacher", expandTeacher));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "start", start));
-    
-    queryParams.addAll(ApiInvoker.parameterToPairs("", "startLastMonday", startLastMonday));
     
 
     
@@ -382,17 +435,18 @@ public class ScheduleApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
       if(response != null){
-        return (Schedule) ApiInvoker.deserialize(response, "", Schedule.class);
+        return ;
       }
       else {
-        return null;
+        return ;
       }
     } catch (ApiException ex) {
       throw ex;
     }
   }
+}
   
 }
 

@@ -1,5 +1,6 @@
 package FontysICT.Api;
 
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
@@ -47,7 +48,7 @@ public class CalendarApi {
    * @param kind Group kind (students/staff)
    * @return List<String>
    */
-  public List<String>  calendarTags (String accessToken, String kind) throws ApiException {
+  public List<String>  calendarTags (String accessToken, Callback callback, String kind) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -97,7 +98,7 @@ public class CalendarApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
       }
@@ -116,7 +117,7 @@ public class CalendarApi {
    * @param tag Calendar Tag, possible values can be requested with tags/{kind}
    * @return Calendar
    */
-  public Calendar  calendarShared (String accessToken, String kind, String tag) throws ApiException {
+  public Calendar  calendarShared (String accessToken, Callback callback, String kind, String tag) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -171,7 +172,7 @@ public class CalendarApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
         return (Calendar) ApiInvoker.deserialize(response, "", Calendar.class);
       }

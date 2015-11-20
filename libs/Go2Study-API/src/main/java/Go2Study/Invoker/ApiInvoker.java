@@ -1,4 +1,4 @@
-package FontysICT.Invoker;
+package Go2Study.Invoker;
 
 
 import com.squareup.okhttp.MediaType;
@@ -212,7 +212,7 @@ public class ApiInvoker {
     }
   }
 
-  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, String accessToken, Callback callback) throws ApiException {
+  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, Callback callback) throws ApiException {
 
     StringBuilder b = new StringBuilder();
     b.append("?");
@@ -276,7 +276,6 @@ public class ApiInvoker {
     if ("GET".equals(method)) {
           Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", "Bearer "+accessToken)
       .build();
 
       client.newCall(request).enqueue(callback);
@@ -287,7 +286,6 @@ public class ApiInvoker {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
         Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", accessToken)
       .post(reqBody)
       .header("Content-Type", contentType)
       .build();
@@ -299,7 +297,6 @@ public class ApiInvoker {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
         Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", accessToken)
       .put(reqBody)
       .header("Content-Type", contentType)
       .build();
@@ -311,7 +308,6 @@ public class ApiInvoker {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
       Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", accessToken)
       .delete(reqBody)
       .header("Content-Type", contentType)
       .build();
@@ -322,7 +318,6 @@ public class ApiInvoker {
       RequestBody reqBody = RequestBody.create(JSON, formParamStr);
       Request request = new Request.Builder()
       .url(url)
-      .header("Authorization", accessToken)
       .patch(reqBody)
       .header("Content-Type", contentType)
       .build();
