@@ -1,52 +1,104 @@
 package Go2Study.Models;
 
-
-
-import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+import java.util.List;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 
 
 @ApiModel(description = "")
 public class User  {
   
-  @SerializedName("id")
-  private String id = null;
-  @SerializedName("im_status")
-  private String imStatus = null;
+  @SerializedName("pcn")
+  private String pcn = null;
+  @SerializedName("firstName")
+  private String firstName = null;
+  @SerializedName("lastName")
+  private String lastName = null;
+  @SerializedName("displayName")
+  private String displayName = null;
+  @SerializedName("email")
+  private String email = null;
   @SerializedName("gps_location")
   private String gpsLocation = null;
+  @SerializedName("ipaddress")
+  private String ipaddress = null;
+  @SerializedName("privateLocation")
+  private Boolean privateLocation = null;
+  @SerializedName("privateAgenda")
+  private Boolean privateAgenda = null;
+  @SerializedName("schedule")
+  private List<Object> schedule = null;
   @SerializedName("photo")
   private String photo = null;
+  @SerializedName("minStartTime")
+  private Date minStartTime = null;
+  @SerializedName("maxEndTime")
+  private Date maxEndTime = null;
 
   
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getId() {
-    return id;
+  public String getPcn() {
+    return pcn;
   }
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  
-  /**
-   * User's online/offline status for messages
-   **/
-  @ApiModelProperty(value = "User's online/offline status for messages")
-  public String getImStatus() {
-    return imStatus;
-  }
-  public void setImStatus(String imStatus) {
-    this.imStatus = imStatus;
+  public void setPcn(String pcn) {
+    this.pcn = pcn;
   }
 
   
   /**
-   * Longitude, Latitude
    **/
-  @ApiModelProperty(value = "Longitude, Latitude")
+  @ApiModelProperty(value = "")
+  public String getFirstName() {
+    return firstName;
+  }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getLastName() {
+    return lastName;
+  }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getDisplayName() {
+    return displayName;
+  }
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getEmail() {
+    return email;
+  }
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
   public String getGpsLocation() {
     return gpsLocation;
   }
@@ -56,14 +108,81 @@ public class User  {
 
   
   /**
-   * URL to User's photograph on server
    **/
-  @ApiModelProperty(value = "URL to User's photograph on server")
+  @ApiModelProperty(value = "")
+  public String getIpaddress() {
+    return ipaddress;
+  }
+  public void setIpaddress(String ipaddress) {
+    this.ipaddress = ipaddress;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public Boolean getPrivateLocation() {
+    return privateLocation;
+  }
+  public void setPrivateLocation(Boolean privateLocation) {
+    this.privateLocation = privateLocation;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public Boolean getPrivateAgenda() {
+    return privateAgenda;
+  }
+  public void setPrivateAgenda(Boolean privateAgenda) {
+    this.privateAgenda = privateAgenda;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public List<Object> getSchedule() {
+    return schedule;
+  }
+  public void setSchedule(List<Object> schedule) {
+    this.schedule = schedule;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
   public String getPhoto() {
     return photo;
   }
   public void setPhoto(String photo) {
     this.photo = photo;
+  }
+
+  
+  /**
+   * The earliest time of the day, acceptable for event invitations
+   **/
+  @ApiModelProperty(value = "The earliest time of the day, acceptable for event invitations")
+  public Date getMinStartTime() {
+    return minStartTime;
+  }
+  public void setMinStartTime(Date minStartTime) {
+    this.minStartTime = minStartTime;
+  }
+
+  
+  /**
+   * The latest time of the day, acceptable for event invitations
+   **/
+  @ApiModelProperty(value = "The latest time of the day, acceptable for event invitations")
+  public Date getMaxEndTime() {
+    return maxEndTime;
+  }
+  public void setMaxEndTime(Date maxEndTime) {
+    this.maxEndTime = maxEndTime;
   }
 
   
@@ -73,10 +192,19 @@ public class User  {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
     
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  imStatus: ").append(imStatus).append("\n");
+    sb.append("  pcn: ").append(pcn).append("\n");
+    sb.append("  firstName: ").append(firstName).append("\n");
+    sb.append("  lastName: ").append(lastName).append("\n");
+    sb.append("  displayName: ").append(displayName).append("\n");
+    sb.append("  email: ").append(email).append("\n");
     sb.append("  gpsLocation: ").append(gpsLocation).append("\n");
+    sb.append("  ipaddress: ").append(ipaddress).append("\n");
+    sb.append("  privateLocation: ").append(privateLocation).append("\n");
+    sb.append("  privateAgenda: ").append(privateAgenda).append("\n");
+    sb.append("  schedule: ").append(schedule).append("\n");
     sb.append("  photo: ").append(photo).append("\n");
+    sb.append("  minStartTime: ").append(minStartTime).append("\n");
+    sb.append("  maxEndTime: ").append(maxEndTime).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

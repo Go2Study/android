@@ -4,15 +4,21 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
+
+import Go2Study.Models.*;
+
+import java.util.*;
+
 import Go2Study.Models.User;
+
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
 
 public class UsersApi {
@@ -109,11 +115,12 @@ public class UsersApi {
    * @param lastName The last name of the user
    * @param accountpcn Pcn of the user to be created
    * @param email The fontys email of the user
+   * @param className The student class, which the student is attending. Necessary for obtaining his schedule.
    * @param photo Photograph
    * @param ipaddress The current IP address, which the client can be identified with. Default value = \&quot;deactivate\&quot; - removes the currently set IP address, this way marking him as not online and delegating all communications through push notifications.
    * @return void
    */
-   public void  usersPost (Callback callback, String firstName, String lastName, String accountpcn, String email, String photo, String ipaddress) throws ApiException { {
+   public void  usersPost (Callback callback, String firstName, String lastName, String accountpcn, String email, String className, String photo, String ipaddress) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'firstName' is set
@@ -172,6 +179,10 @@ public class UsersApi {
         builder.addTextBody("accountpcn", ApiInvoker.parameterToString(accountpcn), ApiInvoker.TEXT_PLAIN_UTF8);
       }
       
+      if (className != null) {
+        builder.addTextBody("className", ApiInvoker.parameterToString(className), ApiInvoker.TEXT_PLAIN_UTF8);
+      }
+      
       if (email != null) {
         builder.addTextBody("email", ApiInvoker.parameterToString(email), ApiInvoker.TEXT_PLAIN_UTF8);
       }
@@ -197,6 +208,7 @@ public class UsersApi {
       .add("firstName", ApiInvoker.parameterToString(firstName))
       .add("lastName", ApiInvoker.parameterToString(lastName))
       .add("accountpcn", ApiInvoker.parameterToString(accountpcn))
+      .add("className", ApiInvoker.parameterToString(className))
       .add("email", ApiInvoker.parameterToString(email))
       .add("ipaddress", ApiInvoker.parameterToString(ipaddress))
       

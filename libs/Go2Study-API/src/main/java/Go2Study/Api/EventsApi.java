@@ -4,16 +4,22 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
+
+import Go2Study.Models.*;
+
+import java.util.*;
+
 import Go2Study.Models.Event;
+import java.util.Date;
+
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
 
 public class EventsApi {
