@@ -212,7 +212,7 @@ public class ApiInvoker {
     }
   }
 
-  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, Callback callback) throws ApiException {
+  public String invokeAPI(String host, String path, String method, List<Pair> queryParams, RequestBody body, Map<String, String> headerParams, Map<String, String> formParams, String contentType, Callback callback) throws ApiException {
 
     StringBuilder b = new StringBuilder();
     b.append("?");
@@ -283,10 +283,9 @@ public class ApiInvoker {
     else if ("POST".equals(method)) {
 
 
-      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
         Request request = new Request.Builder()
       .url(url)
-      .post(reqBody)
+      .post(body)
       .header("Content-Type", contentType)
       .build();
 
@@ -294,10 +293,9 @@ public class ApiInvoker {
     }
     else if ("PUT".equals(method)) {
 
-      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
         Request request = new Request.Builder()
       .url(url)
-      .put(reqBody)
+      .put(body)
       .header("Content-Type", contentType)
       .build();
 
@@ -305,20 +303,18 @@ public class ApiInvoker {
     }
     else if ("DELETE".equals(method)) {
 
-      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
       Request request = new Request.Builder()
       .url(url)
-      .delete(reqBody)
+      .delete(body)
       .header("Content-Type", contentType)
       .build();
 
       client.newCall(request).enqueue(callback);
     }
     else if ("PATCH".equals(method)) {
-      RequestBody reqBody = RequestBody.create(JSON, formParamStr);
       Request request = new Request.Builder()
       .url(url)
-      .patch(reqBody)
+      .patch(body)
       .header("Content-Type", contentType)
       .build();
 

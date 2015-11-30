@@ -22,7 +22,7 @@ import java.io.File;
 
 
 public class GroupEventsApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://api.go2study.lol";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -67,6 +67,8 @@ public class GroupEventsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -91,14 +93,14 @@ public class GroupEventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }

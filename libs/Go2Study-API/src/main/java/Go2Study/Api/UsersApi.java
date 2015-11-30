@@ -4,25 +4,19 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
-
-import Go2Study.Models.*;
-
-import java.util.*;
-
 import Go2Study.Models.User;
 
 
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
-
-
 public class UsersApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://api.go2study.lol/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -62,6 +56,8 @@ public class UsersApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "query", query));
     
@@ -88,14 +84,14 @@ public class UsersApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<User>) ApiInvoker.deserialize(response, "array", User.class);
       }
@@ -154,6 +150,8 @@ public class UsersApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "photo", photo));
     
@@ -204,10 +202,10 @@ public class UsersApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("firstName", ApiInvoker.parameterToString(firstName))
       .add("lastName", ApiInvoker.parameterToString(lastName))
-      .add("accountpcn", ApiInvoker.parameterToString(accountpcn))
+      .add("pcn", ApiInvoker.parameterToString(accountpcn))
       .add("className", ApiInvoker.parameterToString(className))
       .add("email", ApiInvoker.parameterToString(email))
       .add("ipaddress", ApiInvoker.parameterToString(ipaddress))
@@ -217,7 +215,7 @@ public class UsersApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -255,6 +253,8 @@ public class UsersApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -279,14 +279,14 @@ public class UsersApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (User) ApiInvoker.deserialize(response, "", User.class);
       }
@@ -325,6 +325,8 @@ public class UsersApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "photo", photo));
     
@@ -351,14 +353,14 @@ public class UsersApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }

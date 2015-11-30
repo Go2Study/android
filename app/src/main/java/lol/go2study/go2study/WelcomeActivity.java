@@ -21,10 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
-import Go2Study.Models.User;
 
 public class WelcomeActivity extends AppCompatActivity implements Callback {
 
@@ -56,6 +53,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                 if (responseJSON.getString("initials") != null) {
                     person = responseJSON;
                     dbHandler.AddPerson(person);
+                    Log.v("DEGUGGG:::",dbHandler.getPerson().toString());
                 } else {
                     user = responseJSON;
                     Log.v("user", user.toString());
