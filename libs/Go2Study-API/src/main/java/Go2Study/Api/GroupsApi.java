@@ -22,7 +22,7 @@ import java.io.File;
 
 
 public class GroupsApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://api.go2study.lol";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -62,6 +62,8 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "query", query));
     
@@ -88,14 +90,14 @@ public class GroupsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -140,6 +142,8 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -176,7 +180,7 @@ public class GroupsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("name", ApiInvoker.parameterToString(name))
       .add("description", ApiInvoker.parameterToString(description))
       .add("pcnlist", ApiInvoker.parameterToString(pcnlist))
@@ -186,7 +190,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -224,6 +228,8 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -248,14 +254,14 @@ public class GroupsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Group>) ApiInvoker.deserialize(response, "array", Group.class);
       }
@@ -300,6 +306,8 @@ public class GroupsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -332,7 +340,7 @@ public class GroupsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("name", ApiInvoker.parameterToString(name))
       .add("description", ApiInvoker.parameterToString(description))
       
@@ -341,7 +349,7 @@ public class GroupsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }

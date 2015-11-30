@@ -22,7 +22,7 @@ import java.io.File;
 
 
 public class UserFavouritesApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://api.go2study.lol";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -67,6 +67,8 @@ public class UserFavouritesApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -91,14 +93,14 @@ public class UserFavouritesApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (Pcnlist) ApiInvoker.deserialize(response, "", Pcnlist.class);
       }
@@ -142,6 +144,8 @@ public class UserFavouritesApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -170,7 +174,7 @@ public class UserFavouritesApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("favouritepcn", ApiInvoker.parameterToString(favouritepcn))
       
         .build();
@@ -178,7 +182,7 @@ public class UserFavouritesApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -222,6 +226,8 @@ public class UserFavouritesApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -246,14 +252,14 @@ public class UserFavouritesApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }

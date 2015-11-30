@@ -4,26 +4,20 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import Go2Study.Invoker.ApiException;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Invoker.Pair;
-
-import Go2Study.Models.*;
-
-import java.util.*;
-
 import Go2Study.Models.Event;
-import java.util.Date;
-
-
-
-import java.util.Map;
-import java.util.HashMap;
-import java.io.File;
 
 
 public class EventsApi {
-  String basePath = "https://api.go2study.lol/1.0";
+  String basePath = "http://api.go2study.lol";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -63,6 +57,8 @@ public class EventsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "query", query));
     
@@ -89,14 +85,14 @@ public class EventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (List<Event>) ApiInvoker.deserialize(response, "array", Event.class);
       }
@@ -148,6 +144,8 @@ public class EventsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -192,7 +190,7 @@ public class EventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("name", ApiInvoker.parameterToString(name))
       .add("startime", ApiInvoker.parameterToString(startime))
       .add("startimeopt", ApiInvoker.parameterToString(startimeopt))
@@ -204,7 +202,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "POST", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -242,6 +240,8 @@ public class EventsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -266,14 +266,14 @@ public class EventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return (Event) ApiInvoker.deserialize(response, "", Event.class);
       }
@@ -315,6 +315,8 @@ public class EventsApi {
     Map<String, String> headerParams = new HashMap<String, String>();
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
+
+    RequestBody formBody = null;
 
     
 
@@ -360,7 +362,7 @@ public class EventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       .add("nameopt", ApiInvoker.parameterToString(nameopt))
       .add("startimeopt", ApiInvoker.parameterToString(startimeopt))
       .add("durationopt", ApiInvoker.parameterToString(durationopt))
@@ -372,7 +374,7 @@ public class EventsApi {
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
@@ -410,6 +412,8 @@ public class EventsApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    RequestBody formBody = null;
+
     
 
     
@@ -434,14 +438,14 @@ public class EventsApi {
       postBody = "";
     } else {
       // normal form params
-      RequestBody formBody = new FormEncodingBuilder()
+      formBody = new FormEncodingBuilder()
       
         .build();
       
     }
 
     try {
-      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, callback);
+      String response = apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, formBody, headerParams, formParams, contentType, callback);
       if(response != null){
         return ;
       }
