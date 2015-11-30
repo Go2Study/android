@@ -21,6 +21,8 @@ public class User  {
   private String lastName = null;
   @SerializedName("displayName")
   private String displayName = null;
+  @SerializedName("className")
+  private String className = null;
   @SerializedName("email")
   private String email = null;
   @SerializedName("gps_location")
@@ -82,6 +84,17 @@ public class User  {
   }
   public void setDisplayName(String displayName) {
     this.displayName = displayName;
+  }
+
+  
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getClassName() {
+    return className;
+  }
+  public void setClassName(String className) {
+    this.className = className;
   }
 
   
@@ -196,6 +209,7 @@ public class User  {
     sb.append("  firstName: ").append(firstName).append("\n");
     sb.append("  lastName: ").append(lastName).append("\n");
     sb.append("  displayName: ").append(displayName).append("\n");
+    sb.append("  className: ").append(className).append("\n");
     sb.append("  email: ").append(email).append("\n");
     sb.append("  gpsLocation: ").append(gpsLocation).append("\n");
     sb.append("  ipaddress: ").append(ipaddress).append("\n");
