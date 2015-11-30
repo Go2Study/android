@@ -10,14 +10,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.google.android.gms.plus.People;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,19 +22,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import FontysICT.Api.PeopleApi;
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
 import FontysICT.Models.ScheduleQueryItem;
 import Go2Study.Api.UsersApi;
-import Go2Study.Models.User;
 
 public class CreateUserActivity extends AppCompatActivity {
     SharedPreferences pref;
     OAuthSettings settings;
-    private JSONObject userCreated;
+    private JSONObject userCreatedResponseStatus;
     ScheduleApi schedule;
     UsersApi usersApi;
     ArrayList classNames;
@@ -52,9 +47,11 @@ public class CreateUserActivity extends AppCompatActivity {
 
         @Override
         public void onResponse(Response response) throws IOException {
+
             if (response.isSuccessful()) {
                 try {
                     String responseRaw = response.body().string();
+
                     List<ScheduleQueryItem> classes = (List<ScheduleQueryItem>)ApiInvoker.deserialize(responseRaw, "list", ScheduleQueryItem.class);
 
                     for (ScheduleQueryItem c : classes) {
@@ -82,21 +79,27 @@ public class CreateUserActivity extends AppCompatActivity {
     private Callback userCreateCallback = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
-
         }
 
         @Override
         public void onResponse(Response response) throws IOException {
             if (response.isSuccessful()) {
                 try {
-                    String responseRaw = response.body().string();
-                    userCreated = new JSONObject(responseRaw);
+                    String responseBody = response.body().string();
+                    Log.v("Response body", responseBody);
+                    userCreatedResponseStatus = new JSONObject(responseBody);
+                    if (userCreatedResponseStatus.getString("success") != null){
+                        startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
+                    } else {
+                        Log.v("Creating user failed",userCreatedResponseStatus.toString());
+                    }
 
-                    startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
                 }
                 catch(JSONException e){
                     e.printStackTrace();
                 }
+            } else {
+                Log.v("Not succesful","");
             }
         }
     };
@@ -140,8 +143,10 @@ public class CreateUserActivity extends AppCompatActivity {
                 Person p = dbHandler.getPerson();
                 Log.v("Person from DB:", p.toString());
                 try {
-                    UsersApi apiUser = new UsersApi();
-                    apiUser.usersPost(userCreateCallback, p.getGivenName(), p.getSurName(), p.getId(), className, p.getMail(), "", "");
+                   // UsersApi apiUser = new UsersApi();
+                    Log.v("PRE","BEFORE REQUEST");
+                    usersApi.usersPost(userCreateCallback, p.getGivenName(), p.getSurName(), p.getId(), p.getMail(), className,  "", "");
+                    Log.v("Create users call sent","@@@@@@@@@@@@@@@@@@@@@@");
                 }
                 catch (Go2Study.Invoker.ApiException e) {
                     e.printStackTrace();
