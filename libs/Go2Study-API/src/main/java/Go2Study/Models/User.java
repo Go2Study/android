@@ -36,7 +36,7 @@ public class User  {
   @SerializedName("schedule")
   private List<Object> schedule = null;
   @SerializedName("photo")
-  private String photo = null;
+  private Object photo = null;
   @SerializedName("minStartTime")
   private Date minStartTime = null;
   @SerializedName("maxEndTime")
@@ -156,9 +156,6 @@ public class User  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public List<Object> getSchedule() {
-    return schedule;
-  }
   public void setSchedule(List<Object> schedule) {
     this.schedule = schedule;
   }
@@ -167,10 +164,10 @@ public class User  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public String getPhoto() {
+  public Object getPhoto() {
     return photo;
   }
-  public void setPhoto(String photo) {
+  public void setPhoto(Object photo) {
     this.photo = photo;
   }
 

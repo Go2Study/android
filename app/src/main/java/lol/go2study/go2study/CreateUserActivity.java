@@ -79,6 +79,7 @@ public class CreateUserActivity extends AppCompatActivity {
     private Callback userCreateCallback = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
+            Log.v("FAILURE",request.body().toString());
         }
 
         @Override
@@ -88,7 +89,8 @@ public class CreateUserActivity extends AppCompatActivity {
                     String responseBody = response.body().string();
                     Log.v("Response body", responseBody);
                     userCreatedResponseStatus = new JSONObject(responseBody);
-                    if (userCreatedResponseStatus.getString("success") != null){
+                    Log.v("USerCREATECALL",userCreatedResponseStatus.toString());
+                    if (userCreatedResponseStatus.getString("firstName") != null){
                         startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
                     } else {
                         Log.v("Creating user failed",userCreatedResponseStatus.toString());

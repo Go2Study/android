@@ -21,9 +21,12 @@ import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
+import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Models.User;
 
-public class WelcomeActivity extends AppCompatActivity implements Callback {
+public class WelcomeActivity extends AppCompatActivity  {
 
     Intent browserIntent;
     private OAuthSettings settings;
@@ -33,37 +36,73 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
     private JSONObject person;
 
     private UsersApi usersApi; // Go2Study db
-    private JSONObject user;
+    private User user;
     private MyDBHandler dbHandler;
 
-
     // CALLBACK METHODS
-    @Override
-    public void onFailure(Request request, IOException e) {
-        //do something to indicate error
-    }
+     Callback GetUser = new Callback() {
+         @Override
+         public void onFailure(Request request, IOException e) {
+             //do something to indicate error
 
-    @Override
-    public void onResponse(Response response) throws IOException {
-        if (response.isSuccessful()) {
-             // If it's response from Fontys
-            String responseRaw = response.body().string();
-            try {
-                JSONObject responseJSON = new JSONObject(responseRaw);
-                if (responseJSON.getString("initials") != null) {
-                    person = responseJSON;
-                    dbHandler.AddPerson(person);
-                    Log.v("DEGUGGG:::",dbHandler.getPerson().toString());
-                } else {
-                    user = responseJSON;
-                    Log.v("user", user.toString());
+         }
+
+         @Override
+         public void onResponse(Response response) throws IOException {
+
+             if (response.isSuccessful()) {
+                 // If it's response from Fontys
+                 String responseRaw = response.body().string();
+                 try {
+                     user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
+                     Log.v("USER::::",user.toString());
+                     /*
+                     JSONObject responseJSON = new JSONObject(responseRaw);
+                     if (responseJSON.getString("initials") != null) {
+                         user = responseJSON;
+                        Log.v("We have a user", "uiohyou");
+                     }
+                     */
+
+                 } catch (Go2Study.Invoker.ApiException e) {
+                     e.printStackTrace();
+                 }
+             }
+
+         }
+     };
+
+
+    Callback PeopleMe = new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            if (response.isSuccessful()) {
+                // If it's response from Fontys
+                String responseRaw = response.body().string();
+                try {
+
+                    JSONObject responseJSON = new JSONObject(responseRaw);
+                    if (responseJSON.getString("initials") != null) {
+                        person = responseJSON;
+                        dbHandler.AddPerson(person);
+                        Log.v("DEGUGGG:::",dbHandler.getPerson().toString());
+                    }
+
+                    //person = (Person) FontysICT.Invoker.ApiInvoker.deserialize(responseRaw,"",Person.class);
+                  //  dbHandler.AddPerson(person);
+
+                }  catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
-    }
+    };
+
 
 
     @Override
@@ -113,10 +152,14 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                /*
                 catch (JSONException j) {
                     j.printStackTrace();
                 }
+                */
             }
         }
 
@@ -145,6 +188,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
+                       // getString("id")
                         if (isExistingUser(person.getString("id"))) {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
@@ -154,9 +198,11 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                catch (JSONException j) {
-                    j.printStackTrace();
+                catch(JSONException q)
+                {
+                    q.printStackTrace();
                 }
+
             }
         }
     }
@@ -208,7 +254,7 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
         try {
             // Find the data of the user, who holds this token
-            peopleApi.peopleMe(accessToken, this);
+            peopleApi.peopleMe(accessToken, PeopleMe);
         }
         catch (ApiException e){
             e.printStackTrace();
@@ -227,8 +273,9 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
     private boolean isExistingUser(String pcn) throws InterruptedException {
 
         // Async HTTP GET user
+        boolean flag = false;
         try {
-            usersApi.usersPcnGet(this, pcn);
+            usersApi.usersPcnGet(GetUser, pcn);
         }
         catch (Go2Study.Invoker.ApiException e){
             e.printStackTrace();
@@ -238,9 +285,10 @@ public class WelcomeActivity extends AppCompatActivity implements Callback {
 
         while (user == null){
             if (System.currentTimeMillis() - timestampNow >= 3000l){
-                return false;
+                return flag;
             }
         }
+
         Log.v("STATUS::::::::::::", "EXISTS");
         return true;
     }
