@@ -11,34 +11,59 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import FontysICT.Models.Person;
 
-public class CustomAdapter extends  ArrayAdapter<Person>
+public class CustomAdapter extends ArrayAdapter<String>
 {
+    Context context;
+    int[] images;
+    String[] nameArray;
+    String[] roomsArray;
+    TextView textViewName;
+    TextView textViewRooms;
+    private LayoutInflater inflater;
 
-    //Used to display People in the UI
-    public CustomAdapter(Context context, Person[] people)
-    {
-        super(context,R.layout.custom_row ,people);
+    public CustomAdapter(Context context, int img[], String[] names, String[] rooms) {
+        super(context,R.layout.custom_row,names);
+        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+        this.images = img;
+
+        this.nameArray = names;
+        this.roomsArray = rooms;
     }
+
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customViewRow = inflater.inflate(R.layout.custom_row, parent, false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if(convertView==null)
+        {
+            holder = new ViewHolder();
+            convertView = inflater.inflate(R.layout.custom_row, null);
 
-        Person singleItem = getItem(position);
-        TextView textView =(TextView)customViewRow.findViewById(R.id.textView);
-        //ImageView imageView = (ImageView)customViewRow.findViewById(R.id.);
-
-        textView.setText(singleItem.toString());
-        //imageView.setImageResource(R.drawable.boy);
-        return customViewRow;
-
+            holder.txtName = (TextView) convertView.findViewById(R.id.textViewNames);
+            holder.txtRooms = (TextView) convertView.findViewById(R.id.textViewRooms);
+            holder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
+            //holder.txtViewDescription = (TextView) convertView.findViewById(R.id.txtViewDescription);
+            holder.txtName.setText(nameArray[position]);
+            holder.txtRooms.setText(roomsArray[position]);
+            holder.imageView.setImageResource(images[position]);
+            convertView.setTag(holder);
+        }
+        else
+            holder=(ViewHolder)convertView.getTag();
+        return convertView;
     }
+}
 
+class ViewHolder
+{
+    TextView txtName;
+    TextView txtRooms;
+    ImageView imageView;
 
 }
+
+
 
 
