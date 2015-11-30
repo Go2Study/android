@@ -63,4 +63,5 @@
     <string name="select_profile_picture">Profile image</string>
     <string name="create_user_browse_photo">Browse...</string>
     <string name="create_user_capture_photo">Selfie!</string>
+    <string name="title_activity_tabs">TabsActivity</string>
 </resources>
