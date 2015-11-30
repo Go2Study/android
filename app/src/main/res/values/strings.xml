@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Go2Study</string>
+    <string name="app_name"> </string>
     <string name="title_activity_create_user">CreateUser</string>
 
     <!-- Strings related to Settings -->
@@ -16,37 +16,29 @@
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
+
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
+
+
+
+
+    <string name="navigation_item_1">Item 1</string>
+    <string name="navigation_item_2">Item 2</string>
+    <string name="navigation_item_3">Item 3</string>
+    <string name="navigation_item_4">Item 4</string>
+    <string name="navigation_item_5">Item 5</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="title_activity_second">Second</string>
+    <string name="text_second_activity">Hi Its Second Activity Here</string>
+    <string name="title_activity_third">Third</string>
+    <string name="text_third_activity">Hi Its Third Activity</string>
+    <string name="text_dismiss">Dismiss</string>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -64,4 +56,13 @@
     <string name="create_user_browse_photo">Browse...</string>
     <string name="create_user_capture_photo">Selfie!</string>
     <string name="title_activity_tabs">TabsActivity</string>
+    <string name="title_activity_navigation_drawer_fragment">NavigationDrawerFragment</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

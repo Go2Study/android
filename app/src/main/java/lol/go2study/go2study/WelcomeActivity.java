@@ -56,13 +56,6 @@ public class WelcomeActivity extends AppCompatActivity  {
                  try {
                      user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
                      Log.v("USER::::",user.toString());
-                     /*
-                     JSONObject responseJSON = new JSONObject(responseRaw);
-                     if (responseJSON.getString("initials") != null) {
-                         user = responseJSON;
-                        Log.v("We have a user", "uiohyou");
-                     }
-                     */
 
                  } catch (Go2Study.Invoker.ApiException e) {
                      e.printStackTrace();
@@ -92,9 +85,6 @@ public class WelcomeActivity extends AppCompatActivity  {
                         dbHandler.AddPerson(person);
                         Log.v("DEGUGGG:::",dbHandler.getPerson().toString());
                     }
-
-                    //person = (Person) FontysICT.Invoker.ApiInvoker.deserialize(responseRaw,"",Person.class);
-                  //  dbHandler.AddPerson(person);
 
                 }  catch (JSONException e) {
                     e.printStackTrace();
@@ -155,11 +145,6 @@ public class WelcomeActivity extends AppCompatActivity  {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                /*
-                catch (JSONException j) {
-                    j.printStackTrace();
-                }
-                */
             }
         }
 
@@ -189,7 +174,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                 try {
                     if (isValidAccessToken(accessToken)) {
                        // getString("id")
-                        if (isExistingUser(person.getString("id"))) {
+                        if (isExistingUser(person.getString("id")) ) {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
