@@ -2,21 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="lol.go2study.go2study.NavigationDrawerFragment"
-    android:background="@color/common_google_signin_btn_text_light_default"
+    android:background="@color/colorPrimaryDark"
+    android:weightSum="4"
     >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="150dp"
+        android:background="@color/common_google_signin_btn_text_light_focused"
+        android:id="@+id/linearLayout">
 
-    <ImageView
-        android:id="@+id/g2sImageView"
-        android:layout_width="126dp"
-        android:layout_height="126dp"
-        android:src="@drawable/education"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="140dp"
+            android:src="@drawable/logo"
+            android:layout_marginLeft="50dp"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/drawerList"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true">
+    </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>

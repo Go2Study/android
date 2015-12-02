@@ -134,6 +134,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                 try {
                     if (isValidAccessToken(accessToken)) {
                         if (isExistingUser(person.getString("id"))) {
+                            //Home
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             //CreateUserActivity
@@ -175,6 +176,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                     if (isValidAccessToken(accessToken)) {
                        // getString("id")
                         if (isExistingUser(person.getString("id")) ) {
+                            //HOME
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));

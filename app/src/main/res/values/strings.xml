@@ -26,19 +26,16 @@
 
 
 
-    <string name="navigation_item_1">Item 1</string>
-    <string name="navigation_item_2">Item 2</string>
-    <string name="navigation_item_3">Item 3</string>
-    <string name="navigation_item_4">Item 4</string>
-    <string name="navigation_item_5">Item 5</string>
+    <string name="item_home">HOME</string>
+    <string name="item_people">PEOPLE</string>
+    <string name="item_calendar">CALENDAR</string>
+    <string name="item_messaging">MESSAGING</string>
+    <string name="item_settings">SETTINGS</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="title_activity_second">Second</string>
-    <string name="text_second_activity">Hi Its Second Activity Here</string>
-    <string name="title_activity_third">Third</string>
-    <string name="text_third_activity">Hi Its Third Activity</string>
-    <string name="text_dismiss">Dismiss</string>
+
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 

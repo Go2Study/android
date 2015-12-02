@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context="slidenerd.vivz.navigationviewdemo.MainActivity">
 
-
-
-
         <RelativeLayout
             android:id="@+id/main_content"
             android:layout_width="match_parent"
@@ -16,14 +13,6 @@
             android:orientation="vertical"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true">
-
-            <ImageView
-                android:id="@+id/g2sImageView"
-                android:layout_width="126dp"
-                android:layout_height="126dp"
-                android:src="@drawable/education"
-                android:layout_below="@+id/app_bar"
-                android:layout_centerHorizontal="true" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/app_bar"
@@ -36,15 +25,20 @@
 
 
 
-
-    <fragment
-        android:id ="@+id/fragment_navigation_drawer"
-        android:layout_width="200dp"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/main_drawer"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity = "start"
-        app:layout = "@layout/fragment_navigation_drawer"
-        android:name = "lol.go2study.go2study.NavigationDrawerFragment"
-        tools:layout="@layout/content_navigation_drawer_fragment" />
+
+        app:paddingStart="100dp"
+        android:layout_gravity="start"
+        app:itemIconTint="@color/icon_color"
+        app:itemTextColor="@color/colorPrimary"
+        app:menu="@menu/menu_drawer"
+        />
+
+
+
 
 
 </android.support.v4.widget.DrawerLayout>

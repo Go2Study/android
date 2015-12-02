@@ -26,7 +26,7 @@
         android:id="@+id/g2sImageView"
         android:layout_width="126dp"
         android:layout_height="126dp"
-        android:src="@drawable/education"
+        android:src="@drawable/logo"
 
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

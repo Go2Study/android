@@ -16,7 +16,7 @@
         android:id="@+id/g2sImageView"
         android:layout_width="102dp"
         android:layout_height="103dp"
-        android:src="@drawable/education"
+        android:src="@drawable/logo"
 
         android:contentDescription=""
         android:layout_gravity="center_horizontal" />
