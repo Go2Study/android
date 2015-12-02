@@ -23,6 +23,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import FontysICT.Models.Person;
 
 /**
  * Created by Todor on 12/1/2015.
@@ -146,11 +149,14 @@ public class PeopleActivity extends AppCompatActivity {
     //CONTAINER
     static class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.YourRecyclerViewHolder> {
         private ArrayList<String> list = new ArrayList<>();
+        private  List<Person> personArray = new ArrayList<>();
         private LayoutInflater inflater;
 
         public YourRecyclerAdapter(Context context)
         {
             //list = people;
+
+            personArray= HomeActivity.people;
             inflater = LayoutInflater.from(context);
 
             list.add("A-Bomb (HAS)");
@@ -172,12 +178,12 @@ public class PeopleActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(YourRecyclerViewHolder yourRecyclerViewHolder, int i) {
-            yourRecyclerViewHolder.textView.setText(list.get(i));
+            yourRecyclerViewHolder.textView.setText(personArray.get(i).getGivenName());
         }
 
         @Override
         public int getItemCount() {
-            return list.size();
+            return personArray.size();
         }
 
         class YourRecyclerViewHolder extends RecyclerView.ViewHolder {

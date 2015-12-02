@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
-    List<Person> people;
+   static List<Person> people;
 
 
 
