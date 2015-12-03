@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +18,13 @@ import android.view.MenuItem;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private OAuthSettings settings;
     SharedPreferences pref;
     static List<Person> people;
-    static List userList;
+    static List<User> userList;
 
     public Callback getPeopleStaff = new Callback() {
         @Override
