@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyActivity"
-    android:background="#fff">
+    android:background="#F6F6F6">
 
     <com.alamkanak.weekview.WeekView
         android:id="@+id/weekView"
@@ -15,14 +15,14 @@
         app:textSize="12sp"
         app:hourHeight="60dp"
         app:headerColumnPadding="8dp"
-        app:headerColumnTextColor="@color/colorPrimary"
+        app:headerColumnTextColor="#8f000000"
         app:headerRowPadding="12dp"
         app:columnGap="8dp"
         app:noOfVisibleDays="3"
-        app:headerRowBackgroundColor="@color/colorAccent"
+        app:headerRowBackgroundColor="@color/toolbar"
         app:dayBackgroundColor="#05000000"
         app:todayBackgroundColor="#1848adff"
         app:headerColumnBackground="#ffffffff"
-        app:todayHeaderTextColor="@color/common_google_signin_btn_text_dark"/>
+        app:todayHeaderTextColor="@color/accent"/>
 
 </RelativeLayout>
