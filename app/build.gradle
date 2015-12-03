@@ -40,6 +40,7 @@ dependencies {
     compile project(':FontysAPI-Client-v2')
     compile project(':Go2Study-API')
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.github.alamkanak:android-week-view:1.2.3' // Calendar UI
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:design:23.1.1'
