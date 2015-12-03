@@ -38,9 +38,9 @@ public class User  {
   @SerializedName("photo")
   private Object photo = null;
   @SerializedName("minStartTime")
-  private Date minStartTime = null;
+  private String minStartTime = null;
   @SerializedName("maxEndTime")
-  private Date maxEndTime = null;
+  private String maxEndTime = null;
 
   
   /**
@@ -176,10 +176,10 @@ public class User  {
    * The earliest time of the day, acceptable for event invitations
    **/
   @ApiModelProperty(value = "The earliest time of the day, acceptable for event invitations")
-  public Date getMinStartTime() {
+  public String getMinStartTime() {
     return minStartTime;
   }
-  public void setMinStartTime(Date minStartTime) {
+  public void setMinStartTime(String minStartTime) {
     this.minStartTime = minStartTime;
   }
 
@@ -188,10 +188,10 @@ public class User  {
    * The latest time of the day, acceptable for event invitations
    **/
   @ApiModelProperty(value = "The latest time of the day, acceptable for event invitations")
-  public Date getMaxEndTime() {
+  public String getMaxEndTime() {
     return maxEndTime;
   }
-  public void setMaxEndTime(Date maxEndTime) {
+  public void setMaxEndTime(String maxEndTime) {
     this.maxEndTime = maxEndTime;
   }
 

@@ -2,6 +2,7 @@ package lol.go2study.go2study;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +27,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         this.context = context;
         inflater =   LayoutInflater.from(context);
         this.data = data;
+
 
     }
 
@@ -84,7 +85,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         ImageView icon;
         public MyViewHolder(View itemView) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.listText);
+            title = (TextView)itemView.findViewById(R.id.nameTextView);
             icon = (ImageView)itemView.findViewById(R.id.list_item);
             icon.setOnClickListener(this);
             title.setOnClickListener(this);

@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import FontysICT.Api.PeopleApi;
@@ -31,7 +33,7 @@ public class WelcomeActivity extends AppCompatActivity  {
     Intent browserIntent;
     private OAuthSettings settings;
     SharedPreferences pref;
-
+    private List<User> userList;
     private PeopleApi peopleApi; // Fontys
     private JSONObject person;
 
@@ -40,7 +42,11 @@ public class WelcomeActivity extends AppCompatActivity  {
     private MyDBHandler dbHandler;
 
     // CALLBACK METHODS
-     Callback GetUser = new Callback() {
+
+
+
+
+    Callback GetUser = new Callback() {
          @Override
          public void onFailure(Request request, IOException e) {
              //do something to indicate error
@@ -55,7 +61,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                  String responseRaw = response.body().string();
                  try {
                      user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
-                     Log.v("USER::::",user.toString());
+                     Log.v("USERR::::",user.toString());
 
                  } catch (Go2Study.Invoker.ApiException e) {
                      e.printStackTrace();
@@ -110,7 +116,7 @@ public class WelcomeActivity extends AppCompatActivity  {
 
         //Initialize helper class, which is used for the Fontys oAuth
         settings = new OAuthSettings();
-
+        userList = new ArrayList<>();
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
 
@@ -128,6 +134,9 @@ public class WelcomeActivity extends AppCompatActivity  {
         //Check if there is existing access Token saved already. If there is - redirect to User Account Creation / Home
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
+
+        //GET USERS
+
 
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
             if (isLoggedIn(accessJSON)) {
@@ -174,9 +183,7 @@ public class WelcomeActivity extends AppCompatActivity  {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-                       // getString("id")
                         if (isExistingUser(person.getString("id")) ) {
-                            //HOME
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -214,7 +221,6 @@ public class WelcomeActivity extends AppCompatActivity  {
         editor.putString("AccessToken", String.valueOf(access));// Store Access Token
         editor.apply();
     }
-
     public static boolean isLoggedIn(JSONObject accessJSON) {
 
         if (accessJSON.length() != 0){
@@ -236,7 +242,6 @@ public class WelcomeActivity extends AppCompatActivity  {
         }
         return false;
     }
-
     private boolean isValidAccessToken(String accessToken) throws InterruptedException {
 
         try {

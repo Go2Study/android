@@ -22,14 +22,17 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
+import Go2Study.Api.UsersApi;
+import Go2Study.Models.User;
 
 
-public class HomeActivity extends AppCompatActivity implements Callback, NavigationView.OnNavigationItemSelectedListener
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     private static final String SELECTED_ITEM_ID = "selected_item_id";
     private static final String FIRST_TIME = "first_time";
@@ -40,15 +43,16 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
     private int mSelectedId;
     private boolean mUserSawDrawer = false;
 
+    private UsersApi userApi;
 
     //
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
-   static List<Person> people;
+    static List<Person> people;
+    static List userList;
 
-
-
+    public Callback getPeopleStaff = new Callback() {
         @Override
         public void onFailure(Request request, IOException e)
         {
@@ -64,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
                     Person p;
                     //List<Person> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
-                    Log.v("PEOPLE", people.toString());
+                    //Log.v("PEOPLE", people.toString());
                 }
                 catch (ApiException e)
                 {
@@ -74,6 +78,36 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
 
             }
         }
+    };
+
+    public Callback getUsersApp = new Callback() {
+
+        @Override
+        public void onFailure(Request request, IOException e) {
+            Log.v("ERROR GETUSERS",request.body().toString());
+
+
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+
+            if (response.isSuccessful()) {
+                // If it's response from Fontys
+                String responseRaw = response.body().string();
+                try {
+                   // Log.v("USERSLIST",responseRaw.toString());
+                    userList = (List<User>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "list", User.class);
+                    Log.v("USERRRRRRRRRRRRR::::", userList.toString());
+
+                } catch (Go2Study.Invoker.ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+
 
 
     @Override
@@ -107,7 +141,7 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
 
         //API clients
         peopleApi = new PeopleApi();
-
+        userApi = new UsersApi();
         //setContentView(R.layout.activity_welcome);
 
         //Initialize helper class, which is used for the Fontys oAuth
@@ -115,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
 
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
+        userList = new ArrayList<>();
 
         //Add button event click to redirect to Fontys oAuth webpage
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
@@ -122,9 +157,12 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
-                    peopleApi.peopleList(accessToken, this);
+                    peopleApi.peopleList(accessToken, getPeopleStaff);
+                    userApi.usersGet(getUsersApp,"list");
 
                 } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (Go2Study.Invoker.ApiException e) {
                     e.printStackTrace();
                 }
             }
@@ -157,6 +195,7 @@ public class HomeActivity extends AppCompatActivity implements Callback, Navigat
 
     private void navigate(int mSelectedId) {
         Intent intent = null;
+
         if (mSelectedId == R.id.navigation_itemPEOPLE) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             intent = new Intent(this, PeopleActivity.class);

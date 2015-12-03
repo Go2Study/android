@@ -1,7 +1,10 @@
 package lol.go2study.go2study;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -15,17 +18,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.plus.People;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Models.Person;
+import Go2Study.Api.UsersApi;
+import Go2Study.Invoker.ApiException;
+import Go2Study.Invoker.ApiInvoker;
+import Go2Study.Models.User;
+
+import static android.graphics.BitmapFactory.*;
 
 /**
  * Created by Todor on 12/1/2015.
@@ -35,15 +56,21 @@ public class PeopleActivity extends AppCompatActivity {
     private CoordinatorLayout mCoordinator;
     //Need this to set the title of the app bar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private Toolbar mToolbar;
+   // private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private TabLayout mTabLayout;
+    private UsersApi userApi;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people);
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
@@ -51,11 +78,11 @@ public class PeopleActivity extends AppCompatActivity {
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
         //TABS
         mDrawerLayout = (DrawerLayout) findViewById(R.id.people_drawer_layout_tabs);
-        mToolbar = (Toolbar) findViewById(R.id.people_app_bar);
-        setSupportActionBar(mToolbar);
+        //mToolbar = (Toolbar) findViewById(R.id.people_app_bar);
+        //setSupportActionBar(mToolbar);
 
         //drawerToggle button top-left
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
@@ -70,6 +97,7 @@ public class PeopleActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mPager);
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
+        userApi = new UsersApi();
 
     }
 
@@ -97,7 +125,6 @@ public class PeopleActivity extends AppCompatActivity {
 
     public static class MyFragment extends Fragment {
         public static final java.lang.String ARG_PAGE = "arg_page";
-        ArrayList<String> people;
         public MyFragment() {
 
         }
@@ -109,6 +136,7 @@ public class PeopleActivity extends AppCompatActivity {
             myFragment.setArguments(arguments);
             return myFragment;
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,15 +152,34 @@ public class PeopleActivity extends AppCompatActivity {
     //Adapter used to populate tabs
      class PagerAdapter extends FragmentStatePagerAdapter {
 
+
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+
+
+
         @Override
         public Fragment getItem(int position) {
-            PeopleActivity.MyFragment myFragment = PeopleActivity.MyFragment.newInstance(position);
-            return myFragment;
+            //PeopleActivity.MyFragment myFragment = PeopleActivity.MyFragment.newInstance(position);
+            Fragment frag = null;
+            switch ( position) {
+                case 0:
+                    frag = new People_Fragment();
+                    break;
+                case 1:
+                    frag = new Users_Fragment();
+                    break;
+                case 2:
+                    frag = new Favorites_Fragment();
+                    break;
+            }
+            return frag;
         }
+
+
+
 
         @Override
         public int getCount() {
@@ -142,14 +189,31 @@ public class PeopleActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            return "Tab " + (position + 1);
+
+            String title = "";
+            switch ( position) {
+                case 0:
+                    title = "STAFF";
+                    break;
+                case 1:
+                    title = "USERS";
+                    break;
+                case 2:
+                    title = "FAVORITES";
+                    break;
+            }
+            return title;
         }
+
     }
 
     //CONTAINER
-    static class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.YourRecyclerViewHolder> {
+   public static class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.YourRecyclerViewHolder> {
         private ArrayList<String> list = new ArrayList<>();
         private  List<Person> personArray = new ArrayList<>();
+
+        List<Bitmap> bitMapList = new ArrayList<>();
+
         private LayoutInflater inflater;
 
         public YourRecyclerAdapter(Context context)
@@ -159,26 +223,24 @@ public class PeopleActivity extends AppCompatActivity {
             personArray= HomeActivity.people;
             inflater = LayoutInflater.from(context);
 
-            list.add("A-Bomb (HAS)");
-            list.add("A.I.M.");
-            list.add("Abe");
-            list.add("Abin");
-            list.add("Abomination");
-            list.add("Abraxas");
-            list.add("Absorbing");
 
         }
 
+
+
         @Override
         public YourRecyclerViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View root = inflater.inflate(R.layout.custom_row, viewGroup, false);
+            View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
             YourRecyclerViewHolder holder = new YourRecyclerViewHolder(root);
             return holder;
         }
 
         @Override
         public void onBindViewHolder(YourRecyclerViewHolder yourRecyclerViewHolder, int i) {
-            yourRecyclerViewHolder.textView.setText(personArray.get(i).getGivenName());
+            yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getGivenName());
+            yourRecyclerViewHolder.roomTextView.setText(personArray.get(i).getOffice());
+            //yourRecyclerViewHolder.imageView.setImageBitmap(bitMapList.get(i));
+
         }
 
         @Override
@@ -186,13 +248,18 @@ public class PeopleActivity extends AppCompatActivity {
             return personArray.size();
         }
 
-        class YourRecyclerViewHolder extends RecyclerView.ViewHolder {
+     public  class YourRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-            TextView textView;
+            TextView nameTextView;
+            TextView roomTextView;
+            ImageView imageView;
 
             public YourRecyclerViewHolder(View itemView) {
                 super(itemView);
-                textView = (TextView) itemView.findViewById(R.id.listText);
+                nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
+                roomTextView = (TextView) itemView.findViewById(R.id.roomTextView);
+                imageView = (ImageView) itemView.findViewById(R.id.rowImageView);
+
             }
         }
 
