@@ -16,18 +16,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import FontysICT.Models.Person;
 import Go2Study.Models.User;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Users_Fragment extends android.support.v4.app.Fragment  {
+public class StudentsFragment1 extends android.support.v4.app.Fragment  {
 
     ArrayList<String> people;
 
-    public Users_Fragment() {
+    public StudentsFragment1() {
         // Required empty public constructor
 
     }
@@ -41,7 +40,7 @@ public class Users_Fragment extends android.support.v4.app.Fragment  {
         Bundle arguments = getArguments();
         //int pageNumber = arguments.getInt(ARG_PAGE);
         RecyclerView recyclerView = new RecyclerView(getActivity());
-        recyclerView.setAdapter(new YourRecyclerAdapter2(getActivity()));
+        recyclerView.setAdapter(new ReCycleViewStudentFragment(getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return recyclerView;
 
@@ -54,7 +53,7 @@ public class Users_Fragment extends android.support.v4.app.Fragment  {
 }
 
 //CONTAINER
-class YourRecyclerAdapter2 extends RecyclerView.Adapter<YourRecyclerAdapter2.YourRecyclerViewHolder2> {
+class ReCycleViewStudentFragment extends RecyclerView.Adapter<ReCycleViewStudentFragment.YourRecyclerViewHolder2> {
     private ArrayList<String> list = new ArrayList<>();
     private List<User> users = new ArrayList<>();
 
@@ -62,7 +61,7 @@ class YourRecyclerAdapter2 extends RecyclerView.Adapter<YourRecyclerAdapter2.You
 
     private LayoutInflater inflater;
 
-    public YourRecyclerAdapter2(Context context) {
+    public ReCycleViewStudentFragment(Context context) {
         //list = people;
 
         users = HomeActivity.userList;
@@ -73,10 +72,10 @@ class YourRecyclerAdapter2 extends RecyclerView.Adapter<YourRecyclerAdapter2.You
 
 
     @Override
-    public YourRecyclerAdapter2.YourRecyclerViewHolder2 onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ReCycleViewStudentFragment.YourRecyclerViewHolder2 onCreateViewHolder(ViewGroup viewGroup, int i) {
         View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
         YourRecyclerViewHolder2 holder;
-        holder = new YourRecyclerAdapter2.YourRecyclerViewHolder2(root);
+        holder = new ReCycleViewStudentFragment.YourRecyclerViewHolder2(root);
         return holder;
     }
 

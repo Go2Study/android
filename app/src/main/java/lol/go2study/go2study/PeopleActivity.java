@@ -2,9 +2,7 @@ package lol.go2study.go2study;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -17,8 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,26 +23,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.plus.People;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
-import Go2Study.Invoker.ApiException;
-import Go2Study.Invoker.ApiInvoker;
-import Go2Study.Models.User;
-
-import static android.graphics.BitmapFactory.*;
 
 /**
  * Created by Todor on 12/1/2015.
@@ -122,7 +103,7 @@ public class PeopleActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+/*
     public static class MyFragment extends Fragment {
         public static final java.lang.String ARG_PAGE = "arg_page";
         public MyFragment() {
@@ -138,17 +119,18 @@ public class PeopleActivity extends AppCompatActivity {
         }
 
 
+        //peopleActivity uses
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             Bundle arguments = getArguments();
             int pageNumber = arguments.getInt(ARG_PAGE);
             RecyclerView recyclerView = new RecyclerView(getActivity());
-            recyclerView.setAdapter(new YourRecyclerAdapter(getActivity()));
+            recyclerView.setAdapter(new StaffFragment.YourRecyclerAdapter(getActivity()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             return recyclerView;
         }
     }
-
+*/
     //Adapter used to populate tabs
      class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -166,13 +148,13 @@ public class PeopleActivity extends AppCompatActivity {
             Fragment frag = null;
             switch ( position) {
                 case 0:
-                    frag = new People_Fragment();
+                    frag = new StudentsFragment1();
                     break;
                 case 1:
-                    frag = new Users_Fragment();
+                    frag = new StaffFragment();
                     break;
                 case 2:
-                    frag = new Favorites_Fragment();
+                    frag = new GroupFragment();
                     break;
             }
             return frag;
@@ -193,13 +175,13 @@ public class PeopleActivity extends AppCompatActivity {
             String title = "";
             switch ( position) {
                 case 0:
-                    title = "STAFF";
+                    title = "STUDENTS";
                     break;
                 case 1:
-                    title = "USERS";
+                    title = "STAFF";
                     break;
                 case 2:
-                    title = "FAVORITES";
+                    title = "GROUPS";
                     break;
             }
             return title;
@@ -207,61 +189,5 @@ public class PeopleActivity extends AppCompatActivity {
 
     }
 
-    //CONTAINER
-   public static class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.YourRecyclerViewHolder> {
-        private ArrayList<String> list = new ArrayList<>();
-        private  List<Person> personArray = new ArrayList<>();
 
-        List<Bitmap> bitMapList = new ArrayList<>();
-
-        private LayoutInflater inflater;
-
-        public YourRecyclerAdapter(Context context)
-        {
-            //list = people;
-
-            personArray= HomeActivity.people;
-            inflater = LayoutInflater.from(context);
-
-
-        }
-
-
-
-        @Override
-        public YourRecyclerViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
-            YourRecyclerViewHolder holder = new YourRecyclerViewHolder(root);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(YourRecyclerViewHolder yourRecyclerViewHolder, int i) {
-            yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getGivenName());
-            yourRecyclerViewHolder.roomTextView.setText(personArray.get(i).getOffice());
-            //yourRecyclerViewHolder.imageView.setImageBitmap(bitMapList.get(i));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return personArray.size();
-        }
-
-     public  class YourRecyclerViewHolder extends RecyclerView.ViewHolder {
-
-            TextView nameTextView;
-            TextView roomTextView;
-            ImageView imageView;
-
-            public YourRecyclerViewHolder(View itemView) {
-                super(itemView);
-                nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-                roomTextView = (TextView) itemView.findViewById(R.id.roomTextView);
-                imageView = (ImageView) itemView.findViewById(R.id.rowImageView);
-
-            }
-        }
-
-    }
 }

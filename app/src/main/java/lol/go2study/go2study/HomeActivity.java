@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 {
     private static final String SELECTED_ITEM_ID = "selected_item_id";
     private static final String FIRST_TIME = "first_time";
-    private Toolbar mToolbar;
+    //private Toolbar mToolbar;
     private NavigationView mDrawer;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -80,7 +80,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    public Callback getUsersApp = new Callback() {
+    public Callback getUsersAppCallBack = new Callback()
+    {
 
         @Override
         public void onFailure(Request request, IOException e) {
@@ -91,12 +92,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onResponse(Response response) throws IOException {
-
             if (response.isSuccessful()) {
                 // If it's response from Fontys
+                Log.v("USERRRRRRRRRRRRR::::", response.toString());
                 String responseRaw = response.body().string();
                 try {
-                   // Log.v("USERSLIST",responseRaw.toString());
+                   Log.v("USERSLIST",responseRaw.toString());
                     userList = (List<User>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "list", User.class);
                     Log.v("USERRRRRRRRRRRRR::::", userList.toString());
 
@@ -114,18 +115,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //Toolbar toolbar = (Toolbar)findViewById(R.id.app_bar);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         //New NavigationDrawerFragment
-        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer = (NavigationView) findViewById(R.id.main_navigation_Viewiew);
         mDrawer.setNavigationItemSelectedListener(this);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
-                mToolbar,
+                null,                      //toolbar
                 R.string.drawer_open,
                 R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -158,7 +159,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
                     peopleApi.peopleList(accessToken, getPeopleStaff);
-                    userApi.usersGet(getUsersApp,"list");
+                    userApi.usersGet(getUsersAppCallBack,"");
 
                 } catch (ApiException e) {
                     e.printStackTrace();
