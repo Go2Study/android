@@ -55,6 +55,8 @@ public class Person  {
   private String updatedAt = null;
   @SerializedName("uid")
   private String uid = null;
+  @SerializedName("thumbnailData")
+  private String thumbnailData = null;
 
   
   /**
@@ -296,6 +298,14 @@ public class Person  {
     this.uid = uid;
   }
 
+  @ApiModelProperty(value = "Thumbnaildata")
+  public String getThumbnailData() {
+    return thumbnailData;
+  }
+  public void setThumbnailData(String thumbnailData) {
+    this.thumbnailData = thumbnailData;
+  }
+
   
 
   @Override
@@ -323,6 +333,7 @@ public class Person  {
     sb.append("  affiliations: ").append(affiliations).append("\n");
     sb.append("  updatedAt: ").append(updatedAt).append("\n");
     sb.append("  uid: ").append(uid).append("\n");
+    sb.append("  thumbnailData: ").append(thumbnailData).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
