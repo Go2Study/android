@@ -1,7 +1,5 @@
 package lol.go2study.go2study;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,20 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
 
 /**
@@ -37,7 +24,7 @@ public class PeopleActivity extends AppCompatActivity {
     private CoordinatorLayout mCoordinator;
     //Need this to set the title of the app bar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-   // private Toolbar mToolbar;
+    // private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -45,8 +32,7 @@ public class PeopleActivity extends AppCompatActivity {
     private PagerAdapter mAdapter;
     private TabLayout mTabLayout;
     private UsersApi userApi;
-
-
+    private int[] icons = {R.drawable.people, R.drawable.calendar, R.drawable.g2slogo};
 
 
     @Override
@@ -68,6 +54,7 @@ public class PeopleActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
         mAdapter = new PagerAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
@@ -76,6 +63,12 @@ public class PeopleActivity extends AppCompatActivity {
 
         //Notice how The Tab Layout and View Pager object are linked
         mTabLayout.setupWithViewPager(mPager);
+
+        //SET ICONS
+        mTabLayout.getTabAt(0).setIcon(R.drawable.message);
+        mTabLayout.getTabAt(1).setIcon(R.drawable.people);
+        mTabLayout.getTabAt(2).setIcon(R.drawable.settings1);
+
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         userApi = new UsersApi();
@@ -103,36 +96,9 @@ public class PeopleActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    public static class MyFragment extends Fragment {
-        public static final java.lang.String ARG_PAGE = "arg_page";
-        public MyFragment() {
 
-        }
-
-        public static MyFragment newInstance(int pageNumber) {
-            MyFragment myFragment = new MyFragment();
-            Bundle arguments = new Bundle();
-            arguments.putInt(ARG_PAGE, pageNumber + 1);
-            myFragment.setArguments(arguments);
-            return myFragment;
-        }
-
-
-        //peopleActivity uses
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            Bundle arguments = getArguments();
-            int pageNumber = arguments.getInt(ARG_PAGE);
-            RecyclerView recyclerView = new RecyclerView(getActivity());
-            recyclerView.setAdapter(new StaffFragment.YourRecyclerAdapter(getActivity()));
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            return recyclerView;
-        }
-    }
-*/
     //Adapter used to populate tabs
-     class PagerAdapter extends FragmentStatePagerAdapter {
+    class PagerAdapter extends FragmentStatePagerAdapter {
 
 
         public PagerAdapter(FragmentManager fm) {
@@ -141,27 +107,25 @@ public class PeopleActivity extends AppCompatActivity {
 
 
 
-
         @Override
         public Fragment getItem(int position) {
             //PeopleActivity.MyFragment myFragment = PeopleActivity.MyFragment.newInstance(position);
             Fragment frag = null;
-            switch ( position) {
+            switch (position) {
                 case 0:
-                    frag = new StudentsFragment1();
+                    frag = new StudentsFragment();
+
                     break;
                 case 1:
                     frag = new StaffFragment();
                     break;
                 case 2:
                     frag = new GroupFragment();
+
                     break;
             }
             return frag;
         }
-
-
-
 
         @Override
         public int getCount() {
@@ -171,11 +135,14 @@ public class PeopleActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
+            /*
 
             String title = "";
+
             switch ( position) {
                 case 0:
                     title = "STUDENTS";
+
                     break;
                 case 1:
                     title = "STAFF";
@@ -185,9 +152,12 @@ public class PeopleActivity extends AppCompatActivity {
                     break;
             }
             return title;
+
+            */
+            return "";
+
         }
 
     }
-
 
 }

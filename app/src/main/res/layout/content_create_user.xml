@@ -56,29 +56,30 @@
         android:layout_height="wrap_content"
         android:text="@string/create_user_capture_photo"
         android:id="@+id/selfiebtn"
+        android:layout_below="@+id/photoImageView"
 
         android:layout_gravity="right"
-        android:layout_alignTop="@+id/browsebtn"
-        android:layout_alignEnd="@+id/photoImageView" />
+
+        android:layout_toEndOf="@+id/g2sImageView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_user_browse_photo"
         android:id="@+id/browsebtn"
-        android:layout_marginTop="36dp"
+
         android:layout_below="@+id/photoImageView"
-        android:layout_alignStart="@+id/photoImageView" />
+        android:layout_toStartOf="@+id/btnCreateUser" />
 
     <ImageView
-        android:layout_width="220dp"
-        android:layout_height="150dp"
+        android:layout_width="240dp"
+        android:layout_height="230dp"
         android:id="@+id/photoImageView"
         android:focusableInTouchMode="true"
         android:src = "@drawable/userphoto"
         android:contentDescription="str"
         android:scaleType="fitXY"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/classesSelector"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

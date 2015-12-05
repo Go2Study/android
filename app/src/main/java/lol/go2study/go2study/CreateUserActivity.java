@@ -245,8 +245,11 @@ public class CreateUserActivity extends AppCompatActivity {
 
                 e.printStackTrace();
             }
-
-
+        }
+        else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            imageView = (ImageView) findViewById(R.id.photoImageView);
+            imageView.setImageBitmap(photo);
         }
 
 
@@ -274,11 +277,7 @@ public class CreateUserActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) findViewById(R.id.photoImageView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
-        else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView = (ImageView) findViewById(R.id.photoImageView);
-            imageView.setImageBitmap(photo);
-        }
+
         */
         //scaleImage(view);
 

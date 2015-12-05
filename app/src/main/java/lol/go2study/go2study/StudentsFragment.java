@@ -22,11 +22,11 @@ import Go2Study.Models.User;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentsFragment1 extends android.support.v4.app.Fragment  {
+public class StudentsFragment extends android.support.v4.app.Fragment  {
 
     ArrayList<String> people;
 
-    public StudentsFragment1() {
+    public StudentsFragment() {
         // Required empty public constructor
 
     }
@@ -92,6 +92,7 @@ class ReCycleViewStudentFragment extends RecyclerView.Adapter<ReCycleViewStudent
     public int getItemCount() {
         return users.size();
     }
+
     public  class YourRecyclerViewHolder2 extends RecyclerView.ViewHolder {
 
         TextView nameTextView;
