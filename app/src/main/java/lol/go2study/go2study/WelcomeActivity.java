@@ -200,7 +200,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                     if (isValidAccessToken(accessToken)) {
                         if (isExistingUser(person.getString("id"))) {
                             //Home
-                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             //CreateUserActivity
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -242,7 +242,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                         if (isExistingUser(person.getString("id")) ) {
 
                             groupsApi.groupsList(accessToken,getGroupsCallBack);
-                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
 
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
