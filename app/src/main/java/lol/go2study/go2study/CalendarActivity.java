@@ -4,6 +4,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -11,12 +12,18 @@ import android.widget.Toast;
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import FontysICT.Api.ScheduleApi;
 
 /**
  * Created by Todor on 12/2/2015.
@@ -24,17 +31,26 @@ import java.util.Locale;
 public class CalendarActivity extends AppCompatActivity implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener {
 
+    //UI
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
+    ScheduleApi scheduleApi;
+
+    //FONTYS SCHEDULE
+
+   // public Callback GetSchedulecCallBack = new CallBack
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        //scheduleApi = new ScheduleApi();
+        //scheduleApi.scheduleMe()
 
+        //UI
         WeekView mWeekView = (WeekView) findViewById(R.id.weekView);
 
         mWeekView.setOnEventClickListener(this);

@@ -1,14 +1,25 @@
 package lol.go2study.go2study;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.squareup.okhttp.Callback;
@@ -18,6 +29,7 @@ import com.squareup.okhttp.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +49,18 @@ public class CreateUserActivity extends AppCompatActivity {
     UsersApi usersApi;
     ArrayList classNames;
     private MyDBHandler dbHandler;
+
+    //IMAGE
+    private static int RESULT_LOAD_IMAGE = 1;
+    private ImageView imageView;
+    private static final int CAMERA_REQUEST = 1888;
+
+
+    private static Bitmap Image = null;
+    private static Bitmap rotateImage = null;
+
+
+
 
 
     private Callback classCallback = new Callback() {
@@ -157,6 +181,112 @@ public class CreateUserActivity extends AppCompatActivity {
 
             }
         });
+
+        imageView = (ImageView) findViewById(R.id.photoImageView);
+        Button browsebtn = (Button)findViewById(R.id.browsebtn);
+        browsebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            //public void onClick(View v) {
+                //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //startActivityForResult(i, RESULT_LOAD_IMAGE);
+            //}
+            public void onClick(View v) {
+
+
+                imageView.setImageBitmap(null);
+
+
+                if (Image != null) Image.recycle();
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
+            }
+        });
+
+        Button selfieBtn = (Button) findViewById(R.id.selfiebtn);
+        selfieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
+
+
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode != 0) {
+
+
+            Uri mImageUri = data.getData();
+            try {
+                Image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+
+                if (getOrientation(getApplicationContext(), mImageUri) != 0) {
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(getOrientation(getApplicationContext(), mImageUri));
+
+                    if (rotateImage != null)
+                        rotateImage.recycle();
+                    rotateImage = Bitmap.createBitmap(Image, 0, 0, Image.getWidth(), Image.getHeight(), matrix, true);
+                    imageView.setImageBitmap(rotateImage);
+                } else
+                    imageView.setImageBitmap(Image);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+
+
+        }
+
+
+    }
+
+
+    public static int getOrientation(Context context, Uri photoUri) {
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[] { MediaStore.Images.ImageColumns.ORIENTATION },null, null, null);
+        if (cursor.getCount() != 1) {
+            return -1;
+        }
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+        /*
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            ImageView imageView = (ImageView) findViewById(R.id.photoImageView);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        }
+        else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            imageView = (ImageView) findViewById(R.id.photoImageView);
+            imageView.setImageBitmap(photo);
+        }
+        */
+        //scaleImage(view);
+
+
+
+
+
+
+
 
 }
