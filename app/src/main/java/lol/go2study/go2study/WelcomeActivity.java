@@ -21,9 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import FontysICT.Api.GroupsApi;
 import FontysICT.Api.PeopleApi;
+import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
+import FontysICT.Models.Group;
 import FontysICT.Models.Person;
+import FontysICT.Models.ScheduleItem;
 import Go2Study.Api.UsersApi;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Models.User;
@@ -34,15 +38,64 @@ public class WelcomeActivity extends AppCompatActivity  {
     private OAuthSettings settings;
     SharedPreferences pref;
     private List<User> userList;
-    private PeopleApi peopleApi; // Fontys
     private JSONObject person;
-
+    private GroupsApi groupsApi;
+    private PeopleApi peopleApi; // Fontys
     private UsersApi usersApi; // Go2Study db
     private User user;
     private MyDBHandler dbHandler;
+    private List<Group> groupsList;
+    private ScheduleApi scheduleApi;
+
+    public Callback getGroupsCallBack = new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+            Log.v("ERROR FROM groups","");
+
+
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            if (response.isSuccessful()) {
+                // If it's response from Fontys
+                String responseRaw = response.body().string();
+                try {
+                    groupsList = (List<Group>)ApiInvoker.deserialize(responseRaw,"list",Group.class);
+                    Log.v("GROUP::::",groupsList.toString());
+
+                } catch (Go2Study.Invoker.ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+    //List<ScheduleItem> scheduleItems;
 
     // CALLBACK METHODS
 
+    public Callback GetScheduleCallBack = new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            if (response.isSuccessful()) {
+                // If it's response from Fontys
+                String responseRaw = response.body().string();
+                try {
+                    user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
+                    Log.v("USERR::::",user.toString());
+
+                } catch (Go2Study.Invoker.ApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
 
 
@@ -111,7 +164,10 @@ public class WelcomeActivity extends AppCompatActivity  {
 
         //DB Helper
         dbHandler = new MyDBHandler(this, "People", null, 1);
-
+        groupsList = new ArrayList<>();
+        scheduleApi = new ScheduleApi();
+        groupsApi = new GroupsApi();
+       // scheduleApi.scheduleForQuery();
         setContentView(R.layout.activity_welcome);
 
         //Initialize helper class, which is used for the Fontys oAuth
@@ -144,7 +200,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                     if (isValidAccessToken(accessToken)) {
                         if (isExistingUser(person.getString("id"))) {
                             //Home
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         } else {
                             //CreateUserActivity
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
@@ -184,7 +240,10 @@ public class WelcomeActivity extends AppCompatActivity  {
                 try {
                     if (isValidAccessToken(accessToken)) {
                         if (isExistingUser(person.getString("id")) ) {
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+
+                            groupsApi.groupsList(accessToken,getGroupsCallBack);
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
@@ -195,6 +254,8 @@ public class WelcomeActivity extends AppCompatActivity  {
                 catch(JSONException q)
                 {
                     q.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -247,6 +308,7 @@ public class WelcomeActivity extends AppCompatActivity  {
         try {
             // Find the data of the user, who holds this token
             peopleApi.peopleMe(accessToken, PeopleMe);
+
         }
         catch (ApiException e){
             e.printStackTrace();
