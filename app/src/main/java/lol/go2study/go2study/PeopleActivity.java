@@ -64,21 +64,46 @@ public class PeopleActivity extends AppCompatActivity {
         //Notice how The Tab Layout and View Pager object are linked
         mTabLayout.setupWithViewPager(mPager);
 
-        //SET ICONS
-        mTabLayout.getTabAt(0).setIcon(R.drawable.message);
-        mTabLayout.getTabAt(1).setIcon(R.drawable.people);
-        mTabLayout.getTabAt(2).setIcon(R.drawable.settings1);
+        /*
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //mProgressDialog.dismiss();
+                mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+                mTabLayout.getTabAt(0).setIcon(R.drawable.message);
+                mTabLayout.getTabAt(1).setIcon(R.drawable.people);
+                mTabLayout.getTabAt(2).setIcon(R.drawable.settings1);
+            }
+        });
+        */
+
+       mTabLayout.getTabAt(0).setIcon(R.drawable.message);
+        for (int i = 0;i< mTabLayout.getTabCount();i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.message);
+                    break;
+                case 1:
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.logo);
+                    break;
+                case 2:
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.settings1);
+                    break;
+            }
+        }
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
         userApi = new UsersApi();
 
     }
 
+    //try to change this...
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_fourth, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -105,11 +130,8 @@ public class PeopleActivity extends AppCompatActivity {
             super(fm);
         }
 
-
-
         @Override
         public Fragment getItem(int position) {
-            //PeopleActivity.MyFragment myFragment = PeopleActivity.MyFragment.newInstance(position);
             Fragment frag = null;
             switch (position) {
                 case 0:
@@ -134,26 +156,6 @@ public class PeopleActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-
-            /*
-
-            String title = "";
-
-            switch ( position) {
-                case 0:
-                    title = "STUDENTS";
-
-                    break;
-                case 1:
-                    title = "STAFF";
-                    break;
-                case 2:
-                    title = "GROUPS";
-                    break;
-            }
-            return title;
-
-            */
             return "";
 
         }

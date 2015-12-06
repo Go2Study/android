@@ -33,7 +33,7 @@ import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
 
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class HomeActivity extends AppCompatActivity
 {
     private static final String SELECTED_ITEM_ID = "selected_item_id";
     private static final String FIRST_TIME = "first_time";
@@ -54,39 +54,34 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     static List<User> userList;
 
     public Callback getPeopleStaff = new Callback() {
+
         @Override
-        public void onFailure(Request request, IOException e)
-        {
+        public void onFailure(Request request, IOException e) {
             //do something to indicate error
         }
 
         @Override
-        public void onResponse(Response response) throws IOException
-        {
+        public void onResponse(Response response) throws IOException {
             if (response.isSuccessful()) {
                 try {
                     String responseRaw = response.body().string();
                     Person p;
                     //List<Person> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
-                    //Log.v("PEOPLE", people.toString());
+
                 }
                 catch (ApiException e)
                 {
                     e.printStackTrace();
                 }
-
-
             }
         }
     };
 
-    public Callback getUsersAppCallBack = new Callback()
-    {
-
+    public Callback getUsersAppCallBack = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
-            Log.v("ERROR GETUSERS",request.body().toString());
+
 
 
         }
@@ -95,12 +90,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public void onResponse(Response response) throws IOException {
             if (response.isSuccessful()) {
                 // If it's response from Fontys
-                Log.v("USERRRRRRRRRRRRR::::", response.toString());
                 String responseRaw = response.body().string();
                 try {
-                   Log.v("USERSLIST",responseRaw.toString());
                     userList = (List<User>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "list", User.class);
-                    Log.v("USERRRRRRRRRRRRR::::", userList.toString());
 
                 } catch (Go2Study.Invoker.ApiException e) {
                     e.printStackTrace();
@@ -120,13 +112,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //New NavigationDrawerFragment
         mDrawer = (NavigationView) findViewById(R.id.main_navigation_Viewiew);
-        mDrawer.setNavigationItemSelectedListener(this);
+        mDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                mSelectedId = menuItem.getItemId();
+                navigate(mSelectedId);
+                return true;
+            }
+
+        });
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                null,                      //toolbar
-                R.string.drawer_open,
-                R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
         if (!didUserSeeDrawer()) {
@@ -245,13 +244,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
-        menuItem.setChecked(true);
-        mSelectedId = menuItem.getItemId();
-        navigate(mSelectedId);
-        return true;
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

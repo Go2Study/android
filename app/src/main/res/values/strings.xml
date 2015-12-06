@@ -66,4 +66,5 @@
     <string name="action_day_view">Day view</string>
     <string name="action_three_day_view">Three days</string>
     <string name="action_week_view">Week view</string>
+    <string name="title_activity_people2">PeopleActivity2</string>
 </resources>

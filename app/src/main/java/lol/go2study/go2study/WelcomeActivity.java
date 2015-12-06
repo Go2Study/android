@@ -293,7 +293,6 @@ public class WelcomeActivity extends AppCompatActivity  {
                 if (timestampNow >= timestampExpiry){
                     return false;
                 }
-                Log.v("STATUS::::::::::::","LOGGED IN");
                 //The user is logged in and the session has not expired
                 return true;
             } catch (JSONException e){

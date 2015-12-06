@@ -103,7 +103,6 @@ public class CreateUserActivity extends AppCompatActivity {
     private Callback userCreateCallback = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
-            Log.v("FAILURE",request.body().toString());
         }
 
         @Override
@@ -111,13 +110,13 @@ public class CreateUserActivity extends AppCompatActivity {
             if (response.isSuccessful()) {
                 try {
                     String responseBody = response.body().string();
-                    Log.v("Response body", responseBody);
+
                     userCreatedResponseStatus = new JSONObject(responseBody);
-                    Log.v("USerCREATECALL",userCreatedResponseStatus.toString());
+
                     if (userCreatedResponseStatus.getString("firstName") != null){
                         startActivity(new Intent(CreateUserActivity.this, HomeActivity.class));
                     } else {
-                        Log.v("Creating user failed",userCreatedResponseStatus.toString());
+
                     }
 
                 }
@@ -125,7 +124,7 @@ public class CreateUserActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                Log.v("Not succesful","");
+
             }
         }
     };
@@ -156,7 +155,7 @@ public class CreateUserActivity extends AppCompatActivity {
             try {
                 schedule.scheduleAutoComplete(accessToken, classCallback, "class", "");
             } catch (ApiException e) {
-                Log.v("Error", e.getMessage());
+
             }
         }
 
@@ -167,12 +166,12 @@ public class CreateUserActivity extends AppCompatActivity {
                 Spinner classSpinner = (Spinner)findViewById(R.id.classesSelector);
                 String className = classSpinner.getSelectedItem().toString();
                 Person p = dbHandler.getPerson();
-                Log.v("Person from DB:", p.toString());
+                //Log.v("Person from DB:", p.toString());
                 try {
                    // UsersApi apiUser = new UsersApi();
-                    Log.v("PRE","BEFORE REQUEST");
+                   // Log.v("PRE","BEFORE REQUEST");
                     usersApi.usersPost(userCreateCallback, p.getGivenName(), p.getSurName(), p.getId(), p.getMail(), className,  "", "");
-                    Log.v("Create users call sent","@@@@@@@@@@@@@@@@@@@@@@");
+                    //Log.v("Create users call sent","@@@@@@@@@@@@@@@@@@@@@@");
                 }
                 catch (Go2Study.Invoker.ApiException e) {
                     e.printStackTrace();
@@ -217,6 +216,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
     }
 
+    //IMAGE FROM GALLERY AND CAMERA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -265,21 +265,6 @@ public class CreateUserActivity extends AppCompatActivity {
         cursor.moveToFirst();
         return cursor.getInt(0);
     }
-        /*
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            ImageView imageView = (ImageView) findViewById(R.id.photoImageView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-        }
-
-        */
-        //scaleImage(view);
 
 
 
