@@ -33,6 +33,8 @@ public class ScheduleItem  {
   private Integer hoursMask = null;
   @SerializedName("description")
   private String description = null;
+  @SerializedName("updatedAt")
+  private Date updatedAt = null;
 
   
   /**
@@ -143,6 +145,18 @@ public class ScheduleItem  {
   }
 
   
+  /**
+   * The timestamp of the last update of this leasson. Only provided for leassons after 2015-11-10
+   **/
+  @ApiModelProperty(value = "The timestamp of the last update of this leasson. Only provided for leassons after 2015-11-10")
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  
 
   @Override
   public String toString()  {
@@ -158,6 +172,7 @@ public class ScheduleItem  {
     sb.append("  uid: ").append(uid).append("\n");
     sb.append("  hoursMask: ").append(hoursMask).append("\n");
     sb.append("  description: ").append(description).append("\n");
+    sb.append("  updatedAt: ").append(updatedAt).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

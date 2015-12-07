@@ -4,18 +4,24 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Invoker.Pair;
+
+import FontysICT.Models.*;
+
+import java.util.*;
+
+import FontysICT.Models.ScheduleQueryItem;
 import FontysICT.Models.Period;
 import FontysICT.Models.Schedule;
-import FontysICT.Models.ScheduleQueryItem;
+import java.util.Date;
+
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
 
 
 public class ScheduleApi {
@@ -179,9 +185,10 @@ public class ScheduleApi {
    * @param days Number of days to retrieve (default = 14)
    * @param start First day to request format yyyy-mm-dd (defaults = today)
    * @param startLastMonday Request the schedule starting last monday. This overrides the start parameter (default = false)
+   * @param expandWeeks Include the schoolweeks in the output (default = false)
    * @return Schedule
    */
-  public Schedule  scheduleMe (String accessToken, Callback callback, Boolean expandTeacher, Integer days, Date start, Boolean startLastMonday) throws ApiException {
+  public Schedule  scheduleMe (String accessToken, Callback callback, Boolean expandTeacher, Integer days, Date start, Boolean startLastMonday, Boolean expandWeeks) throws ApiException {
     Object postBody = null;
     
 
@@ -203,6 +210,8 @@ public class ScheduleApi {
     queryParams.addAll(ApiInvoker.parameterToPairs("", "start", start));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "startLastMonday", startLastMonday));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "expandWeeks", expandWeeks));
     
 
     
@@ -317,9 +326,10 @@ public class ScheduleApi {
    * @param expandTeacher Expand the teacher information (default = false)
    * @param start First day to request format yyyy-mm-dd (default = today)
    * @param startLastMonday Request the schedule starting last monday (default = false)
+   * @param expandWeeks Include the schoolweeks in the output (default = false)
    * @return Schedule
    */
-  public Schedule  scheduleForQuery (String accessToken, Callback callback, String kind, String query, Integer days, Boolean expandTeacher, Date start, Boolean startLastMonday) throws ApiException {
+  public Schedule  scheduleForQuery (String accessToken, Callback callback, String kind, String query, Integer days, Boolean expandTeacher, Date start, Boolean startLastMonday, Boolean expandWeeks) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -351,6 +361,8 @@ public class ScheduleApi {
     queryParams.addAll(ApiInvoker.parameterToPairs("", "start", start));
     
     queryParams.addAll(ApiInvoker.parameterToPairs("", "startLastMonday", startLastMonday));
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "expandWeeks", expandWeeks));
     
 
     

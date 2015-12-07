@@ -47,6 +47,10 @@ public class JsonUtil {
       return new TypeToken<List<CalendarItem>>(){}.getType();
     }
     
+    if ("StudyResult".equalsIgnoreCase(className)) {
+      return new TypeToken<List<StudyResult>>(){}.getType();
+    }
+    
     if ("Group".equalsIgnoreCase(className)) {
       return new TypeToken<List<Group>>(){}.getType();
     }
@@ -111,8 +115,8 @@ public class JsonUtil {
       return new TypeToken<List<NewsItem>>(){}.getType();
     }
     
-    if ("KeyValuePair".equalsIgnoreCase(className)) {
-      return new TypeToken<List<KeyValuePair>>(){}.getType();
+    if ("KeyValuePair[String,String]".equalsIgnoreCase(className)) {
+      return new TypeToken<List<KeyValuePair[String,String]>>(){}.getType();
     }
     
     if ("RoomOccupancy".equalsIgnoreCase(className)) {
@@ -127,12 +131,12 @@ public class JsonUtil {
       return new TypeToken<List<ScheduleItem>>(){}.getType();
     }
     
-    if ("ScheduleQueryItem".equalsIgnoreCase(className)) {
-      return new TypeToken<List<ScheduleQueryItem>>(){}.getType();
-    }
-    
     if ("Period".equalsIgnoreCase(className)) {
       return new TypeToken<List<Period>>(){}.getType();
+    }
+    
+    if ("ScheduleQueryItem".equalsIgnoreCase(className)) {
+      return new TypeToken<List<ScheduleQueryItem>>(){}.getType();
     }
     
     return new TypeToken<List<Object>>(){}.getType();
@@ -151,6 +155,10 @@ public class JsonUtil {
     
     if ("CalendarItem".equalsIgnoreCase(className)) {
       return new TypeToken<CalendarItem>(){}.getType();
+    }
+    
+    if ("StudyResult".equalsIgnoreCase(className)) {
+      return new TypeToken<StudyResult>(){}.getType();
     }
     
     if ("Group".equalsIgnoreCase(className)) {
@@ -217,8 +225,8 @@ public class JsonUtil {
       return new TypeToken<NewsItem>(){}.getType();
     }
     
-    if ("KeyValuePair".equalsIgnoreCase(className)) {
-      return new TypeToken<KeyValuePair>(){}.getType();
+    if ("KeyValuePair[String,String]".equalsIgnoreCase(className)) {
+      return new TypeToken<KeyValuePair[String,String]>(){}.getType();
     }
     
     if ("RoomOccupancy".equalsIgnoreCase(className)) {
@@ -233,12 +241,12 @@ public class JsonUtil {
       return new TypeToken<ScheduleItem>(){}.getType();
     }
     
-    if ("ScheduleQueryItem".equalsIgnoreCase(className)) {
-      return new TypeToken<ScheduleQueryItem>(){}.getType();
-    }
-    
     if ("Period".equalsIgnoreCase(className)) {
       return new TypeToken<Period>(){}.getType();
+    }
+    
+    if ("ScheduleQueryItem".equalsIgnoreCase(className)) {
+      return new TypeToken<ScheduleQueryItem>(){}.getType();
     }
     
     return new TypeToken<Object>(){}.getType();

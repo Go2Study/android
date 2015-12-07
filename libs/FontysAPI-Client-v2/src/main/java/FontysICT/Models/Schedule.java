@@ -1,6 +1,7 @@
 package FontysICT.Models;
 
 import FontysICT.Models.ScheduleItem;
+import FontysICT.Models.Period;
 import java.util.*;
 import FontysICT.Models.Person;
 import java.util.Date;
@@ -27,6 +28,10 @@ public class Schedule  {
   private Date start = null;
   @SerializedName("teachers")
   private List<Person> teachers = null;
+  @SerializedName("weeks")
+  private List<Period> weeks = null;
+  @SerializedName("latestUpdate")
+  private Date latestUpdate = null;
 
   
   /**
@@ -89,6 +94,30 @@ public class Schedule  {
   }
 
   
+  /**
+   * All the current schoolweeks (sadly in dutch)
+   **/
+  @ApiModelProperty(value = "All the current schoolweeks (sadly in dutch)")
+  public List<Period> getWeeks() {
+    return weeks;
+  }
+  public void setWeeks(List<Period> weeks) {
+    this.weeks = weeks;
+  }
+
+  
+  /**
+   * The higest value of 'updatedAt' of the current Data
+   **/
+  @ApiModelProperty(value = "The higest value of 'updatedAt' of the current Data")
+  public Date getLatestUpdate() {
+    return latestUpdate;
+  }
+  public void setLatestUpdate(Date latestUpdate) {
+    this.latestUpdate = latestUpdate;
+  }
+
+  
 
   @Override
   public String toString()  {
@@ -100,6 +129,8 @@ public class Schedule  {
     sb.append("  numberOfDays: ").append(numberOfDays).append("\n");
     sb.append("  start: ").append(start).append("\n");
     sb.append("  teachers: ").append(teachers).append("\n");
+    sb.append("  weeks: ").append(weeks).append("\n");
+    sb.append("  latestUpdate: ").append(latestUpdate).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

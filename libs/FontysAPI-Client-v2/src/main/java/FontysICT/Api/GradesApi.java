@@ -12,7 +12,7 @@ import FontysICT.Models.*;
 
 import java.util.*;
 
-import FontysICT.Models.KeyValuePair[String,String];
+import FontysICT.Models.StudyResult;
 
 
 
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.io.File;
 
 
-public class PermissionsApi {
+public class GradesApi {
   String basePath = "https://tas.fhict.nl:443/api/v1";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
@@ -43,16 +43,16 @@ public class PermissionsApi {
 
   
   /**
-   * View all the claims of the current token.
+   * Request personal study results. Always display the &#39;rights&#39; message in your application.
    * 
-   * @return List<KeyValuePair[String,String]>
+   * @return List<StudyResult>
    */
-  public List<KeyValuePair[String,String]>  permissionsClaims (String accessToken, Callback callback) throws ApiException {
+  public List<StudyResult>  gradesMe (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
     // create path and map variables
-    String path = "/permissions/claims".replaceAll("\\{format\\}","json");
+    String path = "/grades/me".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -94,7 +94,7 @@ public class PermissionsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
-        return (List<KeyValuePair[String,String]>) ApiInvoker.deserialize(response, "array", KeyValuePair[String,String].class);
+        return (List<StudyResult>) ApiInvoker.deserialize(response, "array", StudyResult.class);
       }
       else {
         return null;
@@ -105,16 +105,16 @@ public class PermissionsApi {
   }
   
   /**
-   * View the roles of the current token
+   * The text that should be displayed in your app if you show student grades.
    * 
-   * @return List<String>
+   * @return String
    */
-  public List<String>  permissionsRoles (String accessToken, Callback callback) throws ApiException {
+  public String  gradesRights (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
     // create path and map variables
-    String path = "/permissions/roles".replaceAll("\\{format\\}","json");
+    String path = "/grades/rights".replaceAll("\\{format\\}","json");
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -156,7 +156,7 @@ public class PermissionsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
-        return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
+        return (String) ApiInvoker.deserialize(response, "", String.class);
       }
       else {
         return null;
@@ -167,16 +167,22 @@ public class PermissionsApi {
   }
   
   /**
-   * View the scopes of the current token.
+   * Staff members may request results for students. Always display the &#39;rights&#39; message in your application.
    * 
-   * @return List<String>
+   * @param username The username of the student (eg. i123456)
+   * @return List<StudyResult>
    */
-  public List<String>  permissionsScopes (String accessToken, Callback callback) throws ApiException {
+  public List<StudyResult>  gradesStudent (String accessToken, Callback callback, String username) throws ApiException {
     Object postBody = null;
+    
+    // verify the required parameter 'username' is set
+    if (username == null) {
+       throw new ApiException(400, "Missing the required parameter 'username' when calling gradesStudent");
+    }
     
 
     // create path and map variables
-    String path = "/permissions/scopes".replaceAll("\\{format\\}","json");
+    String path = "/grades/{username}".replaceAll("\\{format\\}","json").replaceAll("\\{" + "username" + "\\}", apiInvoker.escapeString(username.toString()));
 
     // query params
     List<Pair> queryParams = new ArrayList<Pair>();
@@ -218,7 +224,7 @@ public class PermissionsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
-        return (List<String>) ApiInvoker.deserialize(response, "array", String.class);
+        return (List<StudyResult>) ApiInvoker.deserialize(response, "array", StudyResult.class);
       }
       else {
         return null;

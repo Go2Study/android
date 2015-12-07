@@ -45,9 +45,10 @@ public class PeopleApi {
   /**
    * List all teachers and staff.
    * This endpoint also supports oData queries for filtering, ordering and paging
+   * @param includeThumbs 
    * @return List<Person>
    */
-  public List<Person>  peopleList (String accessToken, Callback callback) throws ApiException {
+  public List<Person>  peopleList (String accessToken, Callback callback, Boolean includeThumbs) throws ApiException {
     Object postBody = null;
     
 
@@ -61,6 +62,8 @@ public class PeopleApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "includeThumbs", includeThumbs));
     
 
     

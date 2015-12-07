@@ -46,7 +46,7 @@ public class RoomsApi {
   /**
    * List all the rooms, and it they are occupied.
    * Currently only returns rooms from the schedule (since we don&#39;t have a database with all rooms yet)
-   * @param date Specify the date you want to compute the date for. (2015-07-28) [default = today]
+   * @param date Specify the date you want to compute the date for. (2015-07-28)
    * @return List<RoomOccupancy>
    */
   public List<RoomOccupancy>  roomsOccupancy (String accessToken, Callback callback, Date date) throws ApiException {

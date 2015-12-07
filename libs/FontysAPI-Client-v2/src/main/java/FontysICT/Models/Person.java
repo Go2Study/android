@@ -1,11 +1,12 @@
 package FontysICT.Models;
 
+import FontysICT.Models.Group;
+import java.util.*;
+import java.util.Date;
+
+
+import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 
 
@@ -52,7 +53,7 @@ public class Person  {
   @SerializedName("affiliations")
   private List<String> affiliations = null;
   @SerializedName("updatedAt")
-  private String updatedAt = null;
+  private Date updatedAt = null;
   @SerializedName("uid")
   private String uid = null;
   @SerializedName("thumbnailData")
@@ -279,10 +280,10 @@ public class Person  {
    * Person last updated. (May not be accurate)
    **/
   @ApiModelProperty(value = "Person last updated. (May not be accurate)")
-  public String getUpdatedAt() {
+  public Date getUpdatedAt() {
     return updatedAt;
   }
-  public void setUpdatedAt(String updatedAt) {
+  public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -298,7 +299,11 @@ public class Person  {
     this.uid = uid;
   }
 
-  @ApiModelProperty(value = "Thumbnaildata")
+  
+  /**
+   * User thumbnail (if requested and allowed)
+   **/
+  @ApiModelProperty(value = "User thumbnail (if requested and allowed)")
   public String getThumbnailData() {
     return thumbnailData;
   }

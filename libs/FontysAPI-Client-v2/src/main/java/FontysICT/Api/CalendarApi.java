@@ -13,6 +13,7 @@ import FontysICT.Models.*;
 import java.util.*;
 
 import FontysICT.Models.Calendar;
+import java.util.Date;
 
 
 
@@ -115,9 +116,10 @@ public class CalendarApi {
    * 
    * @param kind Group kind (students/staff)
    * @param tag Calendar Tag, possible values can be requested with tags/{kind}
+   * @param start From which date should the calendar be fetched.
    * @return Calendar
    */
-  public Calendar  calendarShared (String accessToken, Callback callback, String kind, String tag) throws ApiException {
+  public Calendar  calendarShared (String accessToken, Callback callback, String kind, String tag, Date start) throws ApiException {
     Object postBody = null;
     
     // verify the required parameter 'kind' is set
@@ -141,6 +143,8 @@ public class CalendarApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "start", start));
     
 
     
