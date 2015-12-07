@@ -15,19 +15,15 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import FontysICT.Api.GroupsApi;
 import FontysICT.Api.PeopleApi;
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Models.Group;
-import FontysICT.Models.Person;
-import FontysICT.Models.ScheduleItem;
 import Go2Study.Api.UsersApi;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Models.User;
@@ -47,6 +43,10 @@ public class WelcomeActivity extends AppCompatActivity  {
     private List<Group> groupsList;
     private ScheduleApi scheduleApi;
 
+
+
+
+    // CALLBACK METHODS
     public Callback getGroupsCallBack = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
@@ -71,9 +71,6 @@ public class WelcomeActivity extends AppCompatActivity  {
         }
     };
 
-    //List<ScheduleItem> scheduleItems;
-
-    // CALLBACK METHODS
 
     public Callback GetScheduleCallBack = new Callback() {
         @Override
@@ -96,8 +93,6 @@ public class WelcomeActivity extends AppCompatActivity  {
             }
         }
     };
-
-
 
     Callback GetUser = new Callback() {
          @Override
