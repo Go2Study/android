@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -155,13 +154,13 @@ public class HomeActivity extends AppCompatActivity
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
-                    peopleApi.peopleList(accessToken, getPeopleStaff);
+                    peopleApi.peopleList(accessToken, getPeopleStaff, true);
                     userApi.usersGet(getUsersAppCallBack,"");
 
                 } catch (ApiException e) {
                     e.printStackTrace();
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
+                } catch (Go2Study.Invoker.ApiException j) {
+                    j.printStackTrace();
                 }
             }
         }

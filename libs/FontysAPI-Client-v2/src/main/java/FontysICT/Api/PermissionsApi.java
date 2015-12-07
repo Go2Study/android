@@ -12,7 +12,7 @@ import FontysICT.Models.*;
 
 import java.util.*;
 
-import FontysICT.Models.KeyValuePair[String,String];
+import FontysICT.Models.KeyValuePair;
 
 
 
@@ -45,9 +45,9 @@ public class PermissionsApi {
   /**
    * View all the claims of the current token.
    * 
-   * @return List<KeyValuePair[String,String]>
+   * @return List<KeyValuePair>
    */
-  public List<KeyValuePair[String,String]>  permissionsClaims (String accessToken, Callback callback) throws ApiException {
+  public List<KeyValuePair>  permissionsClaims (String accessToken, Callback callback) throws ApiException {
     Object postBody = null;
     
 
@@ -94,7 +94,7 @@ public class PermissionsApi {
     try {
       String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, accessToken, callback);
       if(response != null){
-        return (List<KeyValuePair[String,String]>) ApiInvoker.deserialize(response, "array", KeyValuePair[String,String].class);
+        return (List<KeyValuePair>) ApiInvoker.deserialize(response, "array", KeyValuePair.class);
       }
       else {
         return null;

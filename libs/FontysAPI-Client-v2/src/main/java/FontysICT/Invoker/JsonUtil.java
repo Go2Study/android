@@ -115,8 +115,8 @@ public class JsonUtil {
       return new TypeToken<List<NewsItem>>(){}.getType();
     }
     
-    if ("KeyValuePair[String,String]".equalsIgnoreCase(className)) {
-      return new TypeToken<List<KeyValuePair[String,String]>>(){}.getType();
+    if ("KeyValuePair".equalsIgnoreCase(className)) {
+      return new TypeToken<List<KeyValuePair>>(){}.getType();
     }
     
     if ("RoomOccupancy".equalsIgnoreCase(className)) {
@@ -225,8 +225,8 @@ public class JsonUtil {
       return new TypeToken<NewsItem>(){}.getType();
     }
     
-    if ("KeyValuePair[String,String]".equalsIgnoreCase(className)) {
-      return new TypeToken<KeyValuePair[String,String]>(){}.getType();
+    if ("KeyValuePair".equalsIgnoreCase(className)) {
+      return new TypeToken<KeyValuePair>(){}.getType();
     }
     
     if ("RoomOccupancy".equalsIgnoreCase(className)) {
