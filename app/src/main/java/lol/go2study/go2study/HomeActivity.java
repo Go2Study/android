@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -86,16 +87,22 @@ public class HomeActivity extends AppCompatActivity
     private void BitMapImages(List<Person> personList)
     {
         List<byte[]> listOfImages = new ArrayList<>();
+        Log.v("People list size",String.valueOf(personList.size()));
         for (Person p :personList) {
-            byte[] data;
+            byte[] data = null;
             try {
-                data = p.getThumbnailData().getBytes("UTF-8");
-                byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
-                listOfImages.add(byteImage);
+                if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
+                    data = p.getThumbnailData().getBytes("UTF-8");
+
+                    byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
+                    listOfImages.add(byteImage);
+                }
             } catch (UnsupportedEncodingException e) {
+                Log.v("data",data.toString());
                 e.printStackTrace();
             }
         }
+        Log.v("List of IMG Length",String.valueOf(listOfImages.size()));
         for (byte[] b:listOfImages) {
             Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
             staffImages.add(bitmap);

@@ -84,7 +84,6 @@ class ReCycleViewStudentFragment extends RecyclerView.Adapter<ReCycleViewStudent
         holder.nameTextView.setText(users.get(i).getFirstName());
         holder.roomTextView.setText(users.get(i).getLastName());
         //yourRecyclerViewHolder.imageView.setImageBitmap(bitMapList.get(i));
-
     }
 
 

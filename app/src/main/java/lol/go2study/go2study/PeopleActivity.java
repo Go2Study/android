@@ -58,27 +58,13 @@ public class PeopleActivity extends AppCompatActivity {
         mAdapter = new PagerAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
-        //Notice how the Tab Layout links with the Pager Adapter
+
         mTabLayout.setTabsFromPagerAdapter(mAdapter);
 
         //Notice how The Tab Layout and View Pager object are linked
         mTabLayout.setupWithViewPager(mPager);
 
-        /*
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //mProgressDialog.dismiss();
-                mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-                mTabLayout.getTabAt(0).setIcon(R.drawable.message);
-                mTabLayout.getTabAt(1).setIcon(R.drawable.people);
-                mTabLayout.getTabAt(2).setIcon(R.drawable.settings1);
-            }
-        });
-        */
-
-       mTabLayout.getTabAt(0).setIcon(R.drawable.message);
         for (int i = 0;i< mTabLayout.getTabCount();i++)
         {
             switch (i)
@@ -122,7 +108,7 @@ public class PeopleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Adapter used to populate tabs
+
     class PagerAdapter extends FragmentStatePagerAdapter {
 
 
