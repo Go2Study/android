@@ -53,7 +53,7 @@ public class Person  {
   @SerializedName("affiliations")
   private List<String> affiliations = null;
   @SerializedName("updatedAt")
-  private Date updatedAt = null;
+  private String updatedAt = null;
   @SerializedName("uid")
   private String uid = null;
   @SerializedName("thumbnailData")
@@ -280,10 +280,10 @@ public class Person  {
    * Person last updated. (May not be accurate)
    **/
   @ApiModelProperty(value = "Person last updated. (May not be accurate)")
-  public Date getUpdatedAt() {
+  public String getUpdatedAt() {
     return updatedAt;
   }
-  public void setUpdatedAt(Date updatedAt) {
+  public void String(String updatedAt) {
     this.updatedAt = updatedAt;
   }
 

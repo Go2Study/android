@@ -4,6 +4,8 @@ package lol.go2study.go2study;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -11,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,6 +24,7 @@ import com.squareup.okhttp.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +55,7 @@ public class HomeActivity extends AppCompatActivity
     SharedPreferences pref;
     static List<Person> people;
     static List<User> userList;
+    static List<Bitmap> staffImages;
 
     public Callback getPeopleStaff = new Callback() {
 
@@ -67,6 +72,7 @@ public class HomeActivity extends AppCompatActivity
                     Person p;
                     //List<Person> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
+                    BitMapImages(people);
 
                 }
                 catch (ApiException e)
@@ -76,6 +82,25 @@ public class HomeActivity extends AppCompatActivity
             }
         }
     };
+
+    private void BitMapImages(List<Person> personList)
+    {
+        List<byte[]> listOfImages = new ArrayList<>();
+        for (Person p :personList) {
+            byte[] data;
+            try {
+                data = p.getThumbnailData().getBytes("UTF-8");
+                byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
+                listOfImages.add(byteImage);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        for (byte[] b:listOfImages) {
+            Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
+            staffImages.add(bitmap);
+        }
+    }
 
     public Callback getUsersAppCallBack = new Callback() {
         @Override
@@ -147,7 +172,7 @@ public class HomeActivity extends AppCompatActivity
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
         userList = new ArrayList<>();
-
+        staffImages = new ArrayList<>();
         //Add button event click to redirect to Fontys oAuth webpage
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);

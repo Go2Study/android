@@ -49,7 +49,6 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     public static class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.RecycleViewPeopleActivity> {
         private ArrayList<String> list = new ArrayList<>();
         private List<Person> personArray = new ArrayList<>();
-
         List<Bitmap> bitMapList = new ArrayList<>();
 
         private LayoutInflater inflater;
@@ -61,7 +60,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             personArray= HomeActivity.people;
             inflater = LayoutInflater.from(context);
             //Log.v("FROMHERE",personArray.get(0).getPhoto());
-
+            bitMapList = HomeActivity.staffImages;
 
         }
 
@@ -78,7 +77,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         public void onBindViewHolder(RecycleViewPeopleActivity yourRecyclerViewHolder, int i) {
             yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getGivenName());
             yourRecyclerViewHolder.roomTextView.setText(personArray.get(i).getOffice());
-            //yourRecyclerViewHolder.imageView.setImageBitmap(bitMapList.get(i));
+            yourRecyclerViewHolder.imageView.setImageBitmap(bitMapList.get(i));
 
         }
 
