@@ -2,15 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="65dp"
+    android:paddingLeft="8dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     >
 
     <ImageView
         android:id="@+id/rowImageView"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="18dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginRight="25dp"
+
         android:src="@drawable/home"
 
 
@@ -22,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity ="center_vertical"
         android:text="dummy text"
-        android:textColor="@color/common_google_signin_btn_text_light"
+        android:textColor="#360d0d"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/rowImageView" />
 
