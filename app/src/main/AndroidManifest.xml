@@ -53,6 +53,11 @@
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppTheme" >
         </activity>
+        <activity
+            android:name=".AddGroupActivity"
+            android:label="@string/title_activity_add_group"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>

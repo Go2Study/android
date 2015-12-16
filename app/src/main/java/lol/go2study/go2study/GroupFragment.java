@@ -1,6 +1,7 @@
 package lol.go2study.go2study;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import FontysICT.Models.Group;
 
 
 /**
@@ -29,13 +32,12 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "FAKA FAKA",
-                        Toast.LENGTH_SHORT).show();
+                //Intent i = new Intent(GroupFragment.this, AddGroupActivity.class);
+                Intent intent = new Intent(getActivity(), AddGroupActivity.class);
+                startActivity(intent);
             }
         });
         // Inflate the layout for this fragment
         return rootView;
     }
-
-
 }
