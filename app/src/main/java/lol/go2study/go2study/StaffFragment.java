@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,6 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
         Bundle arguments = getArguments();
         //int pageNumber = arguments.getInt(ARG_PAGE);
         RecyclerView recyclerView = new RecyclerView(getActivity());
@@ -56,11 +55,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         public YourRecyclerAdapter(Context context)
         {
-            //list = people;
+
             this.context = context;
             personArray= HomeActivity.people;
             inflater = LayoutInflater.from(context);
-            //Log.v("FROMHERE",personArray.get(0).getPhoto());
+
             bitMapList = HomeActivity.staffImages;
 
         }
@@ -90,15 +89,15 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             yourRecyclerViewHolder.favoritesImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"FOVORITES ICON",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "FOVORITES ICON", Toast.LENGTH_SHORT).show();
                 }
             });
             yourRecyclerViewHolder.setClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int position, boolean isLongClick) {
-                    Toast.makeText(context,personArray.get(position).getGivenName(),Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra("name",personArray.get(position).getDisplayName());
+                    Toast.makeText(context,personArray.get(position).getGivenName(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity() ,ProfileActivity.class);
+                    intent.putExtra("data",personArray.get(position).getInitials());
                     startActivity(intent);
 
                 }
@@ -111,7 +110,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             return personArray.size();
         }
 
-        public  class RecycleViewPeopleActivity extends RecyclerView.ViewHolder implements ItemClickListener
+        public  class RecycleViewPeopleActivity extends RecyclerView.ViewHolder implements View.OnClickListener
         {
 
             TextView nameTextView;
@@ -129,7 +128,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 imageView = (ImageView) itemView.findViewById(R.id.rowImageView);
                 favoritesImage = (ImageView)itemView.findViewById(R.id.favoritesImageView);
                 divider = (View) itemView.findViewById(R.id.dividerView);
-
+                itemView.setOnClickListener(this);
 
             }
 
@@ -138,9 +137,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 this.clickListener = itemClickListener;
             }
 
+
             @Override
-            public void onClick(View view, int position, boolean isLongClick) {
-                this.clickListener.onClick(view,position,isLongClick);
+            public void onClick(View v) {
+                clickListener.onClick(v,getAdapterPosition(),false);
+                Log.v("position: " + getAdapterPosition() + "", "");
             }
         }
 
