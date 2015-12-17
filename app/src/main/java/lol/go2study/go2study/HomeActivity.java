@@ -8,15 +8,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -37,19 +42,11 @@ import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
 
 
-public class HomeActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
-    private static final String SELECTED_ITEM_ID = "selected_item_id";
-    private static final String FIRST_TIME = "first_time";
-    //private Toolbar mToolbar;
-    private NavigationView mDrawer;
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private int mSelectedId;
-    private boolean mUserSawDrawer = false;
+
 
     private UsersApi userApi;
-
     //
     private PeopleApi peopleApi;
     private OAuthSettings settings;
@@ -57,6 +54,7 @@ public class HomeActivity extends AppCompatActivity
     static List<Person> people;
     static List<User> userList;
     static List<Bitmap> staffImages;
+    MyDBHandler dbHandler;
 
     public Callback getPeopleStaff = new Callback() {
 
@@ -135,38 +133,34 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        //Toolbar toolbar = (Toolbar)findViewById(R.id.app_bar);
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setContentView(R.layout.activity_test);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        setSupportActionBar(toolbar);
 
-
-        //New NavigationDrawerFragment
-        mDrawer = (NavigationView) findViewById(R.id.main_navigation_Viewiew);
-        mDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
-                mSelectedId = menuItem.getItemId();
-                navigate(mSelectedId);
-                return true;
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-
         });
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-        if (!didUserSeeDrawer()) {
-            showDrawer();
-            markDrawerSeen();
-        } else {
-            hideDrawer();
-        }
-        mSelectedId = savedInstanceState == null ? R.id.navigation_itemHOME : savedInstanceState.getInt(SELECTED_ITEM_ID);
-        navigate(mSelectedId);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout1);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //TextView firstName = (TextView)findViewById(R.id.firstNameTextView);
+        //TextView secondName = (TextView)findViewById(R.id.secondNameTextView);
+        //dbHandler = new MyDBHandler(this, "People", null, 1);
+       // Log.v("OOOOOOO",CreateUserActivity.dbHandler.getPerson().getGivenName() );
+       // firstName.setText(CreateUserActivity.dbHandler.getPerson().getGivenName());
+        //secondName.setText(CreateUserActivity.dbHandler.getPerson().getDisplayName());
 
         //API clients
         peopleApi = new PeopleApi();
@@ -199,59 +193,20 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-
-    //UI LOGIC
-    //
-    private boolean didUserSeeDrawer() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUserSawDrawer = sharedPreferences.getBoolean(FIRST_TIME, false);
-        return mUserSawDrawer;
-    }
-
-    private void markDrawerSeen() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mUserSawDrawer = true;
-        sharedPreferences.edit().putBoolean(FIRST_TIME, mUserSawDrawer).apply();
-    }
-
-    private void showDrawer() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    private void hideDrawer() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    private void navigate(int mSelectedId) {
-        Intent intent = null;
-
-        if (mSelectedId == R.id.navigation_itemPEOPLE) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, PeopleActivity.class);
-            startActivity(intent);
-        }
-        if (mSelectedId == R.id.navigation_itemCALENDAR) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, CalendarActivity.class);
-            startActivity(intent);
-        }
-        if (mSelectedId == R.id.navigation_itemMESSAGING) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, MessagingActivity.class);
-            startActivity(intent);
-        }
-        if (mSelectedId == R.id.navigation_itemSETTINGS) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, MessagingActivity.class);
-            startActivity(intent);
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout1);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.activity_test_drawer, menu);
         return true;
     }
 
@@ -261,34 +216,40 @@ public class HomeActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {        /////////////////////////////////////////////////////////////////////
+        if (id == R.id.action_settings1) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        Intent intent = null;
 
+        if (id == R.id.navigation_itemHOME) {
+            // Handle the camera action
+        } else if (id == R.id.navigation_itemPEOPLE) {
+            intent = new Intent(this, PeopleActivity.class);
+            startActivity(intent);
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SELECTED_ITEM_ID, mSelectedId);
-    }
+        } else if (id == R.id.navigation_itemCALENDAR) {
+            intent = new Intent(this, CalendarActivity.class);
+            startActivity(intent);
 
-    @Override
-    public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        } else if (id == R.id.navigation_itemMESSAGING) {
+            intent = new Intent(this, MessagingActivity.class);
+            startActivity(intent);
         }
-    }
 
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout1);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

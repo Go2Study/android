@@ -48,7 +48,7 @@ public class CreateUserActivity extends AppCompatActivity {
     ScheduleApi schedule;
     UsersApi usersApi;
     ArrayList classNames;
-    private MyDBHandler dbHandler;
+    public static MyDBHandler dbHandler;
 
     //IMAGE
     private static int RESULT_LOAD_IMAGE = 1;

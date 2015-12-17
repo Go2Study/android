@@ -67,19 +67,6 @@ public class MyDBHandler extends  SQLiteOpenHelper  {
         db.close();
     }
 
-    //Add a new row to the database
-    /*public void AddUser(String firstName, String lastName, String email, String pcn, String className, String photo){
-        ContentValues values = new ContentValues();
-        values.put("pcn", pcn);
-        values.put("firstName", firstName);
-        values.put("lastName", lastName);
-        values.put("email", email);
-        values.put("className", className);
-        values.put("photo", photo);
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_USERS, null, values);
-        db.close();
-    }*/
 
     public void AddPerson(JSONObject person) {
         ContentValues values = new ContentValues();
@@ -97,7 +84,7 @@ public class MyDBHandler extends  SQLiteOpenHelper  {
         }
     }
 
-    public Person getPerson(){
+    public  Person getPerson(){
         Person p = new Person();
         SQLiteDatabase db = getWritableDatabase();
 
