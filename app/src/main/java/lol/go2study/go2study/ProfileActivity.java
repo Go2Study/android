@@ -87,27 +87,67 @@ public class ProfileActivity extends AppCompatActivity {
                 TextView roomTextView = (TextView) findViewById(R.id.lbRoom);
                 ImageView imageView = (ImageView)findViewById(R.id.profileImageView);
                 ImageView callIcon = (ImageView) findViewById(R.id.imageView3);
+                ImageView mailIcon = (ImageView)findViewById(R.id.imageViewMail);
+
+                mailIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        i.setType("message/rfc822");
+                        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mail});
+                        i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                        try {
+                            startActivity(Intent.createChooser(i, "Send mail..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(ProfileActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+                mailTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        i.setType("message/rfc822");
+                        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{mail});
+                        i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                        try {
+                            startActivity(Intent.createChooser(i, "Send mail..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(ProfileActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                phoneTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mobileNumber, null));
+                        startActivity(intent);
+                        // callIntent.setData(Uri.parse(phNum));
+                        Toast.makeText(getBaseContext(), mobileNumber, Toast.LENGTH_SHORT).show();
+                        //startActivity(callIntent);
+                    }
+                });
+
                 callIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        String phNum = "tel:" + mobileNumber;
-
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mobileNumber, null));
+                        startActivity(intent);
                         // callIntent.setData(Uri.parse(phNum));
-                        Toast.makeText(getBaseContext(), phNum, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), mobileNumber, Toast.LENGTH_SHORT).show();
                         //startActivity(callIntent);
                     }
                 });
 
                 nameTextView.setText(displayName);
-                if (mobileNumber == "")
-                {
-                    phoneTextView.setText("Unknow");
-                }else {
-                    phoneTextView.setText(mobileNumber);
-                }
+                phoneTextView.setText(mobileNumber);
                 mailTextView.setText(mail);
-
                 roomTextView.setText(office);
                 imageView.setImageBitmap(roundedImage);
             }

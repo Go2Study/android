@@ -39,8 +39,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:id="@+id/imageView2"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="48dp"
                 android:src = "@drawable/profile"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#c9c8c8"
-                android:layout_below="@+id/imageView4"
+                android:layout_below="@+id/imageViewMail"
                 android:layout_alignStart="@+id/lbEmail"
                 android:layout_alignEnd="@+id/dividerView1" />
 
@@ -112,7 +112,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/imageView4"
+                android:id="@+id/imageViewMail"
                 android:src="@drawable/mail"
                 android:layout_alignTop="@+id/lbEmail"
                 android:layout_alignStart="@+id/imageView3" />
@@ -142,7 +142,7 @@
                 android:id="@+id/imageViewBuilding"
                 android:src="@drawable/building"
                 android:layout_below="@+id/dividerView2"
-                android:layout_alignStart="@+id/imageView4"
+                android:layout_alignStart="@+id/imageViewMail"
                 android:layout_marginTop="24dp" />
 
             <TextView
