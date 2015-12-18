@@ -104,6 +104,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                     intent.putExtra("office",personArray.get(position).getOffice());
                     intent.putExtra("mail",personArray.get(position).getMail());
                     intent.putExtra("initial",personArray.get(position).getInitials());
+                    intent.putExtra("photo",bitMapList.get(position));
                     startActivity(intent);
 
                 }

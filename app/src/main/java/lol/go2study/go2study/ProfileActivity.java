@@ -3,6 +3,7 @@ package lol.go2study.go2study;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -31,13 +32,17 @@ public class ProfileActivity extends AppCompatActivity {
     private String office;
     private String mail;
     private String initial;
-
+    private Bitmap photo;
+    private MLRoundedImageView roundedImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        roundedImageView = new MLRoundedImageView(getBaseContext());
+
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.getString("displayname") != null) ;
@@ -65,9 +70,13 @@ public class ProfileActivity extends AppCompatActivity {
                 initial = extras.getString("initial");
 
             }
+            if(extras.getParcelable("photo") != null)
+            {
+                photo = extras.getParcelable("photo");
+            }
 
         }
-
+        final Bitmap roundedImage = roundedImageView.getCroppedBitmap(photo,90);
         Log.v("YES YES ", initial + mail + displayName);
         runOnUiThread(new Runnable() {
             @Override
@@ -75,7 +84,8 @@ public class ProfileActivity extends AppCompatActivity {
                 TextView nameTextView = (TextView) findViewById(R.id.lbName);
                 TextView mailTextView = (TextView) findViewById(R.id.lbEmail);
                 TextView phoneTextView = (TextView) findViewById(R.id.lbPhone);
-
+                TextView roomTextView = (TextView) findViewById(R.id.lbRoom);
+                ImageView imageView = (ImageView)findViewById(R.id.profileImageView);
                 ImageView callIcon = (ImageView) findViewById(R.id.imageView3);
                 callIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -83,15 +93,23 @@ public class ProfileActivity extends AppCompatActivity {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         String phNum = "tel:" + mobileNumber;
 
-                       // callIntent.setData(Uri.parse(phNum));
-                        Toast.makeText(getBaseContext(),phNum,Toast.LENGTH_SHORT).show();
+                        // callIntent.setData(Uri.parse(phNum));
+                        Toast.makeText(getBaseContext(), phNum, Toast.LENGTH_SHORT).show();
                         //startActivity(callIntent);
                     }
                 });
 
                 nameTextView.setText(displayName);
+                if (mobileNumber == "")
+                {
+                    phoneTextView.setText("Unknow");
+                }else {
+                    phoneTextView.setText(mobileNumber);
+                }
                 mailTextView.setText(mail);
-                phoneTextView.setText(mobileNumber);
+
+                roomTextView.setText(office);
+                imageView.setImageBitmap(roundedImage);
             }
         });
 

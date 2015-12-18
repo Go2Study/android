@@ -8,13 +8,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/viewA"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.7"
             android:background="@color/toolbar_text"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_width="155dp"
+                android:layout_height="155dp"
+                android:id="@+id/profileImageView"
+                android:layout_weight="0.30"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:src = "@drawable/userphoto"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/viewB"
@@ -28,8 +39,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:id="@+id/imageView2"
-                android:layout_marginStart="34dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="50dp"
                 android:src = "@drawable/profile"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />
@@ -40,7 +51,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Name"
                 android:id="@+id/lbName"
-                android:layout_marginStart="48dp"
+                android:layout_marginStart="31dp"
                 android:layout_alignTop="@+id/imageView2"
                 android:layout_toEndOf="@+id/imageView2" />
 
@@ -50,27 +61,42 @@
                 android:id="@+id/imageView3"
 
                 android:src="@android:drawable/ic_menu_call"
-                android:layout_below="@+id/dividerView"
-                android:layout_toStartOf="@+id/lbName"
-                android:layout_marginTop="50dp" />
+                android:layout_marginTop="17dp"
+                android:layout_below="@+id/imageView2"
+                android:layout_toStartOf="@+id/lbName" />
             <View
                 android:id = "@+id/dividerView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#222222"
-                android:layout_alignStart="@+id/lbPhone"
-                android:layout_alignEnd="@+id/textView5"
-                android:layout_alignBottom="@+id/imageView2"
-                android:layout_below="@+id/imageView2" />
+                android:background="#c9c8c8"
+                android:layout_below="@+id/imageView2"
+                android:layout_alignStart="@+id/lbName"
+                android:layout_alignEnd="@+id/textView5" />
             <View
                 android:id = "@+id/dividerView1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#c9c8c8"
                 android:layout_alignStart="@+id/lbPhone"
-                android:layout_alignBottom="@+id/imageView3"
                 android:layout_below="@+id/imageView3"
                 android:layout_alignEnd="@+id/dividerView" />
+            <View
+                android:id = "@+id/dividerView2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#c9c8c8"
+                android:layout_below="@+id/imageView4"
+                android:layout_alignStart="@+id/lbEmail"
+                android:layout_alignEnd="@+id/dividerView1" />
+
+            <View
+            android:id = "@+id/dividerView3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#c9c8c8"
+                android:layout_alignStart="@+id/lbRoom"
+                android:layout_below="@+id/imageViewBuilding"
+                android:layout_alignEnd="@+id/dividerView2" />
 
 
 
@@ -81,14 +107,14 @@
                 android:text="Phone"
                 android:id="@+id/lbPhone"
                 android:layout_alignTop="@+id/imageView3"
-                android:layout_alignEnd="@+id/lbEmail" />
+                android:layout_alignStart="@+id/dividerView" />
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:id="@+id/imageView4"
                 android:src="@drawable/mail"
-                android:layout_alignBottom="@+id/lbEmail"
+                android:layout_alignTop="@+id/lbEmail"
                 android:layout_alignStart="@+id/imageView3" />
 
             <TextView
@@ -97,9 +123,9 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Email"
                 android:id="@+id/lbEmail"
-                android:layout_marginTop="63dp"
-                android:layout_below="@+id/dividerView1"
-                android:layout_alignStart="@+id/lbName" />
+                android:layout_below="@+id/imageView3"
+                android:layout_alignStart="@+id/lbPhone"
+                android:layout_marginTop="23dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -109,6 +135,24 @@
                 android:layout_alignBottom="@+id/lbName"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="24dp" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageViewBuilding"
+                android:src="@drawable/building"
+                android:layout_below="@+id/dividerView2"
+                android:layout_alignStart="@+id/imageView4"
+                android:layout_marginTop="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Room"
+                android:id="@+id/lbRoom"
+                android:layout_alignTop="@+id/imageViewBuilding"
+                android:layout_alignStart="@+id/dividerView2" />
         </RelativeLayout>
 
     </LinearLayout>
