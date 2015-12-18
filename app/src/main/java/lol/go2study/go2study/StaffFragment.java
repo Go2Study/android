@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +59,9 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         {
 
             this.context = context;
-            personArray= HomeActivity.people;
-            inflater = LayoutInflater.from(context);
 
+            inflater = LayoutInflater.from(context);
+            personArray= HomeActivity.people;
             bitMapList = HomeActivity.staffImages;
 
         }
@@ -75,6 +77,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         @Override
         public void onBindViewHolder(RecycleViewPeopleActivity yourRecyclerViewHolder, int i) {
+            personArray= HomeActivity.people;
             if(i == 0)
             {
                 yourRecyclerViewHolder.divider.setVisibility(View.INVISIBLE);
@@ -95,9 +98,12 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             yourRecyclerViewHolder.setClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int position, boolean isLongClick) {
-                    Toast.makeText(context,personArray.get(position).getGivenName(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity() ,ProfileActivity.class);
-                    intent.putExtra("data",personArray.get(position).getInitials());
+                    intent.putExtra("displayname",personArray.get(position).getDisplayName());
+                    intent.putExtra("mobilenumber",personArray.get(position).getMobileNumber());
+                    intent.putExtra("office",personArray.get(position).getOffice());
+                    intent.putExtra("mail",personArray.get(position).getMail());
+                    intent.putExtra("initial",personArray.get(position).getInitials());
                     startActivity(intent);
 
                 }
@@ -107,7 +113,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         @Override
         public int getItemCount() {
-            return personArray.size();
+            return personArray.size()  ;
         }
 
         public  class RecycleViewPeopleActivity extends RecyclerView.ViewHolder implements View.OnClickListener

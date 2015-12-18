@@ -47,7 +47,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private UsersApi userApi;
-    //
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
@@ -155,13 +154,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //TextView firstName = (TextView)findViewById(R.id.firstNameTextView);
-        //TextView secondName = (TextView)findViewById(R.id.secondNameTextView);
-        //dbHandler = new MyDBHandler(this, "People", null, 1);
-       // Log.v("OOOOOOO",CreateUserActivity.dbHandler.getPerson().getGivenName() );
-       // firstName.setText(CreateUserActivity.dbHandler.getPerson().getGivenName());
-        //secondName.setText(CreateUserActivity.dbHandler.getPerson().getDisplayName());
-
         //API clients
         peopleApi = new PeopleApi();
         userApi = new UsersApi();
@@ -204,11 +196,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_test_drawer, menu);
-        return true;
-    }
+      public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.activity_test_drawer, menu);
+    return true;
+}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,7 +210,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings1) {
+        if (id == R.id.action_settings) {
             return true;
         }
 

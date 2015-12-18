@@ -45,8 +45,6 @@ public class PeopleActivity extends AppCompatActivity {
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
         //TABS
         mDrawerLayout = (DrawerLayout) findViewById(R.id.people_drawer_layout_tabs);
-        //mToolbar = (Toolbar) findViewById(R.id.people_app_bar);
-        //setSupportActionBar(mToolbar);
 
         //drawerToggle button top-left
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.drawer_open, R.string.drawer_close);
@@ -85,7 +83,7 @@ public class PeopleActivity extends AppCompatActivity {
 
     }
 
-   
+
 
 
     class PagerAdapter extends FragmentStatePagerAdapter {
