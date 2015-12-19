@@ -37,6 +37,7 @@ import java.util.List;
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
+import FontysICT.Models.Group;
 import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
@@ -173,7 +174,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
                     peopleApi.peopleList(accessToken, getPeopleStaff, true);
-                    userApi.usersGet(getUsersAppCallBack,"");
+                    userApi.usersGet(getUsersAppCallBack, "");
 
                 } catch (ApiException e) {
                     e.printStackTrace();

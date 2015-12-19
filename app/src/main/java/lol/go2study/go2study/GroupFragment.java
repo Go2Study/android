@@ -8,9 +8,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import FontysICT.Models.Group;
+import Go2Study.Models.User;
+
+import static lol.go2study.go2study.HomeActivity.userList;
+import static lol.go2study.go2study.R.id.listViewAddGroup;
 
 
 /**
@@ -28,6 +37,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
+
         FloatingActionButton button = (FloatingActionButton)rootView.findViewById(R.id.fab);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,8 +21,8 @@
             android:layout_width="fill_parent">
         </EditText>
         <EditText
-            android:id="@+id/EditTextEmail"
-            android:layout_height="108dp"
+            android:id="@+id/EditDescription"
+            android:layout_height="91dp"
             android:layout_marginTop="20dp"
             android:hint="Description"
             android:inputType="textEmailAddress"
@@ -34,7 +34,9 @@
             android:layout_marginTop="20dp"
             android:layout_width="fill_parent"
             android:text="Choose Group Members"
-            android:layout_weight="0.40" />
+            android:textSize="20sp"
+            android:layout_weight="0.23" />
+
         <ListView
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"
@@ -43,12 +45,13 @@
 
         </ListView>
         <Button
-            android:id="@+id/btnSubmit"
+            android:id="@+id/btnCreateGroup"
             android:layout_width="188dp"
             android:layout_height="wrap_content"
             android:ems="5"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="20dp"
+            android:background="@color/wallet_holo_blue_light"
             android:text="Finish" />
 
 
