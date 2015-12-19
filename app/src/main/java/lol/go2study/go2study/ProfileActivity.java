@@ -35,34 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Bitmap photo;
     private MLRoundedImageView roundedImageView;
 
-    private void InitializeProfileInformation()
-    {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            if (extras.getString("displayname") != null) ;{
-                displayName = extras.getString("displayname");
-            }
-            if (extras.getString("mobilenumber") != null) ;{
-                mobileNumber = extras.getString("mobilenumber");
-            }
-            if (extras.getString("office") != null) ;{
-                office = extras.getString("office");
 
-            }
-            if (extras.getString("mail") != null) ;{
-                mail = extras.getString("mail");
-
-            }
-            if (extras.getString("initial") != null) ;{
-                initial = extras.getString("initial");
-
-            }
-            if(extras.getParcelable("photo") != null) {
-                photo = extras.getParcelable("photo");
-            }
-
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,6 +138,35 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
         }
+
+    private void InitializeProfileInformation()
+    {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.getString("displayname") != null) ;{
+                displayName = extras.getString("displayname");
+            }
+            if (extras.getString("mobilenumber") != null) ;{
+                mobileNumber = extras.getString("mobilenumber");
+            }
+            if (extras.getString("office") != null) ;{
+                office = extras.getString("office");
+
+            }
+            if (extras.getString("mail") != null) ;{
+                mail = extras.getString("mail");
+
+            }
+            if (extras.getString("initial") != null) ;{
+                initial = extras.getString("initial");
+
+            }
+            if(extras.getParcelable("photo") != null) {
+                photo = extras.getParcelable("photo");
+            }
+
+        }
+    }
 
 
 

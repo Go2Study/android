@@ -233,7 +233,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.navigation_itemMESSAGING) {
-            intent = new Intent(this, MessagingActivity.class);
+            intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         }
 
