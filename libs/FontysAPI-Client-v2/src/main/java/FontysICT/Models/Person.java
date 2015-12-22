@@ -1,6 +1,8 @@
 package FontysICT.Models;
 
 import FontysICT.Models.Group;
+
+import java.io.Serializable;
 import java.util.*;
 import java.util.Date;
 
@@ -14,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * This object describes a person
  **/
 @ApiModel(description = "This object describes a person")
-public class Person  {
+public class Person implements Serializable {
   
   @SerializedName("id")
   private String id = null;

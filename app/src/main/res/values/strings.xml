@@ -17,25 +17,19 @@
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
 
-
-
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
 
-
-
-
     <string name="item_home">HOME</string>
     <string name="item_people">PEOPLE</string>
     <string name="item_calendar">CALENDAR</string>
-    <string name="item_messaging">MESSAGING</string>
+    <string name="item_chat">CHAT</string>
     <string name="item_settings">SETTINGS</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="title_activity_second">Second</string>
-
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -71,4 +65,9 @@
     <string name="title_activity_add_group">AddGroupActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_test">TEST</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="send">send</string>
+    <string name="myself">MySelf</string>
+    <string name="friend">Friend</string>
+    <string name="messageEdit">type message</string>
 </resources>

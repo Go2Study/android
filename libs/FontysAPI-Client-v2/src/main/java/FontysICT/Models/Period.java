@@ -1,5 +1,6 @@
 package FontysICT.Models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -12,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * Period defined by startdate and enddate with a specific title
  **/
 @ApiModel(description = "Period defined by startdate and enddate with a specific title")
-public class Period  {
+public class Period  implements Serializable {
   
   @SerializedName("title")
   private String title = null;

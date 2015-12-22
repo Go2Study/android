@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="80dp" android:background="@color/colorAccent"
+
 
     >
 
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity ="center_vertical"
         android:text="dummy text"
-        android:textColor="#360d0d"
+        android:textColor="#FFFFFF"
         android:textSize="16dp"
         android:layout_alignTop="@+id/rowImageView"
         android:layout_toEndOf="@+id/rowImageView"
@@ -39,17 +40,27 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/roomTextView"
+        android:textColor="#FFFFFF"
         android:textSize="12dp"
         android:layout_below="@+id/nameTextView"
         android:layout_toEndOf="@+id/rowImageView" />
 
     <ImageView
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:id="@+id/favoritesImageView"
+    android:src="@android:drawable/ic_input_add"
+        android:background="@color/colorAccent"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/dividerView" />
+
+    <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:id="@+id/favoritesImageView"
-        android:src="@android:drawable/ic_input_add"
-        android:layout_centerVertical="true"
-        android:layout_alignEnd="@+id/dividerView"
-        android:layout_marginEnd="30dp" />
+        android:id="@+id/chatImageView"
+        android:src="@android:drawable/sym_action_chat"
+        android:background="@color/colorAccent"
+        android:layout_alignTop="@+id/favoritesImageView"
+        android:layout_toStartOf="@+id/favoritesImageView" />
 
 </RelativeLayout>

@@ -2,6 +2,8 @@ package FontysICT.Models;
 
 import FontysICT.Models.ScheduleItem;
 import FontysICT.Models.Period;
+
+import java.io.Serializable;
 import java.util.*;
 import FontysICT.Models.Person;
 import java.util.Date;
@@ -16,7 +18,7 @@ import com.google.gson.annotations.SerializedName;
  * A schedule for a user/class/room/subject
  **/
 @ApiModel(description = "A schedule for a user/class/room/subject")
-public class Schedule  {
+public class Schedule implements Serializable {
   
   @SerializedName("title")
   private String title = null;
@@ -25,13 +27,13 @@ public class Schedule  {
   @SerializedName("numberOfDays")
   private Integer numberOfDays = null;
   @SerializedName("start")
-  private Date start = null;
+  private String start = null;
   @SerializedName("teachers")
   private List<Person> teachers = null;
   @SerializedName("weeks")
   private List<Period> weeks = null;
   @SerializedName("latestUpdate")
-  private Date latestUpdate = null;
+  private String latestUpdate = null;
 
   
   /**
@@ -74,10 +76,10 @@ public class Schedule  {
    * Requested startdate of the schedule
    **/
   @ApiModelProperty(value = "Requested startdate of the schedule")
-  public Date getStart() {
+  public String getStart() {
     return start;
   }
-  public void setStart(Date start) {
+  public void setStart(String start) {
     this.start = start;
   }
 
@@ -110,10 +112,10 @@ public class Schedule  {
    * The higest value of 'updatedAt' of the current Data
    **/
   @ApiModelProperty(value = "The higest value of 'updatedAt' of the current Data")
-  public Date getLatestUpdate() {
+  public String getLatestUpdate() {
     return latestUpdate;
   }
-  public void setLatestUpdate(Date latestUpdate) {
+  public void setLatestUpdate(String latestUpdate) {
     this.latestUpdate = latestUpdate;
   }
 

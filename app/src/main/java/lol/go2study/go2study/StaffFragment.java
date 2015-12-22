@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +36,17 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
-        //int pageNumber = arguments.getInt(ARG_PAGE);
         RecyclerView recyclerView = new RecyclerView(getActivity());
         recyclerView.setAdapter(new YourRecyclerAdapter(getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return recyclerView;
-        //return inflater.inflate(R.layout.fragment_people_, container, false);
     }
 
-    //CONTAINER
-    public  class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.RecycleViewPeopleActivity> {
+    ////////////////////////////////////////////////ADAPTE/ used to fill in the CUSTOM_ROW_TAB layout/////////////////////////////
+    public  class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.RecycleViewHolderPeopleActivity> {
         private ArrayList<String> list = new ArrayList<>();
         private List<Person> personArray = new ArrayList<>();
-        List<Bitmap> bitMapList = new ArrayList<>();
+        List<Bitmap> bitMapList = new ArrayList<>();                     ///////////////NEEDS TO CHANGE GET THE THE BITMAP IMAGES THROUGH THE CONSTRUCTOR !!!!
         private Context context;
         private LayoutInflater inflater;
         private MLRoundedImageView roundedImageView;
@@ -66,17 +62,15 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         }
 
-
-
         @Override
-        public RecycleViewPeopleActivity onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecycleViewHolderPeopleActivity onCreateViewHolder(ViewGroup viewGroup, int i) {
             View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
-            RecycleViewPeopleActivity holder = new RecycleViewPeopleActivity(root);
+            RecycleViewHolderPeopleActivity holder = new RecycleViewHolderPeopleActivity(root);
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(RecycleViewPeopleActivity yourRecyclerViewHolder, int i) {
+        public void onBindViewHolder(RecycleViewHolderPeopleActivity yourRecyclerViewHolder, int i) {
             personArray= HomeActivity.people;
             if(i == 0)
             {
@@ -105,6 +99,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                     intent.putExtra("mail",personArray.get(position).getMail());
                     intent.putExtra("initial",personArray.get(position).getInitials());
                     intent.putExtra("photo",bitMapList.get(position));
+                    intent.putExtra("personalTitle",personArray.get(position).getPersonalTitle());
                     startActivity(intent);
 
                 }
@@ -116,8 +111,9 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         public int getItemCount() {
             return personArray.size()  ;
         }
+////////////////////////////////////////////// //CONTAINER AND PLACEHOLDER
 
-        public  class RecycleViewPeopleActivity extends RecyclerView.ViewHolder implements View.OnClickListener
+        public  class RecycleViewHolderPeopleActivity extends RecyclerView.ViewHolder implements View.OnClickListener
         {
 
             TextView nameTextView;
@@ -128,7 +124,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
             private ItemClickListener clickListener;
 
-            public RecycleViewPeopleActivity(View itemView) {
+            public RecycleViewHolderPeopleActivity(View itemView) {
                 super(itemView);
                 nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
                 roomTextView = (TextView) itemView.findViewById(R.id.roomTextView);

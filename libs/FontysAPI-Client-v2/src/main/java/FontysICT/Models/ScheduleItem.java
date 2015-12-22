@@ -1,5 +1,6 @@
 package FontysICT.Models;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
  * An item in a schedule.
  **/
 @ApiModel(description = "An item in a schedule.")
-public class ScheduleItem  {
+public class ScheduleItem implements Serializable {
   
   @SerializedName("classes")
   private List<String> classes = null;
@@ -24,9 +25,9 @@ public class ScheduleItem  {
   @SerializedName("teacherAbbreviation")
   private String teacherAbbreviation = null;
   @SerializedName("start")
-  private Date start = null;
+  private String start = null;
   @SerializedName("end")
-  private Date end = null;
+  private String end = null;
   @SerializedName("uid")
   private String uid = null;
   @SerializedName("hoursMask")
@@ -34,7 +35,7 @@ public class ScheduleItem  {
   @SerializedName("description")
   private String description = null;
   @SerializedName("updatedAt")
-  private Date updatedAt = null;
+  private String updatedAt = null;
 
   
   /**
@@ -89,10 +90,10 @@ public class ScheduleItem  {
    * Start of the lesson
    **/
   @ApiModelProperty(value = "Start of the lesson")
-  public Date getStart() {
+  public String getStart() {
     return start;
   }
-  public void setStart(Date start) {
+  public void setStart(String start) {
     this.start = start;
   }
 
@@ -101,10 +102,10 @@ public class ScheduleItem  {
    * End of the lesson
    **/
   @ApiModelProperty(value = "End of the lesson")
-  public Date getEnd() {
+  public String getEnd() {
     return end;
   }
-  public void setEnd(Date end) {
+  public void setEnd(String end) {
     this.end = end;
   }
 
@@ -149,10 +150,10 @@ public class ScheduleItem  {
    * The timestamp of the last update of this leasson. Only provided for leassons after 2015-11-10
    **/
   @ApiModelProperty(value = "The timestamp of the last update of this leasson. Only provided for leassons after 2015-11-10")
-  public Date getUpdatedAt() {
+  public String getUpdatedAt() {
     return updatedAt;
   }
-  public void setUpdatedAt(Date updatedAt) {
+  public void setUpdatedAt(String updatedAt) {
     this.updatedAt = updatedAt;
   }
 

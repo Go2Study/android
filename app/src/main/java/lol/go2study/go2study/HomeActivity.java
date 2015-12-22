@@ -29,6 +29,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import FontysICT.Api.PeopleApi;
@@ -68,6 +70,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Person p;
                     //List<Person> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
+
+                    Collections.sort(people, new Comparator<Person>() {
+                        @Override
+                        public int compare(Person lhs, Person rhs) {
+                            return lhs.getGivenName().compareToIgnoreCase(rhs.getGivenName());
+                        }
+
+                    });
+
                     BitMapImages(people);
 
                 }
@@ -78,6 +89,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     };
+
+
 
     private void BitMapImages(List<Person> personList)
     {
@@ -229,8 +242,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.navigation_itemCALENDAR) {
-            intent = new Intent(this, CalendarActivity.class);
-            startActivity(intent);
+           // intent = new Intent(this, CalendarActivity.class);
+            //startActivity(intent);
 
         } else if (id == R.id.navigation_itemMESSAGING) {
             intent = new Intent(this, ChatActivity.class);
