@@ -19,7 +19,7 @@ import Go2Study.Api.UsersApi;
 /**
  * Created by Todor on 12/1/2015.
  */
-public class PeopleActivity extends AppCompatActivity {
+public class    PeopleActivity extends AppCompatActivity {
     // Need this to link with the Snackbar
     private CoordinatorLayout mCoordinator;
     //Need this to set the title of the app bar

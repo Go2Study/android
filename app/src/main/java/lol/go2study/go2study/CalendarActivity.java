@@ -1,6 +1,7 @@
 package lol.go2study.go2study;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Models.Schedule;
@@ -154,7 +156,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
 
             @Override
             public String interpretTime(int hour) {
-                return hour > 11 ? (hour - 12) + " PM" : (hour == 0 ? "12 AM" : hour + " AM");
+                return hour > 5 ? (hour - 2) + " PM" : (hour == 0 ? "8 AM" : hour + " AM");
             }
         });
     }
@@ -162,6 +164,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
 
+        Random rnd = new Random();
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         for (ScheduleItem item:schedule.getData()) {
@@ -195,10 +198,11 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
             
 
             WeekViewEvent event = new WeekViewEvent(1, item.getSubject()+ " " + cl+ " " + item.getRoom(), startTime, endTime);
-            event.setColor(getResources().getColor(R.color.colorAccent));
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            event.setColor(color);
             events.add(event);
-            }
 
+            }
         }
 
 
@@ -206,9 +210,6 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
         return events;
     }
 
-    private String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
-    }
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {

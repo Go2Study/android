@@ -65,7 +65,9 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         @Override
         public RecycleViewHolderPeopleActivity onCreateViewHolder(ViewGroup viewGroup, int i) {
             View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
+
             RecycleViewHolderPeopleActivity holder = new RecycleViewHolderPeopleActivity(root);
+
             return holder;
         }
 
@@ -75,8 +77,10 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             if(i == 0)
             {
                 yourRecyclerViewHolder.divider.setVisibility(View.INVISIBLE);
+
             }
-            yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getGivenName());
+            yourRecyclerViewHolder.chatImage.setVisibility(View.INVISIBLE);
+            yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getDisplayName());
             yourRecyclerViewHolder.roomTextView.setText(personArray.get(i).getOffice());
             //Convert to Rounded Image
             roundedImageView = new MLRoundedImageView(context);
@@ -121,6 +125,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             ImageView imageView;
             View divider;
             ImageView favoritesImage ;
+            ImageView chatImage;
 
             private ItemClickListener clickListener;
 
@@ -131,6 +136,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 imageView = (ImageView) itemView.findViewById(R.id.rowImageView);
                 favoritesImage = (ImageView)itemView.findViewById(R.id.favoritesImageView);
                 divider = (View) itemView.findViewById(R.id.dividerView);
+                chatImage = (ImageView)itemView.findViewById(R.id.chatImageView);
                 itemView.setOnClickListener(this);
 
             }
