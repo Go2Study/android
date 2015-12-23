@@ -16,10 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.plus.People;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Models.Person;
+import FontysICT.Models.Schedule;
 
 
 /**
@@ -27,6 +30,7 @@ import FontysICT.Models.Person;
  */
 public class StaffFragment extends android.support.v4.app.Fragment {
 
+    protected List<Person> people;
     public StaffFragment() {
         // Required empty public constructor
     }
@@ -35,30 +39,38 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
+
+        Intent i = getActivity().getIntent();
+        String s = i.getStringExtra("edttext");
+      //  Log.v();                                                          //TO DO
+       // people = (List<Person>) i.getSerializableExtra("list");
+
+       // Log.v("PEOPLE TRANSFERED", people.toString());
+        people = HomeActivity.people;
+
+
         RecyclerView recyclerView = new RecyclerView(getActivity());
-        recyclerView.setAdapter(new YourRecyclerAdapter(getActivity()));
+        recyclerView.setAdapter(new YourRecyclerAdapter(getActivity(),people));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return recyclerView;
     }
 
     ////////////////////////////////////////////////ADAPTE/ used to fill in the CUSTOM_ROW_TAB layout/////////////////////////////
     public  class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.RecycleViewHolderPeopleActivity> {
-        private ArrayList<String> list = new ArrayList<>();
-        private List<Person> personArray = new ArrayList<>();
+        private List<Person> personArray;
         List<Bitmap> bitMapList = new ArrayList<>();                     ///////////////NEEDS TO CHANGE GET THE THE BITMAP IMAGES THROUGH THE CONSTRUCTOR !!!!
         private Context context;
         private LayoutInflater inflater;
         private MLRoundedImageView roundedImageView;
 
-        public YourRecyclerAdapter(Context context)
+        public YourRecyclerAdapter(Context context, List<Person> people)
         {
 
             this.context = context;
+            this.inflater = LayoutInflater.from(context);
+            this.personArray = people;
+            this.bitMapList = HomeActivity.staffImages;
 
-            inflater = LayoutInflater.from(context);
-            personArray= HomeActivity.people;
-            bitMapList = HomeActivity.staffImages;
 
         }
 
@@ -73,7 +85,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         @Override
         public void onBindViewHolder(RecycleViewHolderPeopleActivity yourRecyclerViewHolder, int i) {
-            personArray= HomeActivity.people;
+            //      //personArray= HomeActivity.people;
             if(i == 0)
             {
                 yourRecyclerViewHolder.divider.setVisibility(View.INVISIBLE);
