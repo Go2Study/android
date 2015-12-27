@@ -1,5 +1,6 @@
 package lol.go2study.go2study;
 
+import android.app.SearchManager;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -7,19 +8,21 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
-
 import Go2Study.Api.UsersApi;
 
 /**
  * Created by Todor on 12/1/2015.
  */
-public class    PeopleActivity extends AppCompatActivity {
+
+public class  PeopleActivity extends AppCompatActivity {
     // Need this to link with the Snackbar
     private CoordinatorLayout mCoordinator;
     //Need this to set the title of the app bar
@@ -42,14 +45,11 @@ public class    PeopleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_people);
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
         //COLLAPSING
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+       // mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
         //TABS
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.people_drawer_layout_tabs);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPeople);
+        setSupportActionBar(toolbar);
 
-        //drawerToggle button top-left
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, null, R.string.drawer_open, R.string.drawer_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
@@ -82,6 +82,17 @@ public class    PeopleActivity extends AppCompatActivity {
         userApi = new UsersApi();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        return true;
+    }
+
 
 
 

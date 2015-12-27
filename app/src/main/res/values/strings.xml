@@ -70,4 +70,5 @@
     <string name="myself">MySelf</string>
     <string name="friend">Friend</string>
     <string name="messageEdit">type message</string>
+    <string name="title_activity_try">TRY</string>
 </resources>

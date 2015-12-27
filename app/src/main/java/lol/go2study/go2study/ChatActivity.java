@@ -15,9 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+
+
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -28,11 +33,21 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter adapter;
     private ArrayList<ChatMessage> chatHistory;
 
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://go2study.lol/api/chat");
+        } catch (URISyntaxException e) {}
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initControls();
+        mSocket.connect();
+
     }
 
     @Override
