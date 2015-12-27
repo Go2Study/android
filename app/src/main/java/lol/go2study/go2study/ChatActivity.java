@@ -19,10 +19,13 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -36,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private Socket mSocket;
     {
         try {
-            mSocket = IO.socket("http://go2study.lol/api/chat");
+            mSocket = IO.socket("http://chat.socket.io");
         } catch (URISyntaxException e) {}
     }
 
@@ -45,10 +48,49 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        initControls();
         mSocket.connect();
+        mSocket.on("new message", onNewMessage);
+        initControls();
+
+
+       // mSocket.on("new message", onNewMessage);
+
 
     }
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+                 @Override
+                 public void call(final Object... args) {
+                         runOnUiThread(new Runnable() {
+                             @Override
+                             public void run() {
+                                 JSONObject data = (JSONObject) args[0];
+                                 String username;
+                                 String message;
+
+                                     //username = data.getString("username");
+                                     //message = data.getString("message");
+                                 Log.v("message", data.toString());
+
+                                 ChatMessage chatMessage = new ChatMessage();
+                                 chatMessage.setId(1342);//dummy
+                                 chatMessage.setMessage(data.toString());
+                                 chatMessage.setDate(DateFormat.getDateTimeInstance().format(new Date()));
+                                 chatMessage.setMe(false);
+
+                                // messageET.setText("");
+
+                                 displayMessage(chatMessage);
+
+
+
+                                 // removeTyping(username);
+                                 //addMessage(username, message);
+                             }
+                         });
+                 }
+             };
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,13 +129,15 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("TETEAE","TETETEE");
-                Toast.makeText(getBaseContext(),"TEET",Toast.LENGTH_SHORT).show();
+
+
                 String messageText = messageET.getText().toString();
+                Toast.makeText(getBaseContext(), messageText, Toast.LENGTH_SHORT).show();
                 if (TextUtils.isEmpty(messageText)) {
                     return;
                 }
-
+                //Chat
+                mSocket.emit("new message", messageText);
                 ChatMessage chatMessage = new ChatMessage();
                 chatMessage.setId(122);//dummy
                 chatMessage.setMessage(messageText);
@@ -108,6 +152,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
+
 
     public void displayMessage(ChatMessage message) {
         adapter.add(message);
