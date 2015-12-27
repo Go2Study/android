@@ -50,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         mSocket.connect();
         mSocket.on("new message", onNewMessage);
+
         initControls();
 
 
@@ -57,6 +58,8 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
+
+
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
                  @Override
                  public void call(final Object... args) {
@@ -73,18 +76,18 @@ public class ChatActivity extends AppCompatActivity {
 
                                  ChatMessage chatMessage = new ChatMessage();
                                  chatMessage.setId(1342);//dummy
-                                 chatMessage.setMessage(data.toString());
-                                 chatMessage.setDate(DateFormat.getDateTimeInstance().format(new Date()));
-                                 chatMessage.setMe(false);
+                                 try {
 
-                                // messageET.setText("");
+                                     chatMessage.setMessage(data.getString("message").toString());
+                                     chatMessage.setDate(DateFormat.getDateTimeInstance().format(new Date()));
+                                     chatMessage.setMe(false);
+
+                                 } catch (JSONException e) {
+                                     e.printStackTrace();
+                                 }
 
                                  displayMessage(chatMessage);
 
-
-
-                                 // removeTyping(username);
-                                 //addMessage(username, message);
                              }
                          });
                  }
@@ -114,7 +117,7 @@ public class ChatActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initControls() {
+        private void initControls() {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         messageET = (EditText) findViewById(R.id.messageEdit);
         sendBtn = (Button) findViewById(R.id.sentButton);
@@ -125,33 +128,48 @@ public class ChatActivity extends AppCompatActivity {
         companionLabel.setText("My Buddy");
 
         loadDummyHistory();
-        Log.v("TETEAE","dasd");
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                String messageText = messageET.getText().toString();
-                Toast.makeText(getBaseContext(), messageText, Toast.LENGTH_SHORT).show();
+               final String messageText = messageET.getText().toString();
+
                 if (TextUtils.isEmpty(messageText)) {
                     return;
                 }
-                //Chat
-                mSocket.emit("new message", messageText);
+
+                mSocket.emit("new message",messageText);
+
+                //UI
                 ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setId(122);//dummy
+                chatMessage.setId(2);//dummy
                 chatMessage.setMessage(messageText);
                 chatMessage.setDate(DateFormat.getDateTimeInstance().format(new Date()));
                 chatMessage.setMe(true);
-
                 messageET.setText("");
-
                 displayMessage(chatMessage);
+                Log.v("YES YES", messageText);
+                // mSocket.emit("new message", messageText);
+
+
+
+                Toast.makeText(getBaseContext(), messageText, Toast.LENGTH_SHORT).show();
+
             }
         });
 
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mSocket.disconnect();
+        mSocket.off("new message", onNewMessage);
+    }
+
 
 
     public void displayMessage(ChatMessage message) {
@@ -184,7 +202,7 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(ChatActivity.this, new ArrayList<ChatMessage>());
         messagesContainer.setAdapter(adapter);
 
-        for(int i=0; i<chatHistory.size(); i++) {
+        for(int i=0; i < chatHistory.size(); i++) {
             ChatMessage message = chatHistory.get(i);
             displayMessage(message);
         }

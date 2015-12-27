@@ -67,8 +67,8 @@
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:name=".TRY"
-            android:label="@string/title_activity_try"
+            android:name=".GroupChat"
+            android:label="@string/title_activity_group_chat"
             android:theme="@style/AppTheme" >
         </activity>
     </application>
