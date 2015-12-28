@@ -36,6 +36,7 @@ import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
 import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
+import lol.go2study.go2study.androidchat.ChatMainActivity;
 
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -236,7 +237,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //startActivity(intent);
 
         } else if (id == R.id.navigation_itemMESSAGING) {
-            intent = new Intent(this, GroupChat.class);
+            intent = new Intent(this, ChatMainActivity.class);
             startActivity(intent);
         }
 

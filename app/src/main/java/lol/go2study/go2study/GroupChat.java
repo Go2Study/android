@@ -16,7 +16,7 @@ public class GroupChat extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarGroupChat);
         setSupportActionBar(toolbar);
 
-
+       
     }
 
 }

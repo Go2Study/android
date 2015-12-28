@@ -90,11 +90,11 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
             holder.chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ChatActivity.class);
+                    //Intent intent = new Intent(context, ChatActivity.class); //////////////////////////////////
                     //intent.putExtra("displayname", users.get(position).getDisplayName());
                     //intent.putExtra("clasname", users.get(position).getClassName());
 
-                    startActivity(intent);
+                    //startActivity(intent);
                 }
             });
             holder.favoritesImage.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +103,8 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
                     Toast.makeText(context, "FOVORITES ICON", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            /*
             holder.setClickListener(new ItemClickListener() {
                 @Override
                 public void onClick(View view, int position, boolean isLongClick) {
@@ -113,6 +115,7 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
 
                 }
             });
+            */
         }
 
 
