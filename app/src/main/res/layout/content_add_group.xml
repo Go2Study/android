@@ -1,59 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ScrollView01"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:scrollbars="vertical">
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:orientation="vertical"
-        android:layout_height="fill_parent"
-        android:weightSum="1">
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    android:weightSum="1"
+    
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <!--Put form controls here-->
+
+
         <EditText
             android:id="@+id/EditTextName"
-            android:layout_height="89dp"
-            android:layout_marginTop="40dp"
+            android:layout_height="50dp"
             android:hint="Group Name"
             android:inputType="textPersonName"
-            android:layout_width="fill_parent">
+            android:layout_width="310dp"
+            android:layout_marginTop="53dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
         </EditText>
         <EditText
             android:id="@+id/EditDescription"
-            android:layout_height="91dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="50dp"
             android:hint="Description"
             android:inputType="textEmailAddress"
-            android:layout_width="371dp">
+            android:layout_width="371dp"
+            android:layout_below="@+id/EditTextName"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/EditTextName">
         </EditText>
-        <TextView
-            android:id="@+id/EditMemberName"
-            android:layout_height="29dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="fill_parent"
-            android:text="Choose Group Members"
-            android:textSize="20sp"
-            android:layout_weight="0.23" />
 
-        <ListView
+    <ListView
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
             android:layout_height="178dp"
-            android:id="@+id/listViewAddGroup">
+            android:id="@+id/listViewAddGroup"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/EditDescription"
+        android:layout_alignParentBottom="true">
+
 
         </ListView>
-        <Button
-            android:id="@+id/btnCreateGroup"
-            android:layout_width="188dp"
-            android:layout_height="wrap_content"
-            android:ems="5"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/wallet_holo_blue_light"
-            android:text="Finish" />
 
-
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

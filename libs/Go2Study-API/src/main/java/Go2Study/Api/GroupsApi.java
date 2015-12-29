@@ -22,7 +22,7 @@ import java.io.File;
 
 
 public class GroupsApi {
-  String basePath = "http://api.go2study.lol";
+  String basePath = "http://api.go2study.lol/api";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
@@ -118,7 +118,7 @@ public class GroupsApi {
    * @param description Description of event.
    * @return void
    */
-   public void  groupsPost (Callback callback, String name, List<Integer> pcnlist, String description) throws ApiException { {
+   public void  groupsPost (Callback callback, String name, List<String> pcnlist, String description) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'name' is set

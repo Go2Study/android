@@ -16,7 +16,7 @@ public class Group  {
   @SerializedName("name")
   private String name = null;
   @SerializedName("pcnlist")
-  private List<Integer> pcnlist = null;
+  private List<String> pcnlist = null;
 
   
   /**
@@ -44,10 +44,10 @@ public class Group  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public List<Integer> getPcnlist() {
+  public List<String> getPcnlist() {
     return pcnlist;
   }
-  public void setPcnlist(List<Integer> pcnlist) {
+  public void setPcnlist(List<String> pcnlist) {
     this.pcnlist = pcnlist;
   }
 

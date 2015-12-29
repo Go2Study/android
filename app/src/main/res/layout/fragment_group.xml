@@ -12,8 +12,15 @@
         android:src ="@color/abc_search_url_text_pressed"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="62dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true">
     </android.support.design.widget.FloatingActionButton>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewGroup"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/fab" />
 </RelativeLayout>

@@ -2,7 +2,6 @@ package lol.go2study.go2study;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -48,7 +47,7 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
 
     //CONTAINER
     class ReCycleViewStudentFragment extends RecyclerView.Adapter<ReCycleViewStudentFragment.RecyclerViewHolderStudents> {
-        private ArrayList<String> list = new ArrayList<>();
+
         private List<User> users = new ArrayList<>();
         private MLRoundedImageView roundedImageView;
         List<Bitmap> bitMapList = new ArrayList<>();
@@ -67,7 +66,7 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
 
         @Override
         public RecyclerViewHolderStudents onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
+            View root = inflater.inflate(R.layout.custom_row_staff_user, viewGroup, false);
             RecyclerViewHolderStudents holder = new RecyclerViewHolderStudents(root);
             return holder;
         }

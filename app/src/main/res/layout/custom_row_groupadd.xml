@@ -3,6 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="80dp" android:background="#cfd8dc"
+    android:id="@+id/customrowtab"
 
 
     >
@@ -44,23 +45,5 @@
         android:textSize="12dp"
         android:layout_below="@+id/nameTextView"
         android:layout_toEndOf="@+id/rowImageView" />
-
-    <ImageView
-    android:layout_width="30dp"
-    android:layout_height="30dp"
-    android:id="@+id/favoritesImageView"
-    android:src="@android:drawable/ic_input_add"
-        android:background="#cfd8dc"
-        android:layout_centerVertical="true"
-        android:layout_alignEnd="@+id/dividerView" />
-
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/chatImageView"
-        android:src="@android:drawable/sym_action_chat"
-        android:background="#cfd8dc"
-        android:layout_alignTop="@+id/favoritesImageView"
-        android:layout_toStartOf="@+id/favoritesImageView" />
 
 </RelativeLayout>

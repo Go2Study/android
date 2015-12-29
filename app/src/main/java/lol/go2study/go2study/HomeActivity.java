@@ -34,7 +34,9 @@ import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
+import Go2Study.Api.GroupsApi;
 import Go2Study.Api.UsersApi;
+import Go2Study.Models.Group;
 import Go2Study.Models.User;
 import lol.go2study.go2study.androidchat.ChatMainActivity;
 
@@ -44,13 +46,45 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private UsersApi userApi;
+    private GroupsApi groupsApi;
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
     static List<Person> people;
     static List<User> userList;
     static List<Bitmap> staffImages;
+    static List<Group> groupsList;
     MyDBHandler dbHandler;
+
+
+    public Callback getAllGroups  =new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+            Log.v("Failiar","fail");
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            Log.v("some", response.body().toString());
+            if(response.isSuccessful()){
+                Log.v("some","syccce");
+                String responseRaw = response.body().string();
+                try {
+                    groupsList = (List<Group>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw,"list",Group.class);
+
+                    Log.v("groups", groupsList.toString());
+                } catch (Go2Study.Invoker.ApiException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else
+            {
+                Log.v("else","sle");
+            }
+
+        }
+    };
 
     public Callback getPeopleStaff = new Callback() {
 
@@ -75,9 +109,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
 
                     });
-
                     BitMapImages(people);
-
                 }
                 catch (ApiException e)
                 {
@@ -86,7 +118,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     };
-
 
 
     private void BitMapImages(List<Person> personList)
@@ -157,6 +188,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //API clients
         peopleApi = new PeopleApi();
         userApi = new UsersApi();
+        groupsList = new ArrayList<>();
+        groupsApi = new GroupsApi();
         //setContentView(R.layout.activity_welcome);
 
         //Initialize helper class, which is used for the Fontys oAuth
@@ -174,6 +207,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 try {
                     peopleApi.peopleList(accessToken, getPeopleStaff, true);
                     userApi.usersGet(getUsersAppCallBack, "");
+                    groupsApi.groupsGet(getAllGroups,"");
 
                 } catch (ApiException e) {
                     e.printStackTrace();

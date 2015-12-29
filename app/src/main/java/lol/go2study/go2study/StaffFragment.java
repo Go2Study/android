@@ -16,13 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.plus.People;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Models.Person;
-import FontysICT.Models.Schedule;
 
 
 /**
@@ -76,7 +73,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
         @Override
         public RecycleViewHolderPeopleActivity onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View root = inflater.inflate(R.layout.custom_row_tab, viewGroup, false);
+            View root = inflater.inflate(R.layout.custom_row_staff_user, viewGroup, false);
 
             RecycleViewHolderPeopleActivity holder = new RecycleViewHolderPeopleActivity(root);
 
