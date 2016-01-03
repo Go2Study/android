@@ -50,14 +50,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
-    static List<Person> people;
-    static List<User> userList;
-    static List<Bitmap> staffImages;
-    static List<Group> groupsList;
-    MyDBHandler dbHandler;
+    public static List<Person> people;
+    public static List<User> userList;
+    public static List<Bitmap> staffImages;
+    public static List<Group> groupsList;
 
 
-    public Callback getAllGroups  =new Callback() {
+    public Callback getAllGroups  = new Callback() {
         @Override
         public void onFailure(Request request, IOException e) {
             Log.v("Failiar","fail");

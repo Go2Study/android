@@ -203,7 +203,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             //CreateUserActivity
-                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {
@@ -245,7 +245,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
 
                         } else {
-                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {

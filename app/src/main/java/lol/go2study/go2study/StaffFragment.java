@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Models.Person;
+import Go2Study.Models.Group;
 
 
 /**
@@ -28,6 +32,7 @@ import FontysICT.Models.Person;
 public class StaffFragment extends android.support.v4.app.Fragment {
 
     protected List<Person> people;
+    protected   List<Bitmap> bitMapList;
     public StaffFragment() {
         // Required empty public constructor
     }
@@ -37,136 +42,84 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Intent i = getActivity().getIntent();
-        String s = i.getStringExtra("edttext");
-      //  Log.v();                                                          //TO DO
-       // people = (List<Person>) i.getSerializableExtra("list");
-
-       // Log.v("PEOPLE TRANSFERED", people.toString());
         people = HomeActivity.people;
+        bitMapList = HomeActivity.staffImages;
+        View rootView = inflater.inflate(R.layout.fragment_staff, container, false);
+        ListView staffListView = (ListView) rootView.findViewById(R.id.listViewStaff);
+        staffListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people));
+        staffListView.setItemsCanFocus(false);
+        staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity() ,ProfileActivity.class);
+                intent.putExtra("displayname",people.get(position).getDisplayName());
+                intent.putExtra("mobilenumber",people.get(position).getMobileNumber());
+                intent.putExtra("office",people.get(position).getOffice());
+                intent.putExtra("mail",people.get(position).getMail());
+                intent.putExtra("initial",people.get(position).getInitials());
+                intent.putExtra("photo",bitMapList.get(position));
+                intent.putExtra("personalTitle",people.get(position).getPersonalTitle());
+                startActivity(intent);
+            }
+        });
 
 
-        RecyclerView recyclerView = new RecyclerView(getActivity());
-        recyclerView.setAdapter(new YourRecyclerAdapter(getActivity(),people));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        return recyclerView;
+
+        return rootView;
     }
 
-    ////////////////////////////////////////////////ADAPTE/ used to fill in the CUSTOM_ROW_TAB layout/////////////////////////////
-    public  class YourRecyclerAdapter extends RecyclerView.Adapter<YourRecyclerAdapter.RecycleViewHolderPeopleActivity> {
-        private List<Person> personArray;
-        List<Bitmap> bitMapList = new ArrayList<>();                     ///////////////NEEDS TO CHANGE GET THE THE BITMAP IMAGES THROUGH THE CONSTRUCTOR !!!!
+    public  class YourRecyclerAdapter extends ArrayAdapter<Person> {
+
         private Context context;
-        private LayoutInflater inflater;
+        private List<Person> people;
         private MLRoundedImageView roundedImageView;
 
-        public YourRecyclerAdapter(Context context, List<Person> people)
-        {
 
+
+        public YourRecyclerAdapter(Context context, int resource, List<Person> people) {
+            super(context, resource,people );
             this.context = context;
-            this.inflater = LayoutInflater.from(context);
-            this.personArray = people;
-            this.bitMapList = HomeActivity.staffImages;
+            this.people = people;
+            this.roundedImageView =  new MLRoundedImageView(context);
 
 
         }
 
         @Override
-        public RecycleViewHolderPeopleActivity onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View root = inflater.inflate(R.layout.custom_row_staff_user, viewGroup, false);
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-            RecycleViewHolderPeopleActivity holder = new RecycleViewHolderPeopleActivity(root);
+            View v = convertView;
 
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(RecycleViewHolderPeopleActivity yourRecyclerViewHolder, int i) {
-            //      //personArray= HomeActivity.people;
-            if(i == 0)
-            {
-                yourRecyclerViewHolder.divider.setVisibility(View.INVISIBLE);
-
+            if (v == null) {
+                LayoutInflater vi;
+                vi = LayoutInflater.from(getContext());
+                v = vi.inflate(R.layout.custom_row_staff_user, null);
             }
-            yourRecyclerViewHolder.chatImage.setVisibility(View.INVISIBLE);
-            yourRecyclerViewHolder.nameTextView.setText(personArray.get(i).getDisplayName());
-            yourRecyclerViewHolder.roomTextView.setText(personArray.get(i).getOffice());
-            //Convert to Rounded Image
-            roundedImageView = new MLRoundedImageView(context);
-            Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitMapList.get(i),90);
-            // Set the rounded image to the imageView
-            yourRecyclerViewHolder.imageView.setImageBitmap(roundedImage);
-            yourRecyclerViewHolder.favoritesImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "FOVORITES ICON", Toast.LENGTH_SHORT).show();
+
+            Person p = getItem(position);
+
+
+            if (p != null) {
+                TextView tt1 = (TextView) v.findViewById(R.id.nameTextView);
+                TextView tt2 = (TextView) v.findViewById(R.id.roomTextView);
+                ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
+
+                if (tt1 != null) {
+                    tt1.setText(p.getDisplayName());
                 }
-            });
-            yourRecyclerViewHolder.setClickListener(new ItemClickListener() {
-                @Override
-                public void onClick(View view, int position, boolean isLongClick) {
-                    Intent intent = new Intent(getActivity() ,ProfileActivity.class);
-                    intent.putExtra("displayname",personArray.get(position).getDisplayName());
-                    intent.putExtra("mobilenumber",personArray.get(position).getMobileNumber());
-                    intent.putExtra("office",personArray.get(position).getOffice());
-                    intent.putExtra("mail",personArray.get(position).getMail());
-                    intent.putExtra("initial",personArray.get(position).getInitials());
-                    intent.putExtra("photo",bitMapList.get(position));
-                    intent.putExtra("personalTitle",personArray.get(position).getPersonalTitle());
-                    startActivity(intent);
 
+                if (tt2 != null) {
+                    tt2.setText(p.getOffice().toString());
                 }
-            });
-
+                if(image != null)
+                {
+                    Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitMapList.get(position),90);
+                    image.setImageBitmap(roundedImage);
+                }
+            }
+            return v;
         }
 
-        @Override
-        public int getItemCount() {
-            return personArray.size()  ;
-        }
-////////////////////////////////////////////// //CONTAINER AND PLACEHOLDER
-
-        public  class RecycleViewHolderPeopleActivity extends RecyclerView.ViewHolder implements View.OnClickListener
-        {
-
-            TextView nameTextView;
-            TextView roomTextView;
-            ImageView imageView;
-            View divider;
-            ImageView favoritesImage ;
-            ImageView chatImage;
-
-            private ItemClickListener clickListener;
-
-            public RecycleViewHolderPeopleActivity(View itemView) {
-                super(itemView);
-                nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-                roomTextView = (TextView) itemView.findViewById(R.id.roomTextView);
-                imageView = (ImageView) itemView.findViewById(R.id.rowImageView);
-                favoritesImage = (ImageView)itemView.findViewById(R.id.favoritesImageView);
-                divider = (View) itemView.findViewById(R.id.dividerView);
-                chatImage = (ImageView)itemView.findViewById(R.id.chatImageView);
-                itemView.setOnClickListener(this);
-
-            }
-
-
-            public void setClickListener(ItemClickListener itemClickListener) {
-                this.clickListener = itemClickListener;
-            }
-
-
-            @Override
-            public void onClick(View v) {
-                clickListener.onClick(v,getAdapterPosition(),false);
-                Log.v("position: " + getAdapterPosition() + "", "");
-            }
-        }
-
-    }
-
-    public interface ItemClickListener {
-        void onClick(View view, int position, boolean isLongClick);
     }
 }
 

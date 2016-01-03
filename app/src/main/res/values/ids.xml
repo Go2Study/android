@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="ptr_id_text" type="id">ptr_id_text</item>
+    <item name="ptr_id_header" type="id">ptr_id_header</item>
+    <item name="ptr_id_last_updated" type="id">ptr_id_last_updated</item>
+    <item name="ptr_id_image" type="id">ptr_id_image</item>
+    <item name="ptr_id_spinner" type="id">ptr_id_spinner</item>
+</resources>

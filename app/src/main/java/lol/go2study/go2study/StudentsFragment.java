@@ -66,6 +66,7 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
 
         @Override
         public RecyclerViewHolderStudents onCreateViewHolder(ViewGroup viewGroup, int i) {
+
             View root = inflater.inflate(R.layout.custom_row_staff_user, viewGroup, false);
             RecyclerViewHolderStudents holder = new RecyclerViewHolderStudents(root);
             return holder;
