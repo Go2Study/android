@@ -81,7 +81,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 // Make sure you call swipeContainer.setRefreshing(false)
 
                 // once the network request has completed successfully.
-
+                //https://guides.codepath.com/android/Implementing-Pull-to-Refresh-Guide
                // fetchTimelineAsync(0);
             }
         });
