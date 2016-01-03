@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,11 +34,33 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
     protected List<Person> people;
     protected   List<Bitmap> bitMapList;
+    private SwipeRefreshLayout swipeContainer;
     public StaffFragment() {
         // Required empty public constructor
     }
 
+/*
+    public void fetchTimelineAsync(int page) {
+        client.getHomeTimeline(0, new JsonHttpResponseHandler() {
+            public void onSuccess(JSONArray json) {
+                // Remember to CLEAR OUT old items before appending in the new ones
 
+                adapter.clear();
+                // ...the data has come back, add new items to your adapter...
+
+                adapter.addAll(...);
+                // Now we call setRefreshing(false) to signal refresh has finished
+
+                swipeContainer.setRefreshing(false);
+            }
+
+            public void onFailure(Throwable e) {
+                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+            }
+        });
+    }
+
+*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,6 +68,24 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         people = HomeActivity.people;
         bitMapList = HomeActivity.staffImages;
         View rootView = inflater.inflate(R.layout.fragment_staff, container, false);
+
+        swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                // Your code to refresh the list here.
+
+                // Make sure you call swipeContainer.setRefreshing(false)
+
+                // once the network request has completed successfully.
+
+               // fetchTimelineAsync(0);
+            }
+        });
+
         ListView staffListView = (ListView) rootView.findViewById(R.id.listViewStaff);
         staffListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people));
         staffListView.setItemsCanFocus(false);
