@@ -8,6 +8,7 @@
 /captures
 /libs/FontysAPI-Client-v2/build
 /libs/Go2Study-API/build
+/Dynamicbox
 *.iml
 app/app.iml
 app/app.iml
