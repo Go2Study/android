@@ -12,10 +12,11 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+
 import Go2Study.Api.UsersApi;
 
 /**
@@ -82,6 +83,7 @@ public class  PeopleActivity extends AppCompatActivity {
         userApi = new UsersApi();
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

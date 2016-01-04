@@ -26,8 +26,6 @@ import FontysICT.Api.PeopleApi;
 import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Models.Group;
-import FontysICT.Models.Person;
-import FontysICT.Models.ScheduleItem;
 import Go2Study.Api.UsersApi;
 import Go2Study.Invoker.ApiInvoker;
 import Go2Study.Models.User;
@@ -70,34 +68,7 @@ public class WelcomeActivity extends AppCompatActivity  {
             }
         }
     };
-
-    //List<ScheduleItem> scheduleItems;
-
-    // CALLBACK METHODS
-
-    public Callback GetScheduleCallBack = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                // If it's response from Fontys
-                String responseRaw = response.body().string();
-                try {
-                    user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
-                    Log.v("USERR::::",user.toString());
-
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
-
-
+    // CALLBACKS
 
     Callback GetUser = new Callback() {
          @Override

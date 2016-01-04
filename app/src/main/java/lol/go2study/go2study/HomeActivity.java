@@ -3,8 +3,6 @@ package lol.go2study.go2study;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,15 +21,10 @@ import com.squareup.okhttp.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import FontysICT.Api.PeopleApi;
-import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
 import Go2Study.Api.GroupsApi;
 import Go2Study.Api.UsersApi;
@@ -52,7 +44,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences pref;
     public static List<Person> people;
     public static List<User> userList;
-    public static List<Bitmap> staffImages;
     public static List<Group> groupsList;
 
 
@@ -85,64 +76,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    public Callback getPeopleStaff = new Callback() {
-
-        @Override
-        public void onFailure(Request request, IOException e) {
-            //do something to indicate error
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                try {
-                    String responseRaw = response.body().string();
-                    Person p;
-                    //List<Person> people = new ArrayList<>();
-                    people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
-
-                    Collections.sort(people, new Comparator<Person>() {
-                        @Override
-                        public int compare(Person lhs, Person rhs) {
-                            return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
-                        }
-
-                    });
-                    BitMapImages(people);
-                }
-                catch (ApiException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
 
-    private void BitMapImages(List<Person> personList)
-    {
-        List<byte[]> listOfImages = new ArrayList<>();
-        Log.v("People list size",String.valueOf(personList.size()));
-        for (Person p :personList) {
-            byte[] data = null;
-            try {
-                if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
-                    data = p.getThumbnailData().getBytes("UTF-8");
 
-                    byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
-                    listOfImages.add(byteImage);
-                }
-            } catch (UnsupportedEncodingException e) {
-                Log.v("data",data.toString());
-                e.printStackTrace();
-            }
-        }
-        Log.v("List of IMG Length",String.valueOf(listOfImages.size()));
-        for (byte[] b:listOfImages) {
-            Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
-            staffImages.add(bitmap);
-        }
-    }
+
 
     public Callback getUsersAppCallBack = new Callback() {
         @Override
@@ -197,19 +134,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
         userList = new ArrayList<>();
-        staffImages = new ArrayList<>();
         //Add button event click to redirect to Fontys oAuth webpage
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
-                    peopleApi.peopleList(accessToken, getPeopleStaff, true);
                     userApi.usersGet(getUsersAppCallBack, "");
                     groupsApi.groupsGet(getAllGroups,"");
 
-                } catch (ApiException e) {
-                    e.printStackTrace();
                 } catch (Go2Study.Invoker.ApiException j) {
                     j.printStackTrace();
                 }
