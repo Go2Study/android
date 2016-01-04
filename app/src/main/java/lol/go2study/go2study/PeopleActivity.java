@@ -115,17 +115,17 @@ public class  PeopleActivity extends AppCompatActivity {
                 case 1:
                     frag = new StaffFragment();
                     break;
-                case 2:
+                /*case 2:
                     frag = new GroupFragment();
 
-                    break;
+                    break;*/
             }
             return frag;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override

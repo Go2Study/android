@@ -38,6 +38,8 @@ import Go2Study.Api.GroupsApi;
 import Go2Study.Api.UsersApi;
 import Go2Study.Models.Group;
 import Go2Study.Models.User;
+import lol.go2study.go2study.CallBack.GroupsCallbacks;
+import lol.go2study.go2study.CallBack.UsersCallbacks;
 import lol.go2study.go2study.androidchat.ChatMainActivity;
 
 
@@ -46,69 +48,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private UsersApi userApi;
-    private GroupsApi groupsApi;
+
     private PeopleApi peopleApi;
     private OAuthSettings settings;
+    private GroupsApi groupsApi;
     SharedPreferences pref;
 
-    public static List<User> userList;
+
     public static List<Bitmap> staffImages;
-    public static List<Group> groupsList;
-
-
-    public Callback getAllGroups  = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-            Log.v("Failiar","fail");
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            Log.v("some", response.body().toString());
-            if(response.isSuccessful()){
-                Log.v("some","syccce");
-                String responseRaw = response.body().string();
-                try {
-                    groupsList = (List<Group>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw,"list",Group.class);
-
-                    Log.v("groups", groupsList.toString());
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            else
-            {
-                Log.v("else","sle");
-            }
-
-        }
-    };
 
 
 
-    public Callback getUsersAppCallBack = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
 
 
 
-        }
 
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                // If it's response from Fontys
-                String responseRaw = response.body().string();
-                try {
-                    userList = (List<User>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "list", User.class);
 
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,16 +85,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //API clients
         peopleApi = new PeopleApi();
         userApi = new UsersApi();
-        groupsList = new ArrayList<>();
         groupsApi = new GroupsApi();
-        //setContentView(R.layout.activity_welcome);
-
-        //Initialize helper class, which is used for the Fontys oAuth
         settings = new OAuthSettings();
+
+        GroupsCallbacks groupsCallbacks = new GroupsCallbacks();
+        GroupsCallbacks.GetGroupsCallback getGroupsCallback = groupsCallbacks.new GetGroupsCallback();
+        UsersCallbacks usersCallbacks = new UsersCallbacks();
+        UsersCallbacks.GetUsersCallBack getUsersAppCallBack = usersCallbacks.new GetUsersCallBack();
 
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
-        userList = new ArrayList<>();
         staffImages = new ArrayList<>();
         //Add button event click to redirect to Fontys oAuth webpage
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
@@ -149,7 +104,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 try {
 
                     userApi.usersGet(getUsersAppCallBack, "");
-                    groupsApi.groupsGet(getAllGroups,"");
+                    groupsApi.groupsGet(getGroupsCallback,"");
 
                 } catch (Go2Study.Invoker.ApiException j) {
                     j.printStackTrace();

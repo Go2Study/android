@@ -43,6 +43,8 @@ import FontysICT.Invoker.ApiException;
 import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
 import Go2Study.Models.Group;
+import lol.go2study.go2study.CallBack.PeopleCallback;
+import lol.go2study.go2study.Models.PersonModel;
 import mehdi.sakout.dynamicbox.DynamicBox;
 
 
@@ -66,79 +68,10 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
 
     private View rootView;
-    public Callback getPeopleStaff = new Callback() {
-
-        @Override
-        public void onFailure(Request request, IOException e) {
-            //do something to indicate error
-            Log.v("fail","fail");
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                try {
-                    String responseRaw = response.body().string();
-                    Person p;
-                    //List<Person> people = new ArrayList<>();
-                    people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
-                    Log.v("people here", people.toString());
-
-                    staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                            intent.putExtra("displayname", people.get(position).getDisplayName());
-                            intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
-                            intent.putExtra("office", people.get(position).getOffice());
-                            intent.putExtra("mail", people.get(position).getMail());
-                            intent.putExtra("initial", people.get(position).getInitials());
-                            intent.putExtra("photo", images.get(position));
-                            intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
-                            startActivity(intent);
-                        }
-                    });
-
-                    //might need to move sorting...
-                    Collections.sort(people, new Comparator<Person>() {
-                        @Override
-                        public int compare(Person lhs, Person rhs) {
-                            return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
-                        }
-
-                    });
-                    images =  BitMapImages(people);
-                   // staffListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people));
-
-                  final  ListView view = (ListView) rootView.getRootView().findViewById(R.id.listViewStaff);
-                  final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
 
 
 
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            staffListView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-                            staffListView.setItemsCanFocus(false);
-
-                        }
-                    });
-                    swipeContainer.setRefreshing(false);
-
-
-
-
-                    //  box.showCustomView("defaultView");
-                }
-                catch (ApiException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
 
     private List<Bitmap> BitMapImages(List<Person> personList)
@@ -180,13 +113,45 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
 
+        // Populate the Staff using the cached data in the DB. If it's empty - get new data from Fontys
 
+        people = PersonModel.getAll();
 
+        staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("displayname", people.get(position).getDisplayName());
+                intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
+                intent.putExtra("office", people.get(position).getOffice());
+                intent.putExtra("mail", people.get(position).getMail());
+                intent.putExtra("initial", people.get(position).getInitials());
+                intent.putExtra("photo", images.get(position));
+                intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
+                startActivity(intent);
+            }
+        });
 
-      //  box = new DynamicBox(getContext(),staffListView);
-        //box.addCustomView(rootView, "defaultView");
-        //box.showLoadingLayout();
-        // Setup refresh listener which triggers new data loading
+   /*     Collections.sort(people, new Comparator<Person>() {
+            @Override
+            public int compare(Person lhs, Person rhs) {
+                return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
+            }
+
+        });*/
+
+        images =  BitMapImages(people);
+        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                staffListView.setAdapter(adapter);
+                adapter.refreshEvents(people);
+                staffListView.setItemsCanFocus(false);
+            }
+        });
+
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -194,29 +159,68 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             public void onRefresh() {
 
                 swipeContainer.setRefreshing(true);
-                Log.d("Swipe", "Refreshing Number");
-
-
                     JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
                     String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
                     if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
                         if (WelcomeActivity.isLoggedIn(accessJSON)) {
                             try {
+                                PeopleCallback peopleCallback = new PeopleCallback();
+                                peopleApi.peopleList(accessToken,peopleCallback,true);
 
-                                peopleApi.peopleList(accessToken,getPeopleStaff,true);
-                                Log.v("string","string");
+                                // Wait for getting the people from Fontys API
+                                long timestampNow = System.currentTimeMillis();
+                                while (peopleCallback.people == null || peopleCallback.people.isEmpty()){
+                                    if (System.currentTimeMillis() - timestampNow >= 6000l){
+                                        swipeContainer.setRefreshing(false);
+                                    }
+                                }
+
+                                people = peopleCallback.people;
+                                staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                        intent.putExtra("displayname", people.get(position).getDisplayName());
+                                        intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
+                                        intent.putExtra("office", people.get(position).getOffice());
+                                        intent.putExtra("mail", people.get(position).getMail());
+                                        intent.putExtra("initial", people.get(position).getInitials());
+                                        intent.putExtra("photo", images.get(position));
+                                        intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                Collections.sort(people, new Comparator<Person>() {
+                                    @Override
+                                    public int compare(Person lhs, Person rhs) {
+                                        return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
+                                    }
+
+                                });
+
+                                images =  BitMapImages(people);
+                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        staffListView.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
+                                        staffListView.setItemsCanFocus(false);
+
+                                    }
+                                });
+
+                                swipeContainer.setRefreshing(false);
 
                             } catch (ApiException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
-                   // swipeContainer.setRefreshing(false);
-
                 }
-
         });
-
         return rootView;
     }
 

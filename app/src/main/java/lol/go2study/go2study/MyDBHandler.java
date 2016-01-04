@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import FontysICT.Models.Person;
 import Go2Study.Models.User;
 
@@ -82,9 +86,65 @@ public class MyDBHandler extends  SQLiteOpenHelper  {
         catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
-    public  Person getPerson(){
+    public void savePeople(List<Person> people){
+
+
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        try
+        {
+            db.beginTransaction();
+
+            ContentValues values;
+            for (Person person: people) {
+                values = new ContentValues();
+                values.put("pcn", person.getId());
+                values.put("firstName", person.getGivenName());
+                values.put("lastName", person.getSurName());
+                values.put("email", person.getMail());
+                db.insert(TABLE_PEOPLE, null, values);
+            }
+
+            db.setTransactionSuccessful();
+        } finally
+        {
+            db.endTransaction();
+        }
+    }
+
+    public List<Person> getPeople(){
+        List<Person> people = new ArrayList<Person>();
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_PEOPLE +";";
+
+        //Cursor points to a location in your results
+        Cursor c = db.rawQuery(query, null);
+        if(c.moveToFirst()){
+            do
+            {
+                Person p = new Person();
+                p.setId(c.getString(c.getColumnIndex("pcn")));
+                p.setGivenName(c.getString(c.getColumnIndex("firstName")));
+                p.setSurName(c.getString(c.getColumnIndex("lastName")));
+                p.setOffice(c.getString(c.getColumnIndex("office")));
+                p.setMail(c.getString(c.getColumnIndex("email")));
+                p.setDepartment(c.getString(c.getColumnIndex("department")));
+                p.setTelephoneNumber(c.getString(c.getColumnIndex("telephoneNumber")));
+                p.setMobileNumber(c.getString(c.getColumnIndex("mobileNumber")));
+                people.add(p);
+            }
+            while(c.moveToNext());
+        }
+        c.close();
+        db.close();
+        return people;
+    }
+    public Person getPerson(){
         Person p = new Person();
         SQLiteDatabase db = getWritableDatabase();
 

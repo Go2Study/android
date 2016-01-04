@@ -29,7 +29,6 @@ import Go2Study.Models.User;
 
 import Go2Study.Models.Group;
 import Go2Study.Models.User;
-import static lol.go2study.go2study.HomeActivity.userList;
 import static lol.go2study.go2study.R.id.listViewAddGroup;
 
 
@@ -50,7 +49,6 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
-        groups = HomeActivity.groupsList;
 
         ListView usersListView = (ListView)rootView.findViewById(R.id.listViewGroup);
         usersListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, groups));
@@ -115,12 +113,6 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                 if (tt2 != null) {
                     tt2.setText(p.getPcnlist().toString());
                 }
-                // if(image != null) {
-                //   Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitMapList.get(position),90);
-                // image.setImageBitmap(roundedImage);
-                //}
-
-
             }
 
             return v;

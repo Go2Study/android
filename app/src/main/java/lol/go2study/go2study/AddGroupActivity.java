@@ -108,7 +108,6 @@ public class AddGroupActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         groupsApi = new GroupsApi();
 
-        userList = HomeActivity.userList;
 
         pcnList = new ArrayList<>();
 

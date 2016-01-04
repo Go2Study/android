@@ -57,7 +57,6 @@ public class StudentsFragment extends android.support.v4.app.Fragment {
         public ReCycleViewStudentFragment(Context context) {
 
             this.context = context;
-            users = HomeActivity.userList;
             inflater = LayoutInflater.from(context);
 
 

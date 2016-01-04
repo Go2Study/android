@@ -166,7 +166,7 @@ public class CreateUserActivity extends AppCompatActivity {
                 Spinner classSpinner = (Spinner)findViewById(R.id.classesSelector);
                 String className = classSpinner.getSelectedItem().toString();
                 Person p = dbHandler.getPerson();
-                //Log.v("Person from DB:", p.toString());
+                //Log.v("PersonModel from DB:", p.toString());
                 try {
                    // UsersApi apiUser = new UsersApi();
                    // Log.v("PRE","BEFORE REQUEST");
