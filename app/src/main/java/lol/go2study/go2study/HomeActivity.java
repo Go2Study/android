@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     SharedPreferences pref;
-    public static List<Person> people;
+
     public static List<User> userList;
     public static List<Bitmap> staffImages;
     public static List<Group> groupsList;
@@ -85,64 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    public Callback getPeopleStaff = new Callback() {
 
-        @Override
-        public void onFailure(Request request, IOException e) {
-            //do something to indicate error
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                try {
-                    String responseRaw = response.body().string();
-                    Person p;
-                    //List<Person> people = new ArrayList<>();
-                    people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
-
-                    Collections.sort(people, new Comparator<Person>() {
-                        @Override
-                        public int compare(Person lhs, Person rhs) {
-                            return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
-                        }
-
-                    });
-                    BitMapImages(people);
-                }
-                catch (ApiException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
-
-
-    private void BitMapImages(List<Person> personList)
-    {
-        List<byte[]> listOfImages = new ArrayList<>();
-        Log.v("People list size",String.valueOf(personList.size()));
-        for (Person p :personList) {
-            byte[] data = null;
-            try {
-                if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
-                    data = p.getThumbnailData().getBytes("UTF-8");
-
-                    byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
-                    listOfImages.add(byteImage);
-                }
-            } catch (UnsupportedEncodingException e) {
-                Log.v("data",data.toString());
-                e.printStackTrace();
-            }
-        }
-        Log.v("List of IMG Length",String.valueOf(listOfImages.size()));
-        for (byte[] b:listOfImages) {
-            Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
-            staffImages.add(bitmap);
-        }
-    }
 
     public Callback getUsersAppCallBack = new Callback() {
         @Override
@@ -204,12 +147,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
             if (WelcomeActivity.isLoggedIn(accessJSON)) {
                 try {
-                    peopleApi.peopleList(accessToken, getPeopleStaff, true);
+
                     userApi.usersGet(getUsersAppCallBack, "");
                     groupsApi.groupsGet(getAllGroups,"");
 
-                } catch (ApiException e) {
-                    e.printStackTrace();
                 } catch (Go2Study.Invoker.ApiException j) {
                     j.printStackTrace();
                 }

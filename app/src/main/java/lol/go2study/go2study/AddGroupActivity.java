@@ -109,7 +109,7 @@ public class AddGroupActivity extends AppCompatActivity
         groupsApi = new GroupsApi();
 
         userList = HomeActivity.userList;
-        people = HomeActivity.people;
+
         pcnList = new ArrayList<>();
 
         //ADD string pcn

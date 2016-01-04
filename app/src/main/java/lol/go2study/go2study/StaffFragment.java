@@ -1,14 +1,19 @@
 package lol.go2study.go2study;
 
 
+import android.accounts.AccountManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +25,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import FontysICT.Api.PeopleApi;
+import FontysICT.Invoker.ApiException;
+import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
 import Go2Study.Models.Group;
+import mehdi.sakout.dynamicbox.DynamicBox;
 
 
 /**
@@ -33,78 +52,170 @@ import Go2Study.Models.Group;
 public class StaffFragment extends android.support.v4.app.Fragment {
 
     protected List<Person> people;
-    protected   List<Bitmap> bitMapList;
+    protected   List<Bitmap> images;
     private SwipeRefreshLayout swipeContainer;
+    private PeopleApi peopleApi;
+    SharedPreferences pref;
+    ListView staffListView;
+    private OAuthSettings settings;
+    private DynamicBox box;
+
     public StaffFragment() {
         // Required empty public constructor
     }
 
-/*
-    public void fetchTimelineAsync(int page) {
-        client.getHomeTimeline(0, new JsonHttpResponseHandler() {
-            public void onSuccess(JSONArray json) {
-                // Remember to CLEAR OUT old items before appending in the new ones
 
-                adapter.clear();
-                // ...the data has come back, add new items to your adapter...
+    private View rootView;
+    public Callback getPeopleStaff = new Callback() {
 
-                adapter.addAll(...);
-                // Now we call setRefreshing(false) to signal refresh has finished
+        @Override
+        public void onFailure(Request request, IOException e) {
+            //do something to indicate error
+            Log.v("fail","fail");
+        }
 
-                swipeContainer.setRefreshing(false);
+        @Override
+        public void onResponse(Response response) throws IOException {
+            if (response.isSuccessful()) {
+                try {
+                    String responseRaw = response.body().string();
+                    Person p;
+                    //List<Person> people = new ArrayList<>();
+                    people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
+                    Log.v("people here", people.toString());
+
+                    staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                            intent.putExtra("displayname", people.get(position).getDisplayName());
+                            intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
+                            intent.putExtra("office", people.get(position).getOffice());
+                            intent.putExtra("mail", people.get(position).getMail());
+                            intent.putExtra("initial", people.get(position).getInitials());
+                            intent.putExtra("photo", images.get(position));
+                            intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
+                            startActivity(intent);
+                        }
+                    });
+
+                    //might need to move sorting...
+                    Collections.sort(people, new Comparator<Person>() {
+                        @Override
+                        public int compare(Person lhs, Person rhs) {
+                            return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
+                        }
+
+                    });
+                    images =  BitMapImages(people);
+                   // staffListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people));
+
+                  final  ListView view = (ListView) rootView.getRootView().findViewById(R.id.listViewStaff);
+                  final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
+
+
+
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            staffListView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                            staffListView.setItemsCanFocus(false);
+
+                        }
+                    });
+                    swipeContainer.setRefreshing(false);
+
+
+
+
+                    //  box.showCustomView("defaultView");
+                }
+                catch (ApiException e)
+                {
+                    e.printStackTrace();
+                }
             }
+        }
+    };
 
-            public void onFailure(Throwable e) {
-                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+
+    private List<Bitmap> BitMapImages(List<Person> personList)
+    {
+        List<byte[]> listOfImages = new ArrayList<>();
+        Log.v("People list size", String.valueOf(personList.size()));
+        for (Person p :personList) {
+            byte[] data = null;
+            try {
+                if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
+                    data = p.getThumbnailData().getBytes("UTF-8");
+
+                    byte[] byteImage = Base64.decode(data, Base64.DEFAULT);
+                    listOfImages.add(byteImage);
+                }
+            } catch (UnsupportedEncodingException e) {
+                Log.v("data",data.toString());
+                e.printStackTrace();
             }
-        });
+        }
+        List<Bitmap> temp = new ArrayList<>();
+        Log.v("List of IMG Length", String.valueOf(listOfImages.size()));
+        for (byte[] b:listOfImages) {
+            Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
+            temp.add(bitmap);
+        }
+        return  temp;
     }
 
-*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        people = HomeActivity.people;
-        bitMapList = HomeActivity.staffImages;
-        View rootView = inflater.inflate(R.layout.fragment_staff, container, false);
 
+        rootView = inflater.inflate(R.layout.fragment_staff, container, false);
+        peopleApi = new PeopleApi();
+        settings = new OAuthSettings();
+        pref = this.getActivity().getSharedPreferences("TokenPref", Context.MODE_PRIVATE);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
+        staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
+
+
+
+
+      //  box = new DynamicBox(getContext(),staffListView);
+        //box.addCustomView(rootView, "defaultView");
+        //box.showLoadingLayout();
         // Setup refresh listener which triggers new data loading
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
             @Override
             public void onRefresh() {
 
-                // Your code to refresh the list here.
+                swipeContainer.setRefreshing(true);
+                Log.d("Swipe", "Refreshing Number");
 
-                // Make sure you call swipeContainer.setRefreshing(false)
 
-                // once the network request has completed successfully.
-                //https://guides.codepath.com/android/Implementing-Pull-to-Refresh-Guide
-               // fetchTimelineAsync(0);
-            }
+                    JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
+                    String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
+                    if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
+                        if (WelcomeActivity.isLoggedIn(accessJSON)) {
+                            try {
+
+                                peopleApi.peopleList(accessToken,getPeopleStaff,true);
+                                Log.v("string","string");
+
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                   // swipeContainer.setRefreshing(false);
+
+                }
+
         });
-
-        ListView staffListView = (ListView) rootView.findViewById(R.id.listViewStaff);
-        staffListView.setAdapter(new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people));
-        staffListView.setItemsCanFocus(false);
-        staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity() ,ProfileActivity.class);
-                intent.putExtra("displayname",people.get(position).getDisplayName());
-                intent.putExtra("mobilenumber",people.get(position).getMobileNumber());
-                intent.putExtra("office",people.get(position).getOffice());
-                intent.putExtra("mail",people.get(position).getMail());
-                intent.putExtra("initial",people.get(position).getInitials());
-                intent.putExtra("photo",bitMapList.get(position));
-                intent.putExtra("personalTitle",people.get(position).getPersonalTitle());
-                startActivity(intent);
-            }
-        });
-
-
 
         return rootView;
     }
@@ -125,6 +236,13 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
 
         }
+
+        public void refreshEvents(List<Person> people) {
+            this.people.clear();
+            this.people.addAll(people);
+            notifyDataSetChanged();
+        }
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -154,7 +272,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 }
                 if(image != null)
                 {
-                    Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitMapList.get(position),90);
+                    Bitmap roundedImage = roundedImageView.getCroppedBitmap(images.get(position),90);
                     image.setImageBitmap(roundedImage);
                 }
             }

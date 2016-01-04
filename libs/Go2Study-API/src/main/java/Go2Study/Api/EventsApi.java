@@ -17,7 +17,7 @@ import Go2Study.Models.Event;
 
 
 public class EventsApi {
-  String basePath = "http://api.go2study.lol";
+  String basePath = "http://api.go2study.lol:8080";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
