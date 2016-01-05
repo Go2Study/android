@@ -58,13 +58,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public static List<Bitmap> staffImages;
 
 
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -70,7 +70,7 @@ public class PersonModel extends Model {
         //this.telephoneNumber = p.getTelephoneNumber();
     }
 
-    public static List<Person> getAll() throws UnsupportedEncodingException, DecoderException {
+    public static List<Person> getAllPeople() throws UnsupportedEncodingException, DecoderException {
         List<PersonModel> peopleFromDB = new Select()
                 .from(PersonModel.class)
                 .orderBy("firstName ASC")

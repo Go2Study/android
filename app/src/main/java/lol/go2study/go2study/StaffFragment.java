@@ -1,7 +1,6 @@
 package lol.go2study.go2study;
 
 
-import android.accounts.AccountManager;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,17 +19,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.plus.People;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.apache.commons.codec.DecoderException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,9 +31,7 @@ import java.util.List;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
 import FontysICT.Models.Person;
-import Go2Study.Models.Group;
 import lol.go2study.go2study.CallBack.PeopleCallback;
 import lol.go2study.go2study.Models.PersonModel;
 
@@ -132,7 +119,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         // PersonModel.deleteAll();
         try {
 
-            StaffFragment.this.people = PersonModel.getAll();
+            StaffFragment.this.people = PersonModel.getAllPeople();
             if(people == null || people.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
