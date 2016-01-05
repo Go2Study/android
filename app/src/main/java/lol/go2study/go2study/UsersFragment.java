@@ -2,94 +2,111 @@ package lol.go2study.go2study;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.codec.DecoderException;
 import org.json.JSONObject;
-import Go2Study.Models.Group;
+
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import Go2Study.Api.GroupsApi;
+
+import FontysICT.Invoker.ApiException;
+import FontysICT.Models.Person;
+import Go2Study.Api.UsersApi;
 import Go2Study.Models.User;
 import lol.go2study.go2study.CallBack.GroupsCallbacks;
+import lol.go2study.go2study.CallBack.PeopleCallback;
 import lol.go2study.go2study.CallBack.UsersCallbacks;
-import lol.go2study.go2study.Models.GroupsModel;
-
+import lol.go2study.go2study.Models.UserModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupFragment extends android.support.v4.app.Fragment {
+public class UsersFragment extends android.support.v4.app.Fragment {
 
-    private List<Group> groups;
-    private SharedPreferences pref;
-    private GroupsApi groupsApi;
+    List<User> users;
+    SharedPreferences pref;
     private OAuthSettings settings;
     private SwipeRefreshLayout swipeContainer;
+    private UsersApi usersApi;
+    private List<Bitmap> images;
 
-    public GroupFragment() {
+    public UsersFragment() {
         // Required empty public constructor
+
     }
+
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView  staffListView = (ListView) view.findViewById(R.id.listViewGroups);
-        Log.v("test", "test");
+        ListView  staffListView = (ListView) view.findViewById(R.id.listViewUsers);
+        Log.v("test","test");
         //images =  BitMapImages(people);
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, groups);
+        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, users);
         staffListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_users,container,false);
 
-        View rootView = inflater.inflate(R.layout.fragment_group, container, false);
+
         pref = this.getActivity().getSharedPreferences("TokenPref", Context.MODE_PRIVATE);
         settings = new OAuthSettings();
-        groupsApi = new GroupsApi();
+        usersApi = new UsersApi();
         final JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
-        swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainerGroups);
-        final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewGroups);
+        swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainerUsers);
+        final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewUsers);
 
         try {
-            GroupsModel.deleteAll();
-            GroupFragment.this.groups = GroupsModel.getAllGroups();
-            if(groups == null || groups.size() == 0)
+            UserModel.deleteAll();
+            UsersFragment.this.users = UserModel.getAllUsers();
+            if(users == null || users.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
                     if (WelcomeActivity.isLoggedIn(accessJSON)) {
                         try {
-                            GroupsCallbacks groupsCallbacks = new GroupsCallbacks();
-                            GroupsCallbacks.GetGroupsCallback getGroupsCallback = groupsCallbacks.new GetGroupsCallback();
-                            groupsApi.groupsGet(getGroupsCallback, "");
+                            UsersCallbacks usersCallbacks = new UsersCallbacks();
+                            UsersCallbacks.GetUsersCallBack getUsersCallBack = usersCallbacks.new GetUsersCallBack();
+                            usersApi.usersGet(getUsersCallBack, "");
 
                             // Wait for getting the people from Fontys API
                             long timestampNow = System.currentTimeMillis();
-                            while (getGroupsCallback.groupsList == null || getGroupsCallback.groupsList.isEmpty()) {
+                            while (usersCallbacks.userList == null || usersCallbacks.userList.isEmpty()) {
                                 if (System.currentTimeMillis() - timestampNow >= 6000l) {
                                     // swipeContainer.setRefreshing(false);
                                 }
                             }
-                            GroupFragment.this.groups = getGroupsCallback.groupsList;
+                            UsersFragment.this.users = usersCallbacks.userList;
 
 
                         }  catch (Go2Study.Invoker.ApiException e) {
@@ -115,21 +132,21 @@ public class GroupFragment extends android.support.v4.app.Fragment {
 
 
 
-                            GroupsCallbacks groupsCallbacks = new GroupsCallbacks();
-                            GroupsCallbacks.GetGroupsCallback getGroupsCallback = groupsCallbacks.new GetGroupsCallback();
-                            groupsApi.groupsGet(getGroupsCallback, "");
+                            UsersCallbacks usersCallbacks = new UsersCallbacks();
+                            UsersCallbacks.GetUsersCallBack getUsersCallBack = usersCallbacks.new GetUsersCallBack();
+                            usersApi.usersGet(getUsersCallBack, "");
 
                             // Wait for getting the people from Fontys API
                             long timestampNow = System.currentTimeMillis();
-                            while (getGroupsCallback.groupsList == null || getGroupsCallback.groupsList.isEmpty()) {
-                                if (System.currentTimeMillis() - timestampNow >= 6000l) {
+                            while (usersCallbacks.userList == null || usersCallbacks.userList.isEmpty()){
+                                if (System.currentTimeMillis() - timestampNow >= 6000l){
                                     // swipeContainer.setRefreshing(false);
                                 }
                             }
-                            GroupFragment.this.groups = getGroupsCallback.groupsList;
 
+                            UsersFragment.this.users = usersCallbacks.userList;
 
-                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, GroupFragment.this.groups);
+                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, UsersFragment.this.users);
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -152,28 +169,31 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         });
 
         return rootView;
+
     }
 
-    public  class YourRecyclerAdapter extends ArrayAdapter<Group> {
+
+
+    public  class YourRecyclerAdapter extends ArrayAdapter<User> {
 
         private Context context;
-        private List<Group> groups;
+        private List<User> users;
         private MLRoundedImageView roundedImageView;
 
 
 
-        public YourRecyclerAdapter(Context context, int resource, List<Group> groups) {
-            super(context, resource,groups );
+        public YourRecyclerAdapter(Context context, int resource, List<User> users) {
+            super(context, resource,users );
             this.context = context;
-            this.groups = groups;
+            this.users = users;
             this.roundedImageView =  new MLRoundedImageView(context);
 
 
         }
 
-        public void refreshEvents(List<Group> groups) {
-            this.groups.clear();
-            this.groups.addAll(groups);
+        public void refreshEvents(List<User> users) {
+            this.users.clear();
+            this.users.addAll(users);
             notifyDataSetChanged();
         }
 
@@ -189,7 +209,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                 v = vi.inflate(R.layout.custom_row_staff_user, null);
             }
 
-            Group p = getItem(position);
+            User p = getItem(position);
 
 
             if (p != null) {
@@ -198,18 +218,20 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                 ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
                 if (tt1 != null) {
-                    tt1.setText(p.getName());
+                    tt1.setText(p.getDisplayName());
                 }
 
                 if (tt2 != null) {
-                    tt2.setText(p.getPcnlist().toString());
+                    tt2.setText(p.getEmail().toString());
+                }
+                if(image != null)
+                {
+
                 }
             }
             return v;
         }
-
     }
-
-
-
 }
+
+

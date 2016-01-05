@@ -89,17 +89,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         Log.v("test","test");
         images =  BitMapImages(people);
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
-
         final List<Person> finalPeopleFromFontys = people;
-        //this.getActivity().runOnUiThread(new Runnable() {
-         //   @Override
-         //   public void run() {
-                staffListView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-               // adapter.refreshEvents(finalPeopleFromFontys);
-                staffListView.setItemsCanFocus(false);
-         //   }
-      //  });
+        staffListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+       // adapter.refreshEvents(finalPeopleFromFontys);
+        staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
     }
 
@@ -116,7 +110,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-        // PersonModel.deleteAll();
+        //PersonModel.deleteAll();
         try {
 
             StaffFragment.this.people = PersonModel.getAllPeople();
@@ -132,7 +126,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                             long timestampNow = System.currentTimeMillis();
                             while (peopleCallback.people == null || peopleCallback.people.isEmpty()) {
                                 if (System.currentTimeMillis() - timestampNow >= 6000l) {
-                                    // swipeContainer.setRefreshing(false);
+                                     swipeContainer.setRefreshing(false);
                                 }
                             }
                             StaffFragment.this.people = peopleCallback.people;
@@ -277,9 +271,9 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
 
             if (p != null) {
-                TextView tt1 = (TextView) v.findViewById(R.id.nameTextView);
-                TextView tt2 = (TextView) v.findViewById(R.id.roomTextView);
-                ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
+                TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
+                TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
+                ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaff);  //for the image
 
                 if (tt1 != null) {
                     tt1.setText(p.getDisplayName());

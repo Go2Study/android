@@ -42,6 +42,7 @@ public class UsersCallbacks  {
                         for (User user: userList) {
 
                             UserModel userModel = new UserModel(user);
+
                             userModel.save();
 
                         }

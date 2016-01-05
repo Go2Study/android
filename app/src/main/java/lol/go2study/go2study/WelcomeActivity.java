@@ -47,29 +47,7 @@ public class WelcomeActivity extends AppCompatActivity  {
     private List<Group> groupsList;
     private ScheduleApi scheduleApi;
 
-    public Callback getGroupsCallBack = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-            Log.v("ERROR FROM groups","");
 
-
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                // If it's response from Fontys
-                String responseRaw = response.body().string();
-                try {
-                    groupsList = (List<Group>)ApiInvoker.deserialize(responseRaw,"list",Group.class);
-                    Log.v("GROUP::::",groupsList.toString());
-
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
     //List<ScheduleItem> scheduleItems;
 
@@ -203,7 +181,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
                         } else {
                             //CreateUserActivity
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {
@@ -240,12 +218,9 @@ public class WelcomeActivity extends AppCompatActivity  {
                 try {
                     if (isValidAccessToken(accessToken)) {
                         if (isExistingUser(person.getString("id")) ) {
-
-                            groupsApi.groupsList(accessToken,getGroupsCallBack);
                             startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
-
                         } else {
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                            startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {
@@ -254,10 +229,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                 catch(JSONException q)
                 {
                     q.printStackTrace();
-                } catch (ApiException e) {
-                    e.printStackTrace();
                 }
-
             }
         }
     }

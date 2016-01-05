@@ -195,11 +195,6 @@ public class AddGroupActivity extends AppCompatActivity
             if (tt2 != null) {
                 tt2.setText(p.getEmail());
             }
-            // if(image != null) {
-            //   Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitMapList.get(position),90);
-            // image.setImageBitmap(roundedImage);
-            //}
-
 
         }
 

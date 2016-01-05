@@ -10,7 +10,7 @@
     >
 
     <ImageView
-        android:id="@+id/rowImageView"
+        android:id="@+id/rowImageViewStaff"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
@@ -19,15 +19,15 @@
 
 
     <TextView
-        android:id = "@+id/nameTextView"
+        android:id = "@+id/nameTextViewStaff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity ="center_vertical"
         android:text="dummy text"
         android:textColor="#000"
         android:textSize="16dp"
-        android:layout_alignTop="@+id/rowImageView"
-        android:layout_toEndOf="@+id/rowImageView"
+        android:layout_alignTop="@+id/rowImageViewStaff"
+        android:layout_toEndOf="@+id/rowImageViewStaff"
         android:layout_marginTop="8dp" />
 
     <TextView
@@ -35,11 +35,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
-        android:id="@+id/roomTextView"
+        android:id="@+id/roomTextViewStaff"
         android:textColor="#000"
         android:textSize="12dp"
-        android:layout_below="@+id/nameTextView"
-        android:layout_toEndOf="@+id/rowImageView" />
+        android:layout_below="@+id/nameTextViewStaff"
+        android:layout_toEndOf="@+id/rowImageViewStaff" />
 
     <ImageView
     android:layout_width="30dp"

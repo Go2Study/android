@@ -99,7 +99,6 @@ public class  PeopleActivity extends AppCompatActivity {
 
     class PagerAdapter extends FragmentStatePagerAdapter {
 
-
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -109,23 +108,22 @@ public class  PeopleActivity extends AppCompatActivity {
             Fragment frag = null;
             switch (position) {
                 case 0:
-                    frag = new StudentsFragment();
+                    frag = new UsersFragment();
 
                     break;
                 case 1:
                     frag = new StaffFragment();
                     break;
-                /*case 2:
+                case 2:
                     frag = new GroupFragment();
-
-                    break;*/
+                    break;
             }
             return frag;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override

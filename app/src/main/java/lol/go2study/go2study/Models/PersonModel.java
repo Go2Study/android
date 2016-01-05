@@ -30,7 +30,7 @@ public class PersonModel extends Model {
     @Column(name = "lastName")
     public String lastName;
 
-    @Column(name = "pcn" ,index = true)
+    @Column(name = "pcn" ,unique = true)
     public String pcn;
 
     @Column(name = "office")
@@ -38,6 +38,7 @@ public class PersonModel extends Model {
 
     @Column(name = "email")
     public String email;
+
 
     @Column(name = "department")
     public String department;
@@ -82,15 +83,12 @@ public class PersonModel extends Model {
             Person person = new Person();
             person.setGivenName(p.firstName);
             person.setSurName(p.lastName);
-           // person.setTelephoneNumber(p.telephoneNumber);
+            // person.setTelephoneNumber(p.telephoneNumber);
             person.setMail(p.email);
             person.setOffice(p.office);
             person.setDepartment(p.department);
             person.setId(p.pcn);
             person.setPhoto(p.photo);
-
-            //Base64 encode the thumbnailData
-
             person.setThumbnailData(p.thumbnailDataa);
 
             //Add to list of people

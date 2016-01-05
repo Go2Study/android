@@ -22,7 +22,7 @@ import java.io.File;
 
 
 public class UserGroupsApi {
-  String basePath = "http://api.go2study.lol";
+  String basePath = "http://go2study.lol";
   ApiInvoker apiInvoker = ApiInvoker.getInstance();
 
   public void addHeader(String key, String value) {
