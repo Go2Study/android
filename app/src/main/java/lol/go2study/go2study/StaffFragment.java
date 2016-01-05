@@ -109,7 +109,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
          //   public void run() {
                 staffListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                adapter.refreshEvents(finalPeopleFromFontys);
+               // adapter.refreshEvents(finalPeopleFromFontys);
                 staffListView.setItemsCanFocus(false);
          //   }
       //  });
@@ -129,7 +129,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-         PersonModel.deleteAll();
+        // PersonModel.deleteAll();
         try {
 
             StaffFragment.this.people = PersonModel.getAll();
