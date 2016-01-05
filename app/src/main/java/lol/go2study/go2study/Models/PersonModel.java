@@ -5,8 +5,14 @@ import android.graphics.Bitmap;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.UnsupportedEncodingException;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +30,7 @@ public class PersonModel extends Model {
     @Column(name = "lastName")
     public String lastName;
 
-    @Column(name = "pcn")
+    @Column(name = "pcn" ,index = true)
     public String pcn;
 
     @Column(name = "office")
@@ -36,14 +42,14 @@ public class PersonModel extends Model {
     @Column(name = "department")
     public String department;
 
-    @Column(name = "telephoneNumber")
-    public String telephoneNumber;
-
     @Column(name = "mobileNumber")
     public String mobileNumber;
 
     @Column(name = "photo")
     public String photo;
+
+    @Column(name = "thumbnailDataa")
+    public String thumbnailDataa;
 
     public PersonModel() {
         super();
@@ -60,10 +66,11 @@ public class PersonModel extends Model {
         this.department = p.getDepartment();
         this.photo = p.getPhoto();
         this.mobileNumber = p.getMobileNumber();
-        this.telephoneNumber = p.getTelephoneNumber();
+        this.thumbnailDataa = p.getThumbnailData();
+        //this.telephoneNumber = p.getTelephoneNumber();
     }
 
-    public static List<Person> getAll() {
+    public static List<Person> getAll() throws UnsupportedEncodingException, DecoderException {
         List<PersonModel> peopleFromDB = new Select()
                 .from(PersonModel.class)
                 .orderBy("firstName ASC")
@@ -75,16 +82,26 @@ public class PersonModel extends Model {
             Person person = new Person();
             person.setGivenName(p.firstName);
             person.setSurName(p.lastName);
-            person.setTelephoneNumber(p.telephoneNumber);
+           // person.setTelephoneNumber(p.telephoneNumber);
             person.setMail(p.email);
             person.setOffice(p.office);
             person.setDepartment(p.department);
             person.setId(p.pcn);
             person.setPhoto(p.photo);
 
+            //Base64 encode the thumbnailData
+            Base64 bs = new Base64();
+            String s  =   new String((byte[])bs.decode(p.thumbnailDataa), "UTF-8");
+            person.setThumbnailData(s);
+
             //Add to list of people
             peopleList.add(person);
         }
         return peopleList;
+    }
+
+    public static void deleteAll()
+    {
+        new Delete().from(PersonModel.class).execute();
     }
 }

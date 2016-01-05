@@ -29,6 +29,7 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.apache.commons.codec.DecoderException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -45,7 +46,6 @@ import FontysICT.Models.Person;
 import Go2Study.Models.Group;
 import lol.go2study.go2study.CallBack.PeopleCallback;
 import lol.go2study.go2study.Models.PersonModel;
-import mehdi.sakout.dynamicbox.DynamicBox;
 
 
 /**
@@ -54,13 +54,12 @@ import mehdi.sakout.dynamicbox.DynamicBox;
 public class StaffFragment extends android.support.v4.app.Fragment {
 
     protected List<Person> people;
-    protected   List<Bitmap> images;
+    protected List<Bitmap> images;
     private SwipeRefreshLayout swipeContainer;
     private PeopleApi peopleApi;
     SharedPreferences pref;
     ListView staffListView;
     private OAuthSettings settings;
-    private DynamicBox box;
 
     public StaffFragment() {
         // Required empty public constructor
@@ -112,10 +111,14 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         pref = this.getActivity().getSharedPreferences("TokenPref", Context.MODE_PRIVATE);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-
+        PersonModel.deleteAll();
         // Populate the Staff using the cached data in the DB. If it's empty - get new data from Fontys
-
-        people = PersonModel.getAll();
+       // PersonModel.deleteAll();
+        try {
+            people = PersonModel.getAll();
+        } catch (UnsupportedEncodingException | DecoderException e) {
+            e.printStackTrace();
+        }
 
         staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,14 +146,14 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         images =  BitMapImages(people);
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                staffListView.setAdapter(adapter);
-                adapter.refreshEvents(people);
-                staffListView.setItemsCanFocus(false);
-            }
-        });
+      // getActivity().runOnUiThread(new Runnable() {
+           // @Override
+           // public void run() {
+        staffListView.setAdapter(adapter);
+        adapter.refreshEvents(people);
+        staffListView.setItemsCanFocus(false);
+          //  }
+     //   });
 
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -171,7 +174,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                 long timestampNow = System.currentTimeMillis();
                                 while (peopleCallback.people == null || peopleCallback.people.isEmpty()){
                                     if (System.currentTimeMillis() - timestampNow >= 6000l){
-                                        swipeContainer.setRefreshing(false);
+                                       // swipeContainer.setRefreshing(false);
                                     }
                                 }
 
