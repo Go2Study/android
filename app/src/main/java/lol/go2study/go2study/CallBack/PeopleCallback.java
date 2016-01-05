@@ -10,6 +10,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import FontysICT.Invoker.ApiException;
@@ -45,6 +46,7 @@ public class PeopleCallback implements Callback {
         public void onResponse(Response response) throws IOException {
             if (response.isSuccessful()) {
                 try {
+                    people = new ArrayList<>();
                     String responseRaw = response.body().string();
                     //List<PersonModel> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
@@ -55,17 +57,17 @@ public class PeopleCallback implements Callback {
 
                         for (Person p: people) {
 
+
+                            PersonModel person = new PersonModel(p);
+
+                            person.save();
                             //Encode the thumbnailData to base64 string
-                            if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
-                               String s = decodeBase64Profile(p.getThumbnailData()).toString();
+                           /* if(p.getThumbnailData() != "" && p.getThumbnailData() != null && !p.getThumbnailData().equals("") ) {
                                 byte[] data = p.getThumbnailData().getBytes("UTF-8");
                                 String base64 = Base64.encodeToString(data, Base64.DEFAULT);
                                 p.setThumbnailData(base64);
 
-                                PersonModel person = new PersonModel(p);
-
-                                person.save();
-                            }
+                            }*/
                         }
                         ActiveAndroid.setTransactionSuccessful();
                     }

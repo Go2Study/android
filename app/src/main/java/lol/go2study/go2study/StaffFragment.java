@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.plus.People;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -60,17 +61,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     SharedPreferences pref;
     ListView staffListView;
     private OAuthSettings settings;
+    private View rootView;
 
     public StaffFragment() {
         // Required empty public constructor
     }
-
-
-    private View rootView;
-
-
-
-
 
 
     private List<Bitmap> BitMapImages(List<Person> personList)
@@ -101,6 +96,27 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ListView  staffListView = (ListView) view.findViewById(R.id.listViewStaff);
+        Log.v("test","test");
+        images =  BitMapImages(people);
+        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
+
+        final List<Person> finalPeopleFromFontys = people;
+        //this.getActivity().runOnUiThread(new Runnable() {
+         //   @Override
+         //   public void run() {
+                staffListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                adapter.refreshEvents(finalPeopleFromFontys);
+                staffListView.setItemsCanFocus(false);
+         //   }
+      //  });
+        swipeContainer.setRefreshing(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -109,52 +125,61 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         peopleApi = new PeopleApi();
         settings = new OAuthSettings();
         pref = this.getActivity().getSharedPreferences("TokenPref", Context.MODE_PRIVATE);
+        final JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
+        final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-        PersonModel.deleteAll();
-        // Populate the Staff using the cached data in the DB. If it's empty - get new data from Fontys
-       // PersonModel.deleteAll();
+         PersonModel.deleteAll();
         try {
-            people = PersonModel.getAll();
+
+            StaffFragment.this.people = PersonModel.getAll();
+            if(people == null || people.size() == 0)
+            {
+                if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
+                    if (WelcomeActivity.isLoggedIn(accessJSON)) {
+                        try {
+                            PeopleCallback peopleCallback = new PeopleCallback();
+                            peopleApi.peopleList(accessToken, peopleCallback, true);
+
+                            // Wait for getting the people from Fontys API
+                            long timestampNow = System.currentTimeMillis();
+                            while (peopleCallback.people == null || peopleCallback.people.isEmpty()) {
+                                if (System.currentTimeMillis() - timestampNow >= 6000l) {
+                                    // swipeContainer.setRefreshing(false);
+                                }
+                            }
+                            StaffFragment.this.people = peopleCallback.people;
+
+
+                        } catch (ApiException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+
         } catch (UnsupportedEncodingException | DecoderException e) {
             e.printStackTrace();
         }
+
+
+
 
         staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                intent.putExtra("displayname", people.get(position).getDisplayName());
-                intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
-                intent.putExtra("office", people.get(position).getOffice());
-                intent.putExtra("mail", people.get(position).getMail());
-                intent.putExtra("initial", people.get(position).getInitials());
+                intent.putExtra("displayname", StaffFragment.this.people.get(position).getDisplayName());
+                intent.putExtra("mobilenumber", StaffFragment.this.people.get(position).getMobileNumber());
+                intent.putExtra("office", StaffFragment.this.people.get(position).getOffice());
+                intent.putExtra("mail", StaffFragment.this.people.get(position).getMail());
+                intent.putExtra("initial", StaffFragment.this.people.get(position).getInitials());
                 intent.putExtra("photo", images.get(position));
-                intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
+                intent.putExtra("personalTitle", StaffFragment.this.people.get(position).getPersonalTitle());
                 startActivity(intent);
             }
         });
-
-   /*     Collections.sort(people, new Comparator<Person>() {
-            @Override
-            public int compare(Person lhs, Person rhs) {
-                return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
-            }
-
-        });*/
-
-        images =  BitMapImages(people);
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
-
-      // getActivity().runOnUiThread(new Runnable() {
-           // @Override
-           // public void run() {
-        staffListView.setAdapter(adapter);
-        adapter.refreshEvents(people);
-        staffListView.setItemsCanFocus(false);
-          //  }
-     //   });
-
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -162,8 +187,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             public void onRefresh() {
 
                 swipeContainer.setRefreshing(true);
-                    JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
-                    String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
+
                     if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
                         if (WelcomeActivity.isLoggedIn(accessJSON)) {
                             try {
@@ -178,23 +202,23 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                     }
                                 }
 
-                                people = peopleCallback.people;
+                                StaffFragment.this.people = peopleCallback.people;
                                 staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                                        intent.putExtra("displayname", people.get(position).getDisplayName());
-                                        intent.putExtra("mobilenumber", people.get(position).getMobileNumber());
-                                        intent.putExtra("office", people.get(position).getOffice());
-                                        intent.putExtra("mail", people.get(position).getMail());
-                                        intent.putExtra("initial", people.get(position).getInitials());
+                                        intent.putExtra("displayname", StaffFragment.this.people.get(position).getDisplayName());
+                                        intent.putExtra("mobilenumber", StaffFragment.this.people.get(position).getMobileNumber());
+                                        intent.putExtra("office", StaffFragment.this.people.get(position).getOffice());
+                                        intent.putExtra("mail", StaffFragment.this.people.get(position).getMail());
+                                        intent.putExtra("initial", StaffFragment.this.people.get(position).getInitials());
                                         intent.putExtra("photo", images.get(position));
-                                        intent.putExtra("personalTitle", people.get(position).getPersonalTitle());
+                                        intent.putExtra("personalTitle", StaffFragment.this.people.get(position).getPersonalTitle());
                                         startActivity(intent);
                                     }
                                 });
 
-                                Collections.sort(people, new Comparator<Person>() {
+                                Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
                                     @Override
                                     public int compare(Person lhs, Person rhs) {
                                         return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
@@ -202,8 +226,8 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
                                 });
 
-                                images =  BitMapImages(people);
-                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
+                                images =  BitMapImages(StaffFragment.this.people);
+                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, StaffFragment.this.people);
 
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override

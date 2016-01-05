@@ -90,9 +90,8 @@ public class PersonModel extends Model {
             person.setPhoto(p.photo);
 
             //Base64 encode the thumbnailData
-            Base64 bs = new Base64();
-            String s  =   new String((byte[])bs.decode(p.thumbnailDataa), "UTF-8");
-            person.setThumbnailData(s);
+
+            person.setThumbnailData(p.thumbnailDataa);
 
             //Add to list of people
             peopleList.add(person);
