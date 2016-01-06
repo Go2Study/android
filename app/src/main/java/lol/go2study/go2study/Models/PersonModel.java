@@ -30,7 +30,7 @@ public class PersonModel extends Model {
     @Column(name = "lastName")
     public String lastName;
 
-    @Column(name = "pcn" ,unique = true)
+    @Column(name = "pcn" ,unique = true,onUniqueConflict = Column.ConflictAction.IGNORE, index =  true)
     public String pcn;
 
     @Column(name = "office")

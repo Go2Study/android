@@ -64,7 +64,6 @@ public class UsersFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewUsers);
         Log.v("test","test");
-        //images =  BitMapImages(people);
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, users);
         staffListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -88,7 +87,8 @@ public class UsersFragment extends android.support.v4.app.Fragment {
         final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewUsers);
 
         try {
-            UserModel.deleteAll();
+
+            //UserModel.deleteAll();
             UsersFragment.this.users = UserModel.getAllUsers();
             if(users == null || users.size() == 0)
             {
@@ -125,12 +125,10 @@ public class UsersFragment extends android.support.v4.app.Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                swipeContainer.setRefreshing(true);
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
                     if (WelcomeActivity.isLoggedIn(accessJSON)) {
                         try {
-
-
 
                             UsersCallbacks usersCallbacks = new UsersCallbacks();
                             UsersCallbacks.GetUsersCallBack getUsersCallBack = usersCallbacks.new GetUsersCallBack();
@@ -146,7 +144,7 @@ public class UsersFragment extends android.support.v4.app.Fragment {
 
                             UsersFragment.this.users = usersCallbacks.userList;
 
-                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, UsersFragment.this.users);
+                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, UsersFragment.this.users);
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -213,16 +211,16 @@ public class UsersFragment extends android.support.v4.app.Fragment {
 
 
             if (p != null) {
-                TextView tt1 = (TextView) v.findViewById(R.id.nameTextView);
-                TextView tt2 = (TextView) v.findViewById(R.id.roomTextView);
+                TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
+                TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
                 ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
                 if (tt1 != null) {
-                    tt1.setText(p.getDisplayName());
+                    tt1.setText(p.getFirstName());
                 }
 
                 if (tt2 != null) {
-                    tt2.setText(p.getEmail().toString());
+                    tt2.setText(p.getPcn());
                 }
                 if(image != null)
                 {

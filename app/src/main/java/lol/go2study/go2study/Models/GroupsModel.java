@@ -49,7 +49,7 @@ public class GroupsModel extends Model {
     public static List<Group> getAllGroups() throws UnsupportedEncodingException, DecoderException {
         List<GroupsModel> groupFromDB = new Select()
                 .from(GroupsModel.class)
-                .orderBy("firstName ASC")
+                .orderBy("id ASC")
                 .execute();
 
         //Create List<Person> using the Fontys Person model and return it

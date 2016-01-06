@@ -27,7 +27,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
@@ -45,8 +47,9 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     protected List<Bitmap> images;
     private SwipeRefreshLayout swipeContainer;
     private PeopleApi peopleApi;
-    SharedPreferences pref;
-    ListView staffListView;
+    private SharedPreferences pref;
+    private YourRecyclerAdapter adapter;
+    private  ListView staffListView;
     private OAuthSettings settings;
     private View rootView;
 
@@ -58,7 +61,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     private List<Bitmap> BitMapImages(List<Person> personList)
     {
         List<byte[]> listOfImages = new ArrayList<>();
-        Log.v("People list size", String.valueOf(personList.size()));
+
         for (Person p :personList) {
             byte[] data = null;
             try {
@@ -86,13 +89,16 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewStaff);
-        Log.v("test","test");
+        Log.v("test", "test");
+        Set<Person> hs = new HashSet<>();
+        hs.addAll(people);
+        people.clear();
+        people.addAll(hs);
         images =  BitMapImages(people);
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, people);
-        final List<Person> finalPeopleFromFontys = people;
+
+        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, people);
         staffListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-       // adapter.refreshEvents(finalPeopleFromFontys);
+        //adapter.refreshEvents(people);
         staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
     }
@@ -110,10 +116,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-        //PersonModel.deleteAll();
+       // PersonModel.deleteAll();
         try {
 
-            StaffFragment.this.people = PersonModel.getAllPeople();
+            people = PersonModel.getAllPeople();
+            Log.v("People list size", String.valueOf(people.size()));
             if(people == null || people.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
@@ -126,10 +133,10 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                             long timestampNow = System.currentTimeMillis();
                             while (peopleCallback.people == null || peopleCallback.people.isEmpty()) {
                                 if (System.currentTimeMillis() - timestampNow >= 6000l) {
-                                     swipeContainer.setRefreshing(false);
+                                     //swipeContainer.setRefreshing(false);
                                 }
                             }
-                            StaffFragment.this.people = peopleCallback.people;
+                            people = peopleCallback.people;
 
 
                         } catch (ApiException e) {
@@ -143,9 +150,6 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         } catch (UnsupportedEncodingException | DecoderException e) {
             e.printStackTrace();
         }
-
-
-
 
         staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -183,7 +187,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                     }
                                 }
 
-                                StaffFragment.this.people = peopleCallback.people;
+                                people = peopleCallback.people;
                                 staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -199,16 +203,16 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                     }
                                 });
 
-                                Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
+                               /* Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
                                     @Override
                                     public int compare(Person lhs, Person rhs) {
                                         return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
                                     }
 
-                                });
+                                });*/
 
                                 images =  BitMapImages(StaffFragment.this.people);
-                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, StaffFragment.this.people);
+                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, StaffFragment.this.people);
 
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
@@ -273,10 +277,10 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             if (p != null) {
                 TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
                 TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
-                ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaff);  //for the image
+                ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaffUser);  //for the image
 
                 if (tt1 != null) {
-                    tt1.setText(p.getDisplayName());
+                    tt1.setText(p.getGivenName() + "," + p.getSurName() + "," + p.getInitials());
                 }
 
                 if (tt2 != null) {

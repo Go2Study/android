@@ -25,9 +25,7 @@ import lol.go2study.go2study.MyDBHandler;
 public class PeopleCallback implements Callback {
 
     public List<Person> people;
-    private MyDBHandler dbHandler;
-
-
+    private List<PersonModel> personModels;
 
     @Override
         public void onFailure(Request request, IOException e) {
@@ -40,8 +38,9 @@ public class PeopleCallback implements Callback {
                 try {
                     people = new ArrayList<>();
                     String responseRaw = response.body().string();
-                    //List<PersonModel> people = new ArrayList<>();
                     people = (List<Person>) ApiInvoker.deserialize(responseRaw, "list", Person.class);
+                    personModels =new ArrayList<>();
+
 
                     //Cache in SQlite
                     ActiveAndroid.beginTransaction();
@@ -50,7 +49,9 @@ public class PeopleCallback implements Callback {
                         for (Person p: people) {
 
                             PersonModel person = new PersonModel(p);
+                            personModels.add(person);
                             person.save();
+
                         }
                         ActiveAndroid.setTransactionSuccessful();
                     }

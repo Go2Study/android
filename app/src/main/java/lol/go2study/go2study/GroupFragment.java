@@ -50,7 +50,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewGroups);
         Log.v("test", "test");
         //images =  BitMapImages(people);
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, groups);
+        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, groups);
         staffListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
@@ -71,7 +71,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewGroups);
 
         try {
-            GroupsModel.deleteAll();
+            //GroupsModel.deleteAll();
             GroupFragment.this.groups = GroupsModel.getAllGroups();
             if(groups == null || groups.size() == 0)
             {
@@ -129,7 +129,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                             GroupFragment.this.groups = getGroupsCallback.groupsList;
 
 
-                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_groupadd, GroupFragment.this.groups);
+                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, GroupFragment.this.groups);
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -193,8 +193,8 @@ public class GroupFragment extends android.support.v4.app.Fragment {
 
 
             if (p != null) {
-                TextView tt1 = (TextView) v.findViewById(R.id.nameTextView);
-                TextView tt2 = (TextView) v.findViewById(R.id.roomTextView);
+                TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
+                TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
                 ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
                 if (tt1 != null) {

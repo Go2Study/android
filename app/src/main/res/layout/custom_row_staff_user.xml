@@ -10,7 +10,7 @@
     >
 
     <ImageView
-        android:id="@+id/rowImageViewStaff"
+        android:id="@+id/rowImageViewStaffUser"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="10dp"
@@ -26,8 +26,8 @@
         android:text="dummy text"
         android:textColor="#000"
         android:textSize="16dp"
-        android:layout_alignTop="@+id/rowImageViewStaff"
-        android:layout_toEndOf="@+id/rowImageViewStaff"
+        android:layout_alignTop="@+id/rowImageViewStaffUser"
+        android:layout_toEndOf="@+id/rowImageViewStaffUser"
         android:layout_marginTop="8dp" />
 
     <TextView
@@ -39,7 +39,7 @@
         android:textColor="#000"
         android:textSize="12dp"
         android:layout_below="@+id/nameTextViewStaff"
-        android:layout_toEndOf="@+id/rowImageViewStaff" />
+        android:layout_toEndOf="@+id/rowImageViewStaffUser" />
 
     <ImageView
     android:layout_width="30dp"

@@ -22,7 +22,7 @@ import Go2Study.Models.User;
 @Table(name = "Users")
 public class UserModel extends Model {
 
-    @Column(name = "pcn",unique = true,onUniqueConflict = Column.ConflictAction.IGNORE)
+    @Column(name = "pcn", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
     private String pcn = null;
 
     @Column(name = "firstName")
@@ -30,8 +30,6 @@ public class UserModel extends Model {
 
     @Column(name = "lastName")
     private String lastName = null;
-
-
 
     @Column(name = "className")
     private String className = null;
@@ -51,7 +49,6 @@ public class UserModel extends Model {
         this.pcn = u.getPcn();
         this.firstName = u.getFirstName();
         this.lastName = u.getLastName();
-      //  this.displayName = u.getDisplayName();
         this.className = u.getClassName();
         this.email = u.getEmail();
 
@@ -74,9 +71,6 @@ public class UserModel extends Model {
           //  user.setDisplayName(u.displayName);
             user.setClassName(u.className);
             user.setEmail(u.email);
-
-
-            //Base64 encode the thumbnailData
 
             //Add to list of people
             userList.add(user);
