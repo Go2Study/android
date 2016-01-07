@@ -1,6 +1,7 @@
 package lol.go2study.go2study.CallBack;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -36,15 +37,18 @@ public class UsersCallbacks  {
                 try {
                     userList = (List<User>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw, "list", User.class);
 
-                    ActiveAndroid.beginTransaction();
+
                     try {
+                        ActiveAndroid.beginTransaction();
+                        if(userList != null || !userList.isEmpty() || userList.size() > 0) {
+                            new Delete().from(UserModel.class).execute();
+                            for (User user : userList) {
 
-                        for (User user: userList) {
+                                UserModel userModel = new UserModel(user);
 
-                            UserModel userModel = new UserModel(user);
+                                userModel.save();
 
-                            userModel.save();
-
+                            }
                         }
                         ActiveAndroid.setTransactionSuccessful();
                     }

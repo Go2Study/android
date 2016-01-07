@@ -3,6 +3,7 @@ package lol.go2study.go2study.CallBack;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import Go2Study.Models.Group;
 import lol.go2study.go2study.Models.GroupModel;
+import lol.go2study.go2study.Models.UserModel;
 
 /**
  * Created by Todor on 1/4/2016.
@@ -32,14 +34,17 @@ public class GroupsCallbacks {
                 String responseRaw = response.body().string();
                 try {
                     groupsList = (List<Group>) Go2Study.Invoker.ApiInvoker.deserialize(responseRaw,"list",Group.class);
-                    ActiveAndroid.beginTransaction();
+
                     try {
+                        ActiveAndroid.beginTransaction();
+                        if(groupsList != null || !groupsList.isEmpty() || groupsList.size() > 0) {
+                            new Delete().from(GroupModel.class).execute();
+                            for (Group group : groupsList) {
 
-                        for (Group group: groupsList) {
+                                GroupModel groupsModel = new GroupModel(group);
+                                groupsModel.save();
 
-                            GroupModel groupsModel = new GroupModel(group);
-                            groupsModel.save();
-
+                            }
                         }
                         ActiveAndroid.setTransactionSuccessful();
                     }

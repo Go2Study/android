@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -48,6 +49,7 @@ public class PeopleCallback implements Callback {
 
                         if(people != null || !people.isEmpty() || people.size() > 0){
                             ActiveAndroid.beginTransaction();
+
                             for (Person p: people) {
 
                                 PersonModel personModel = new PersonModel(p);

@@ -194,12 +194,14 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                 TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
               //  ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
-                if (tt1 != null) {
+                if (tt1 != null && tt2 != null) {
                     tt1.setText(p.getName());
-                }
-
-                if (tt2 != null) {
                     tt2.setText(p.getPcnlist().toString());
+                }
+                else
+                {
+                    Log.v("Error", "");
+                    tt2.setText("");
                 }
             }
             return v;

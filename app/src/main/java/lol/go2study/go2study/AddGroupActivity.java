@@ -84,7 +84,7 @@ public class AddGroupActivity extends AppCompatActivity
 
                 try {
                     if(pcnList.size() > 0) {
-                        groupsApi.groupsPost(postNewGroupCallBack,nameOfGroup, pcnList, description);
+                        groupsApi.groupsPost(postNewGroupCallBack,nameOfGroup, pcnList);
                         Toast.makeText(getBaseContext(),pcnList.toString(),Toast.LENGTH_SHORT).show();
 
                     }

@@ -17,14 +17,15 @@ import Go2Study.Models.Group;
  * Created by Todor on 1/5/2016.
  */
 
-@Table(name = "Group")
+@Table(name = "GroupTable")
 public class GroupModel extends Model {
 
-    @Column(name = "id",unique = true,onUniqueConflict = Column.ConflictAction.IGNORE, index =  true)
+    @Column(name = "Group_id", index =  true)
     private String id = null;
 
     @Column(name = "name")
     private String name = null;
+
 
     @Column(name = "pcnlist")
     private List<String> pcnlist = null;
@@ -44,7 +45,7 @@ public class GroupModel extends Model {
     public static List<Group> getAllGroups() throws UnsupportedEncodingException, DecoderException {
         List<GroupModel> groupFromDB = new Select()
                 .from(GroupModel.class)
-               // .orderBy("id ASC")
+                .orderBy("name ASC")
                 .execute();
 
         //Create List<Person> using the Fontys Person model and return it

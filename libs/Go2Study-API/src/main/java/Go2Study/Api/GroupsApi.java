@@ -115,10 +115,9 @@ public class GroupsApi {
    * 
    * @param name Name of group/event
    * @param pcnlist List of pcn numbers
-   * @param description Description of event.
    * @return void
    */
-   public void  groupsPost (Callback callback, String name, List<String> pcnlist, String description) throws ApiException { {
+   public void  groupsPost (Callback callback, String name, List<String> pcnlist) throws ApiException { {
     Object postBody = null;
     
     // verify the required parameter 'name' is set
@@ -182,7 +181,6 @@ public class GroupsApi {
       // normal form params
       formBody = new FormEncodingBuilder()
       .add("name", ApiInvoker.parameterToString(name))
-      .add("description", ApiInvoker.parameterToString(description))
       .add("pcnlist", ApiInvoker.parameterToString(pcnlist))
       
         .build();
