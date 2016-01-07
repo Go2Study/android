@@ -39,7 +39,6 @@ public class PersonModel extends Model {
     @Column(name = "email")
     public String email;
 
-
     @Column(name = "department")
     public String department;
 
@@ -63,6 +62,7 @@ public class PersonModel extends Model {
         this.lastName = p.getSurName();
         this.pcn = p.getId();
         this.email = p.getMail();
+        this.mobileNumber =  p.getMobileNumber();
         this.office = p.getOffice();
         this.department = p.getDepartment();
         this.photo = p.getPhoto();
@@ -83,7 +83,7 @@ public class PersonModel extends Model {
             Person person = new Person();
             person.setGivenName(p.firstName);
             person.setSurName(p.lastName);
-            // person.setTelephoneNumber(p.telephoneNumber);
+            person.setMobileNumber(p.mobileNumber);
             person.setMail(p.email);
             person.setOffice(p.office);
             person.setDepartment(p.department);

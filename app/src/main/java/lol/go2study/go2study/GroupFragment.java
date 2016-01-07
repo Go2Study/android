@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,10 +20,8 @@ import Go2Study.Models.Group;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import Go2Study.Api.GroupsApi;
-import Go2Study.Models.User;
 import lol.go2study.go2study.CallBack.GroupsCallbacks;
-import lol.go2study.go2study.CallBack.UsersCallbacks;
-import lol.go2study.go2study.Models.GroupsModel;
+import lol.go2study.go2study.Models.GroupModel;
 
 
 
@@ -71,8 +68,8 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewGroups);
 
         try {
-            //GroupsModel.deleteAll();
-            GroupFragment.this.groups = GroupsModel.getAllGroups();
+            //GroupModel.deleteAll();
+            GroupFragment.this.groups = GroupModel.getAllGroups();
             if(groups == null || groups.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
@@ -195,7 +192,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
             if (p != null) {
                 TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
                 TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
-                ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
+              //  ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
                 if (tt1 != null) {
                     tt1.setText(p.getName());

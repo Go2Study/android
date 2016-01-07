@@ -43,24 +43,27 @@ public class PeopleCallback implements Callback {
 
 
                     //Cache in SQlite
-                    ActiveAndroid.beginTransaction();
+
                     try {
 
-                        for (Person p: people) {
+                        if(people != null || !people.isEmpty() || people.size() > 0){
+                            ActiveAndroid.beginTransaction();
+                            for (Person p: people) {
 
-                            PersonModel person = new PersonModel(p);
-                            personModels.add(person);
-                            person.save();
+                                PersonModel personModel = new PersonModel(p);
+                                //personModels.add(personModel);
+                                personModel.save();
 
+                            }
+                            ActiveAndroid.setTransactionSuccessful();
                         }
-                        ActiveAndroid.setTransactionSuccessful();
-                    }
-                    finally {
+
+                    } finally {
                         ActiveAndroid.endTransaction();
                     }
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
             }
         }
 }

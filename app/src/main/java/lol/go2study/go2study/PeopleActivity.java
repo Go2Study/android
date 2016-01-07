@@ -44,12 +44,8 @@ public class  PeopleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people);
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
-        //COLLAPSING
-       // mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        //TABS
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPeople);
         setSupportActionBar(toolbar);
-
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 

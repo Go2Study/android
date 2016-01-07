@@ -94,6 +94,13 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         hs.addAll(people);
         people.clear();
         people.addAll(hs);
+
+         Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
+             @Override
+             public int compare(Person lhs, Person rhs) {
+                 return lhs.getGivenName().compareToIgnoreCase(rhs.getGivenName());
+             }
+        });
         images =  BitMapImages(people);
 
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, people);
@@ -116,7 +123,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
-       // PersonModel.deleteAll();
+        //PersonModel.deleteAll();
         try {
 
             people = PersonModel.getAllPeople();
@@ -188,6 +195,27 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                 }
 
                                 people = peopleCallback.people;
+
+                                images =  BitMapImages(StaffFragment.this.people);
+                                Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
+                                    @Override
+                                    public int compare(Person lhs, Person rhs) {
+                                        return lhs.getGivenName().compareToIgnoreCase(rhs.getGivenName());
+                                    }
+                                });
+                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, StaffFragment.this.people);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        staffListView.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
+                                        staffListView.setItemsCanFocus(false);
+
+                                    }
+                                });
+                                swipeContainer.setRefreshing(false);
+
                                 staffListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -203,28 +231,11 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                     }
                                 });
 
-                               /* Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
-                                    @Override
-                                    public int compare(Person lhs, Person rhs) {
-                                        return lhs.getDisplayName().compareToIgnoreCase(rhs.getDisplayName());
-                                    }
 
-                                });*/
 
-                                images =  BitMapImages(StaffFragment.this.people);
-                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, StaffFragment.this.people);
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        staffListView.setAdapter(adapter);
-                                        adapter.notifyDataSetChanged();
-                                        staffListView.setItemsCanFocus(false);
 
-                                    }
-                                });
 
-                                swipeContainer.setRefreshing(false);
 
                             } catch (ApiException e) {
                                 e.printStackTrace();
@@ -280,7 +291,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaffUser);  //for the image
 
                 if (tt1 != null) {
-                    tt1.setText(p.getGivenName() + "," + p.getSurName() + "," + p.getInitials());
+                    tt1.setText(p.getGivenName() + "," + p.getSurName() + "," + p.getMobileNumber());
                 }
 
                 if (tt2 != null) {

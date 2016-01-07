@@ -5,7 +5,6 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
-import com.google.gson.annotations.SerializedName;
 
 import org.apache.commons.codec.DecoderException;
 
@@ -14,17 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import Go2Study.Models.Group;
 
-import FontysICT.Models.Person;
-import Go2Study.Models.User;
-
 /**
  * Created by Todor on 1/5/2016.
  */
 
-@Table(name = "Users")
-public class GroupsModel extends Model {
+@Table(name = "Group")
+public class GroupModel extends Model {
 
-    @Column(name = "id")
+    @Column(name = "id",unique = true,onUniqueConflict = Column.ConflictAction.IGNORE, index =  true)
     private String id = null;
 
     @Column(name = "name")
@@ -33,12 +29,11 @@ public class GroupsModel extends Model {
     @Column(name = "pcnlist")
     private List<String> pcnlist = null;
 
-    public GroupsModel() {super();}
+    public GroupModel() {super();}
 
 
-    public GroupsModel(Group group) {
+    public GroupModel(Group group) {
         super();
-
         this.id = group.getId();
         this.name = group.getName();
         this.pcnlist = group.getPcnlist();
@@ -47,15 +42,15 @@ public class GroupsModel extends Model {
     }
 
     public static List<Group> getAllGroups() throws UnsupportedEncodingException, DecoderException {
-        List<GroupsModel> groupFromDB = new Select()
-                .from(GroupsModel.class)
-                .orderBy("id ASC")
+        List<GroupModel> groupFromDB = new Select()
+                .from(GroupModel.class)
+               // .orderBy("id ASC")
                 .execute();
 
         //Create List<Person> using the Fontys Person model and return it
         List<Group> groupList = new ArrayList<Group>();
 
-        for (GroupsModel groupsModel: groupFromDB) {
+        for (GroupModel groupsModel: groupFromDB) {
             Group group = new Group();
             group.setId(groupsModel.id);
             group.setName(groupsModel.name);
@@ -69,6 +64,6 @@ public class GroupsModel extends Model {
 
 
     public static void deleteAll() {
-        new Delete().from(GroupsModel.class).execute();
+        new Delete().from(GroupModel.class).execute();
     }
 }

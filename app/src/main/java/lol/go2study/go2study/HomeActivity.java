@@ -81,8 +81,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         groupsApi = new GroupsApi();
         settings = new OAuthSettings();
 
-        GroupsCallbacks groupsCallbacks = new GroupsCallbacks();
-        GroupsCallbacks.GetGroupsCallback getGroupsCallback = groupsCallbacks.new GetGroupsCallback();
+
         UsersCallbacks usersCallbacks = new UsersCallbacks();
         UsersCallbacks.GetUsersCallBack getUsersAppCallBack = usersCallbacks.new GetUsersCallBack();
 
@@ -97,7 +96,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 try {
 
                     userApi.usersGet(getUsersAppCallBack, "");
-                    groupsApi.groupsGet(getGroupsCallback,"");
 
                 } catch (Go2Study.Invoker.ApiException j) {
                     j.printStackTrace();
