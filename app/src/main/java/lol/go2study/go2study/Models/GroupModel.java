@@ -20,7 +20,7 @@ import Go2Study.Models.Group;
 @Table(name = "GroupTable")
 public class GroupModel extends Model {
 
-    @Column(name = "Group_id", index =  true)
+    @Column(name = "Group_id", unique = true,onUniqueConflict = Column.ConflictAction.IGNORE, index =  true)
     private String id = null;
 
     @Column(name = "name")

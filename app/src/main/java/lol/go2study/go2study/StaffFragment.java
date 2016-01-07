@@ -90,10 +90,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewStaff);
         Log.v("test", "test");
-        Set<Person> hs = new HashSet<>();
-        hs.addAll(people);
-        people.clear();
-        people.addAll(hs);
+
 
          Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
              @Override

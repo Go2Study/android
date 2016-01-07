@@ -196,7 +196,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
 
                 if (tt1 != null && tt2 != null) {
                     tt1.setText(p.getName());
-                    tt2.setText(p.getPcnlist().toString());
+//                    tt2.setText(p.getPcnlist().toString());
                 }
                 else
                 {
