@@ -23,19 +23,19 @@ import Go2Study.Models.User;
 public class UserModel extends Model {
 
     @Column(name = "pcn", unique = true, onUniqueConflict = Column.ConflictAction.IGNORE)
-    private String pcn = null;
+    public String pcn = null;
 
     @Column(name = "firstName")
-    private String firstName = null;
+    public String firstName = null;
 
     @Column(name = "lastName")
-    private String lastName = null;
+    public String lastName = null;
 
     @Column(name = "className")
-    private String className = null;
+    public String className = null;
 
     @Column(name = "email")
-    private String email = null;
+    public String email = null;
 
 
 

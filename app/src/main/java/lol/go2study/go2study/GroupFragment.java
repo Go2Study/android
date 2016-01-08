@@ -2,9 +2,11 @@ package lol.go2study.go2study;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,10 +48,9 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewGroups);
         Log.v("test", "test");
-        //images =  BitMapImages(people);
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, groups);
         staffListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
     }
@@ -66,10 +67,19 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainerGroups);
         final ListView staffListView = (ListView)rootView.findViewById(R.id.listViewGroups);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.flbtn_addNewURL);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              Intent  intent = new Intent(getActivity(), AddGroupActivity.class);
+                getActivity().startActivity(intent);
+
+            }
+        });
 
         try {
             //GroupModel.deleteAll();
-            GroupFragment.this.groups = GroupModel.getAllGroups();
+            groups = GroupModel.getAllGroups();
             if(groups == null || groups.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
@@ -86,7 +96,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                                     // swipeContainer.setRefreshing(false);
                                 }
                             }
-                            GroupFragment.this.groups = getGroupsCallback.groupsList;
+                            groups = getGroupsCallback.groupsList;
 
 
                         }  catch (Go2Study.Invoker.ApiException e) {
@@ -123,7 +133,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                                     // swipeContainer.setRefreshing(false);
                                 }
                             }
-                            GroupFragment.this.groups = getGroupsCallback.groupsList;
+                            groups = getGroupsCallback.groupsList;
 
 
                             final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, GroupFragment.this.groups);
@@ -187,6 +197,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
             }
 
             Group p = getItem(position);
+            Log.v("Group", p.toString());
 
 
             if (p != null) {
@@ -196,7 +207,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
 
                 if (tt1 != null && tt2 != null) {
                     tt1.setText(p.getName());
-//                    tt2.setText(p.getPcnlist().toString());
+                    tt2.setText(p.getPcnlist().toString());
                 }
                 else
                 {

@@ -36,6 +36,10 @@ public class PersonModel extends Model {
     @Column(name = "office")
     public String office;
 
+
+    @Column(name = "displayName")
+    public String displayName;
+
     @Column(name = "email")
     public String email;
 
@@ -61,6 +65,7 @@ public class PersonModel extends Model {
         this.firstName = p.getGivenName();
         this.lastName = p.getSurName();
         this.pcn = p.getId();
+        this.displayName = p.getDisplayName();
         this.email = p.getMail();
         this.mobileNumber =  p.getMobileNumber();
         this.office = p.getOffice();
@@ -83,6 +88,7 @@ public class PersonModel extends Model {
             Person person = new Person();
             person.setGivenName(p.firstName);
             person.setSurName(p.lastName);
+            person.setDisplayName(p.displayName);
             person.setMobileNumber(p.mobileNumber);
             person.setMail(p.email);
             person.setOffice(p.office);

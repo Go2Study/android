@@ -92,17 +92,13 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         Log.v("test", "test");
 
 
-         Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
-             @Override
-             public int compare(Person lhs, Person rhs) {
-                 return lhs.getGivenName().compareToIgnoreCase(rhs.getGivenName());
-             }
-        });
+
         images =  BitMapImages(people);
 
         final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, people);
         staffListView.setAdapter(adapter);
         //adapter.refreshEvents(people);
+        adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
     }
@@ -193,7 +189,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
                                 people = peopleCallback.people;
 
-                                images =  BitMapImages(StaffFragment.this.people);
+                                //images =  BitMapImages(StaffFragment.this.people);
                                 Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
                                     @Override
                                     public int compare(Person lhs, Person rhs) {
@@ -227,12 +223,6 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                                         startActivity(intent);
                                     }
                                 });
-
-
-
-
-
-
 
                             } catch (ApiException e) {
                                 e.printStackTrace();
@@ -288,7 +278,7 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaffUser);  //for the image
 
                 if (tt1 != null) {
-                    tt1.setText(p.getGivenName() + "," + p.getSurName() + "," + p.getMobileNumber());
+                    tt1.setText(p.getDisplayName());
                 }
 
                 if (tt2 != null) {

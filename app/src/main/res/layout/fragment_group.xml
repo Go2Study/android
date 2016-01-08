@@ -1,19 +1,46 @@
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:id="@+id/swipeContainerGroups"
+<RelativeLayout
     android:layout_height="match_parent"
-    tools:context="lol.go2study.go2study.GroupFragment">
+    android:layout_width="match_parent"
+    android:gravity="top"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/swipeContainerGroups"
+            android:layout_height="match_parent"
+            tools:context="lol.go2study.go2study.GroupFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+            <!-- TODO: Update blank fragment layout -->
 
-    <ListView
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listViewGroups"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                 />
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/flbtn_addNewURL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewGroups"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/fab" />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_gravity="right|bottom"
+
+        android:clickable="true"
+
+        android:src="@drawable/settings1"
+        app:elevation="4dp"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
+
+

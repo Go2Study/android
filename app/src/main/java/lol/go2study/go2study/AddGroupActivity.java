@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.google.android.gms.plus.People;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -37,6 +38,8 @@ import Go2Study.Api.GroupsApi;
 import Go2Study.Invoker.ApiException;
 import Go2Study.Models.Group;
 import Go2Study.Models.User;
+import lol.go2study.go2study.CallBack.GroupsCallbacks;
+import lol.go2study.go2study.Models.UserModel;
 
 public class AddGroupActivity extends AppCompatActivity
 {
@@ -46,22 +49,10 @@ public class AddGroupActivity extends AppCompatActivity
    private List<String> pcnList;
     String nameOfGroup;
     String description;
+    GroupsCallbacks groupsCallbacks;
+    GroupsCallbacks.PostGroupCallBack postGroupCallBack;
 
-    public Callback postNewGroupCallBack = new Callback() {
 
-        @Override
-        public void onFailure(Request request, IOException e) {
-            //do something to indicate error
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                //String responseRaw = response.body().string();
-                Log.v(" The response  is is:::", "SUCCESSFULLL POST");
-            }
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,11 +71,9 @@ public class AddGroupActivity extends AppCompatActivity
             case R.id.new_group:
                // newGame();
 
-
-
                 try {
                     if(pcnList.size() > 0) {
-                        groupsApi.groupsPost(postNewGroupCallBack,nameOfGroup, pcnList);
+                        groupsApi.groupsPost(postGroupCallBack,nameOfGroup, pcnList);
                         Toast.makeText(getBaseContext(),pcnList.toString(),Toast.LENGTH_SHORT).show();
 
                     }
@@ -103,12 +92,26 @@ public class AddGroupActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group);
-
+        userList = new ArrayList<>();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNewGroup);
         setSupportActionBar(toolbar);
         groupsApi = new GroupsApi();
+        List<UserModel> dbUsers =  new Select().from(UserModel.class)
+                .orderBy("firstName ASC").limit(100).execute();
 
 
+        for (UserModel model:dbUsers) {
+            User user = new User();
+            user.setFirstName(model.firstName);
+            user.setEmail(model.email);
+            user.setPcn(model.pcn);
+            user.setLastName(model.lastName);
+            user.setClassName(model.className);
+            userList.add(user);
+
+        }
+        groupsCallbacks = new GroupsCallbacks();
+        postGroupCallBack= groupsCallbacks.new PostGroupCallBack();
         pcnList = new ArrayList<>();
 
         //ADD string pcn
@@ -123,7 +126,7 @@ public class AddGroupActivity extends AppCompatActivity
 
       //  usersListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, allUsers));
         usersListView.setAdapter(new YourRecyclerAdapter(this, R.layout.custom_row_groupadd, userList));
-        usersListView.setItemsCanFocus(false);
+        usersListView.setItemsCanFocus(true);
         // we want multiple clicks
         usersListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
@@ -164,7 +167,6 @@ public class AddGroupActivity extends AppCompatActivity
         super(context, resource,userList );
         this.context = context;
         this.userList = userList;
-        // this.bitMapList = HomeActivity.staffImages;
 
 
     }
@@ -186,10 +188,9 @@ public class AddGroupActivity extends AppCompatActivity
         if (p != null) {
             TextView tt1 = (TextView) v.findViewById(R.id.nameTextView);
             TextView tt2 = (TextView) v.findViewById(R.id.roomTextView);
-            ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
             if (tt1 != null) {
-                tt1.setText(p.getDisplayName());
+                tt1.setText(p.getFirstName() + "," + p.getLastName());
             }
 
             if (tt2 != null) {

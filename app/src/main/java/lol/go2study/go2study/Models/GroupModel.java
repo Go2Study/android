@@ -10,6 +10,7 @@ import org.apache.commons.codec.DecoderException;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import Go2Study.Models.Group;
 
@@ -28,7 +29,7 @@ public class GroupModel extends Model {
 
 
     @Column(name = "pcnlist")
-    private List<String> pcnlist = null;
+    private String pcnlist = null;
 
     public GroupModel() {super();}
 
@@ -37,7 +38,7 @@ public class GroupModel extends Model {
         super();
         this.id = group.getId();
         this.name = group.getName();
-        this.pcnlist = group.getPcnlist();
+        this.pcnlist = group.getPcnlist().toString();
 
 
     }
@@ -55,7 +56,8 @@ public class GroupModel extends Model {
             Group group = new Group();
             group.setId(groupsModel.id);
             group.setName(groupsModel.name);
-            group.setPcnlist(groupsModel.pcnlist);
+            List<String> stringList = new ArrayList<String>(Arrays.asList(groupsModel.pcnlist));
+            group.setPcnlist(stringList);
 
             //Add to list of people
             groupList.add(group);

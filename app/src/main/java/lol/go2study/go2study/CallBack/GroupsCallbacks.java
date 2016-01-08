@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 import Go2Study.Models.Group;
+import Go2Study.Models.User;
 import lol.go2study.go2study.Models.GroupModel;
 import lol.go2study.go2study.Models.UserModel;
 
@@ -59,6 +60,25 @@ public class GroupsCallbacks {
             }
 
         }
+
+    }
+
+    public class PostGroupCallBack implements Callback
+    {
+
+            @Override
+            public void onFailure(Request request, IOException e) {
+                //do something to indicate error
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    //String responseRaw = response.body().string();
+                    Log.v(" The response  is is:::", "SUCCESSFULLL POST");
+                }
+            }
+
 
     }
 }
