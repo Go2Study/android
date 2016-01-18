@@ -43,8 +43,6 @@ public class PeopleCallback implements Callback {
                     personModels =new ArrayList<>();
 
 
-                    //Cache in SQlite
-
                     try {
 
                         if(people != null || !people.isEmpty() || people.size() > 0){

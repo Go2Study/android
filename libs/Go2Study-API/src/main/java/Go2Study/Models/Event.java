@@ -20,8 +20,10 @@ public class Event  {
   private String location = null;
   @SerializedName("description")
   private String description = null;
+  @SerializedName("title")
+  private String title;
 
-  
+
   /**
    **/
   @ApiModelProperty(value = "")
@@ -76,6 +78,15 @@ public class Event  {
     this.description = description;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getTitle() {
+    return title;
+  }
+  public void setTitle(String title) {
+    this.title = title;
+  }
   
 
   @Override
@@ -88,6 +99,7 @@ public class Event  {
     sb.append("  endTime: ").append(endTime).append("\n");
     sb.append("  location: ").append(location).append("\n");
     sb.append("  description: ").append(description).append("\n");
+    sb.append("  title: ").append(description).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

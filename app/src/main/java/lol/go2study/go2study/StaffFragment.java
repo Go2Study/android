@@ -8,16 +8,21 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.apache.commons.codec.DecoderException;
@@ -28,13 +33,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import FontysICT.Api.PeopleApi;
 import FontysICT.Invoker.ApiException;
 import FontysICT.Models.Person;
 import lol.go2study.go2study.CallBack.PeopleCallback;
+import lol.go2study.go2study.Models.PersonImage;
 import lol.go2study.go2study.Models.PersonModel;
 
 
@@ -52,14 +60,15 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     private  ListView staffListView;
     private OAuthSettings settings;
     private View rootView;
+    private SearchView searchView;
+    List<PersonImage> newList;
 
     public StaffFragment() {
         // Required empty public constructor
     }
 
 
-    private List<Bitmap> BitMapImages(List<Person> personList)
-    {
+    private List<Bitmap> BitMapImages(List<Person> personList) {
         List<byte[]> listOfImages = new ArrayList<>();
 
         for (Person p :personList) {
@@ -77,7 +86,6 @@ public class StaffFragment extends android.support.v4.app.Fragment {
             }
         }
         List<Bitmap> temp = new ArrayList<>();
-        Log.v("List of IMG Length", String.valueOf(listOfImages.size()));
         for (byte[] b:listOfImages) {
             Bitmap bitmap   = BitmapFactory.decodeByteArray(b, 0, b.length);
             temp.add(bitmap);
@@ -89,18 +97,53 @@ public class StaffFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewStaff);
-        Log.v("test", "test");
-
-
 
         images =  BitMapImages(people);
 
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, people);
+        newList = new ArrayList<>();
+        for(int i = 0; i < people.size();i++)
+        {
+            PersonImage temp = new PersonImage(people.get(i),images.get(i),people.get(i).getDisplayName());
+
+            newList.add(temp);
+        }
+
+
+
+
+        adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, newList);
         staffListView.setAdapter(adapter);
-        //adapter.refreshEvents(people);
         adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
-        swipeContainer.setRefreshing(false);
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+
+        inflater.inflate(R.menu.menu_search,menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView sv = new SearchView(((PeopleActivity) getActivity()).getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, sv);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                System.out.println("search query submit");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -115,12 +158,14 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         final JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
         swipeContainer = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeContainer);
+        setHasOptionsMenu(true);
         staffListView = (ListView)rootView.findViewById(R.id.listViewStaff);
+
+
         //PersonModel.deleteAll();
         try {
 
             people = PersonModel.getAllPeople();
-            Log.v("People list size", String.valueOf(people.size()));
             if(people == null || people.size() == 0)
             {
                 if (accessJSON.length() != 0 && accessToken != null && !accessToken.equals("")) {
@@ -189,14 +234,8 @@ public class StaffFragment extends android.support.v4.app.Fragment {
 
                                 people = peopleCallback.people;
 
-                                //images =  BitMapImages(StaffFragment.this.people);
-                                Collections.sort(StaffFragment.this.people, new Comparator<Person>() {
-                                    @Override
-                                    public int compare(Person lhs, Person rhs) {
-                                        return lhs.getGivenName().compareToIgnoreCase(rhs.getGivenName());
-                                    }
-                                });
-                                final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, StaffFragment.this.people);
+
+                                adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, newList);
 
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
@@ -234,27 +273,21 @@ public class StaffFragment extends android.support.v4.app.Fragment {
         return rootView;
     }
 
-    public  class YourRecyclerAdapter extends ArrayAdapter<Person> {
+    public  class YourRecyclerAdapter extends ArrayAdapter<PersonImage> {
 
         private Context context;
-        private List<Person> people;
+        private List<PersonImage> people;
         private MLRoundedImageView roundedImageView;
 
 
 
-        public YourRecyclerAdapter(Context context, int resource, List<Person> people) {
+        public YourRecyclerAdapter(Context context, int resource, List<PersonImage> people) {
             super(context, resource,people );
             this.context = context;
             this.people = people;
             this.roundedImageView =  new MLRoundedImageView(context);
 
 
-        }
-
-        public void refreshEvents(List<Person> people) {
-            this.people.clear();
-            this.people.addAll(people);
-            notifyDataSetChanged();
         }
 
 
@@ -269,24 +302,24 @@ public class StaffFragment extends android.support.v4.app.Fragment {
                 v = vi.inflate(R.layout.custom_row_staff_user, null);
             }
 
-            Person p = getItem(position);
+            PersonImage p = people.get(position);
 
 
             if (p != null) {
                 TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
                 TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
-                ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaffUser);  //for the image
+                ImageView image = (ImageView)v.findViewById(R.id.rowImageViewStaffUser);
 
                 if (tt1 != null) {
-                    tt1.setText(p.getDisplayName());
+                    tt1.setText(p.getPerson().getDisplayName());
                 }
 
                 if (tt2 != null) {
-                    tt2.setText(p.getOffice().toString());
+                    tt2.setText(p.getPerson().getOffice().toString());
                 }
                 if(image != null)
                 {
-                    Bitmap roundedImage = roundedImageView.getCroppedBitmap(images.get(position),90);
+                    Bitmap roundedImage = roundedImageView.getCroppedBitmap(p.getImage(),90);
                     image.setImageBitmap(roundedImage);
                 }
             }

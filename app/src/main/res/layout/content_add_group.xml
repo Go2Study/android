@@ -2,45 +2,27 @@
 
 <RelativeLayout
     android:layout_width="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_height="fill_parent"
     android:weightSum="1"
-    
     xmlns:android="http://schemas.android.com/apk/res/android">
 
         <!--Put form controls here-->
 
-
-        <EditText
-            android:id="@+id/EditTextName"
-            android:layout_height="50dp"
-            android:hint="Group Name"
-            android:inputType="textPersonName"
-            android:layout_width="310dp"
-            android:layout_marginTop="53dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
-        </EditText>
-        <EditText
-            android:id="@+id/EditDescription"
-            android:layout_height="50dp"
-            android:hint="Description"
-            android:inputType="textEmailAddress"
-            android:layout_width="371dp"
-            android:layout_below="@+id/EditTextName"
-            android:layout_alignParentStart="true"
-            android:layout_alignEnd="@+id/EditTextName">
-        </EditText>
+    <LinearLayout
+        android:background="#ba68c8"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:id="@+id/linearlayout"
+        android:orientation="horizontal">
+    </LinearLayout>
 
     <ListView
-            android:layout_width="match_parent"
-            android:layout_height="178dp"
-            android:id="@+id/listViewAddGroup"
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:id="@+id/listViewAddGroup"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/EditDescription"
-        android:layout_alignParentBottom="true">
-
-
-        </ListView>
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/linearlayout" />
 
 </RelativeLayout>

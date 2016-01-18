@@ -37,6 +37,9 @@ public class UserModel extends Model {
     @Column(name = "email")
     public String email = null;
 
+    @Column(name = "photo")
+    public String photo = null;
+
 
 
 
@@ -51,6 +54,7 @@ public class UserModel extends Model {
         this.lastName = u.getLastName();
         this.className = u.getClassName();
         this.email = u.getEmail();
+        this.photo = u.getPhoto();
 
 
     }
@@ -71,6 +75,7 @@ public class UserModel extends Model {
           //  user.setDisplayName(u.displayName);
             user.setClassName(u.className);
             user.setEmail(u.email);
+            user.setPhoto(u.photo);
 
             //Add to list of people
             userList.add(user);

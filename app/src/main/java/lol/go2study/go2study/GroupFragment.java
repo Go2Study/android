@@ -7,13 +7,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.apache.commons.codec.DecoderException;
@@ -37,7 +42,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
     private GroupsApi groupsApi;
     private OAuthSettings settings;
     private SwipeRefreshLayout swipeContainer;
-
+    private   YourRecyclerAdapter adapter;
     public GroupFragment() {
         // Required empty public constructor
     }
@@ -48,11 +53,39 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         ListView  staffListView = (ListView) view.findViewById(R.id.listViewGroups);
         Log.v("test", "test");
-        final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, groups);
+        adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, groups);
         staffListView.setAdapter(adapter);
         //adapter.notifyDataSetChanged();
         staffListView.setItemsCanFocus(false);
         swipeContainer.setRefreshing(false);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView sv = new SearchView(((PeopleActivity) getActivity()).getSupportActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, sv);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                System.out.println("search query submit");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -62,6 +95,8 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
         pref = this.getActivity().getSharedPreferences("TokenPref", Context.MODE_PRIVATE);
         settings = new OAuthSettings();
+        setHasOptionsMenu(true);
+
         groupsApi = new GroupsApi();
         final JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         final String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
@@ -71,7 +106,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent  intent = new Intent(getActivity(), AddGroupActivity.class);
+              Intent  intent = new Intent(getActivity(), GroupActivity.class);
                 getActivity().startActivity(intent);
 
             }
@@ -136,7 +171,7 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                             groups = getGroupsCallback.groupsList;
 
 
-                            final YourRecyclerAdapter adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, GroupFragment.this.groups);
+                             adapter = new YourRecyclerAdapter(getContext(), R.layout.custom_row_staff_user, GroupFragment.this.groups);
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -178,12 +213,6 @@ public class GroupFragment extends android.support.v4.app.Fragment {
 
         }
 
-        public void refreshEvents(List<Group> groups) {
-            this.groups.clear();
-            this.groups.addAll(groups);
-            notifyDataSetChanged();
-        }
-
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -196,14 +225,13 @@ public class GroupFragment extends android.support.v4.app.Fragment {
                 v = vi.inflate(R.layout.custom_row_staff_user, null);
             }
 
-            Group p = getItem(position);
+            Group p = groups.get(position);
             Log.v("Group", p.toString());
 
 
             if (p != null) {
                 TextView tt1 = (TextView) v.findViewById(R.id.nameTextViewStaff);
                 TextView tt2 = (TextView) v.findViewById(R.id.roomTextViewStaff);
-              //  ImageView image = (ImageView)v.findViewById(R.id.rowImageView);  //for the image
 
                 if (tt1 != null && tt2 != null) {
                     tt1.setText(p.getName());

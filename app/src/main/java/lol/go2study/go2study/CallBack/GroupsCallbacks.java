@@ -74,8 +74,8 @@ public class GroupsCallbacks {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    //String responseRaw = response.body().string();
-                    Log.v(" The response  is is:::", "SUCCESSFULLL POST");
+                    String responseRaw = response.body().string();
+                    Log.v(" The response  is is:::", responseRaw);
                 }
             }
 

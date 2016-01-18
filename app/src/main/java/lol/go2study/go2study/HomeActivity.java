@@ -12,10 +12,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -24,22 +26,18 @@ import com.squareup.okhttp.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import FontysICT.Api.PeopleApi;
+import FontysICT.Api.PictureApi;
+import FontysICT.Api.ScheduleApi;
 import FontysICT.Invoker.ApiException;
-import FontysICT.Invoker.ApiInvoker;
-import FontysICT.Models.Person;
 import Go2Study.Api.GroupsApi;
 import Go2Study.Api.UsersApi;
-import Go2Study.Models.Group;
-import Go2Study.Models.User;
-import lol.go2study.go2study.CallBack.GroupsCallbacks;
+import lol.go2study.go2study.CallBack.FontysScheduleCallback;
 import lol.go2study.go2study.CallBack.UsersCallbacks;
+import lol.go2study.go2study.Models.ScheduleItemModel;
 import lol.go2study.go2study.androidchat.ChatMainActivity;
 
 
@@ -48,22 +46,69 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private UsersApi userApi;
-
+    private static Bitmap bitmap;
     private PeopleApi peopleApi;
     private OAuthSettings settings;
     private GroupsApi groupsApi;
-    SharedPreferences pref;
-
+    private SharedPreferences pref;
+    private String firstName;
+    private String lastName;
+    private PictureApi pictureApi;
+    private ScheduleApi scheduleApi;
+    ImageView imageView;
+    private String pcn;
+    private MLRoundedImageView roundedImageView;
+    private final String SIZE = "Large";
 
     public static List<Bitmap> staffImages;
 
+
+    private  Callback pictureCallback = new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            if (response.isSuccessful()) {
+                byte[] responseRaw = response.body().bytes();
+                //Bitmap bitmap = BitmapFactory.decodeStream( (byte[])response.body().bytes());
+               // Bitmap bitmap = BitmapFactory.decodeStream((InputStream) responseRaw.());
+                //bmp=BitmapFactory.decodeByteArray(  (byte[])responseRaw, 0,   ((byte[]) responseRaw).length);
+               // byte[] bite = responseRaw("UTF-8");
+                bitmap = BitmapFactory.decodeByteArray(responseRaw, 0, responseRaw.length);
+               // Bitmap bitmap = BitmapFactory.decodeStream((InputStream) responseRaw);
+                Log.v("IMAAGE", bitmap.toString());
+             final    Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitmap,90);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(roundedImage);
+                    }
+                });
+
+
+
+            }
+            else{
+                Log.v("TOTOTO","TOTOTO");
+            }
+
+        }
+    };
+    private String className;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
+        pictureApi = new PictureApi();
+
+        this.roundedImageView =  new MLRoundedImageView(this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout1);
@@ -75,19 +120,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View view = navigationView.getHeaderView(0);
+        TextView fName = (TextView)view.findViewById(R.id.firstNameTextView);
+        TextView sName = (TextView)view.findViewById(R.id.secondNameTextView);
+        imageView = (ImageView)view.findViewById(R.id.imageView);
+        Bundle extras = getIntent().getExtras();
+
+        if(extras != null){
+            firstName =  extras.getString("firstName");
+            lastName = extras.getString("lastName");
+            pcn = extras.getString("pcn");
+            className = extras.getString("className");
+
+        }
+        Log.v("PCN", pcn + SIZE);
+
+        fName.setText(firstName);
+        sName.setText(lastName );
+
         //API clients
         peopleApi = new PeopleApi();
-        userApi = new UsersApi();
-        groupsApi = new GroupsApi();
+        userApi = new UsersApi(); // For getting all the latest information about the users
+        groupsApi = new GroupsApi(); // For getting groups information
         settings = new OAuthSettings();
+        scheduleApi = new ScheduleApi(); // For obtaining the schedule information from Fontys
 
 
         UsersCallbacks usersCallbacks = new UsersCallbacks();
         UsersCallbacks.GetUsersCallBack getUsersAppCallBack = usersCallbacks.new GetUsersCallBack();
+        FontysScheduleCallback fontysScheduleCallback = new FontysScheduleCallback();
 
         //Initialize shared preferences, used for storing the access token and other authorizations
         pref = this.getSharedPreferences("TokenPref", MODE_PRIVATE);
         staffImages = new ArrayList<>();
+
         //Add button event click to redirect to Fontys oAuth webpage
         JSONObject accessJSON = settings.getAccessTokenJSONFromSharedPreferences(pref);
         String accessToken = settings.getAccessTokenFromSharedPreferences(pref);
@@ -96,15 +162,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 try {
 
                     userApi.usersGet(getUsersAppCallBack, "");
+                    pictureApi.pictureImage(accessToken, pictureCallback, pcn, SIZE);
+
+                    // Clear the schedule db cache and get new one
+                    ScheduleItemModel.deleteAll();
+                    scheduleApi.scheduleForQuery(accessToken, fontysScheduleCallback,"class","ei14", 31, true, null, false, false);
+
 
                 } catch (Go2Study.Invoker.ApiException j) {
                     j.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
                 }
             }
         }
-
-
-
     }
 
     @Override
@@ -153,8 +224,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else if (id == R.id.navigation_itemCALENDAR) {
-           // intent = new Intent(this, CalendarActivity.class);
-            //startActivity(intent);
+           intent = new Intent(this, CalendarActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.navigation_itemMESSAGING) {
             intent = new Intent(this, ChatMainActivity.class);

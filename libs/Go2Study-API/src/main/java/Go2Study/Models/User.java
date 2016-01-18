@@ -2,6 +2,7 @@ package Go2Study.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 
 @ApiModel(description = "")
-public class User  {
+public class User implements Serializable {
   
   @SerializedName("pcn")
   private String pcn = null;
@@ -36,7 +37,7 @@ public class User  {
   @SerializedName("schedule")
   private List<Object> schedule = null;
   @SerializedName("photo")
-  private Object photo = null;
+  private String photo = null;
   @SerializedName("minStartTime")
   private String minStartTime = null;
   @SerializedName("maxEndTime")
@@ -164,10 +165,10 @@ public class User  {
   /**
    **/
   @ApiModelProperty(value = "")
-  public Object getPhoto() {
+  public String getPhoto() {
     return photo;
   }
-  public void setPhoto(Object photo) {
+  public void setPhoto(String photo) {
     this.photo = photo;
   }
 

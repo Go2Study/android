@@ -26,32 +26,24 @@ public class PersonModel extends Model {
     // If name is omitted, then the field name is used.
     @Column(name = "firstName")
     public String firstName;
-
     @Column(name = "lastName")
     public String lastName;
-
     @Column(name = "pcn" ,unique = true,onUniqueConflict = Column.ConflictAction.IGNORE, index =  true)
     public String pcn;
-
     @Column(name = "office")
     public String office;
-
-
     @Column(name = "displayName")
     public String displayName;
-
+    @Column(name = "personalTitle")
+    public String personalTitle;
     @Column(name = "email")
     public String email;
-
     @Column(name = "department")
     public String department;
-
     @Column(name = "mobileNumber")
     public String mobileNumber;
-
     @Column(name = "photo")
     public String photo;
-
     @Column(name = "thumbnailDataa")
     public String thumbnailDataa;
 
@@ -73,6 +65,7 @@ public class PersonModel extends Model {
         this.photo = p.getPhoto();
         this.mobileNumber = p.getMobileNumber();
         this.thumbnailDataa = p.getThumbnailData();
+        this.personalTitle = p.getPersonalTitle();
         //this.telephoneNumber = p.getTelephoneNumber();
     }
 
@@ -96,6 +89,7 @@ public class PersonModel extends Model {
             person.setId(p.pcn);
             person.setPhoto(p.photo);
             person.setThumbnailData(p.thumbnailDataa);
+            person.setPersonalTitle(p.personalTitle);
 
             //Add to list of people
             peopleList.add(person);

@@ -72,21 +72,16 @@ public class MyDBHandler extends  SQLiteOpenHelper  {
     }
 
 
-    public void AddPerson(JSONObject person) {
+    public void AddPerson(Person person) {
         ContentValues values = new ContentValues();
-        try {
-            values.put("pcn", person.getString("id"));
-            values.put("firstName", person.getString("givenName"));
-            values.put("lastName", person.getString("surName"));
-            values.put("email", person.getString("mail"));
+
+            values.put("pcn", person.getId());
+            values.put("firstName", person.getGivenName());
+            values.put("lastName", person.getSurName());
+            values.put("email", person.getMail());
             SQLiteDatabase db = getWritableDatabase();
             db.insert(TABLE_PEOPLE, null, values);
             db.close();
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void savePeople(List<Person> people){

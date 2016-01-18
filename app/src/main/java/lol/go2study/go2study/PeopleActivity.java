@@ -77,7 +77,7 @@ public class  PeopleActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
         // Retrieve the SearchView and plug it into SearchManager
@@ -86,6 +86,7 @@ public class  PeopleActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+*/
 
 
 
@@ -128,3 +129,13 @@ public class  PeopleActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+
+

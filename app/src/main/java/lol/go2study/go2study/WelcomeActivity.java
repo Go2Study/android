@@ -38,7 +38,7 @@ public class WelcomeActivity extends AppCompatActivity  {
     private OAuthSettings settings;
     SharedPreferences pref;
     private List<User> userList;
-    private JSONObject person;
+    private Person person;
     private GroupsApi groupsApi;
     private PeopleApi peopleApi; // Fontys
     private UsersApi usersApi; // Go2Study db
@@ -53,27 +53,6 @@ public class WelcomeActivity extends AppCompatActivity  {
 
     // CALLBACK METHODS
 
-    public Callback GetScheduleCallBack = new Callback() {
-        @Override
-        public void onFailure(Request request, IOException e) {
-
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            if (response.isSuccessful()) {
-                // If it's response from Fontys
-                String responseRaw = response.body().string();
-                try {
-                    user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
-                    Log.v("USERR::::",user.toString());
-
-                } catch (Go2Study.Invoker.ApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
 
 
@@ -88,7 +67,6 @@ public class WelcomeActivity extends AppCompatActivity  {
          public void onResponse(Response response) throws IOException {
 
              if (response.isSuccessful()) {
-                 // If it's response from Fontys
                  String responseRaw = response.body().string();
                  try {
                      user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
@@ -114,18 +92,14 @@ public class WelcomeActivity extends AppCompatActivity  {
             if (response.isSuccessful()) {
                 // If it's response from Fontys
                 String responseRaw = response.body().string();
+
                 try {
-
-                    JSONObject responseJSON = new JSONObject(responseRaw);
-                    if (responseJSON.getString("initials") != null) {
-                        person = responseJSON;
-                        dbHandler.AddPerson(person);
-                        Log.v("DEGUGGG:::",dbHandler.getPerson().toString());
-                    }
-
-                }  catch (JSONException e) {
+                    person = (Person) FontysICT.Invoker.ApiInvoker.deserialize(responseRaw,"",Person.class);
+                } catch (ApiException e) {
                     e.printStackTrace();
                 }
+                dbHandler.AddPerson(person);
+                        Log.v("DEGUGGG:::",person.toString());
             }
         }
     };
@@ -176,17 +150,20 @@ public class WelcomeActivity extends AppCompatActivity  {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-                        if (isExistingUser(person.getString("id"))) {
+                        if (isExistingUser(person.getId())) {
                             //Home
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                            Intent intent = new Intent(WelcomeActivity.this,HomeActivity.class);
+                            intent.putExtra("firstName", user.getFirstName());
+                            intent.putExtra("lastName", user.getLastName());
+                            intent.putExtra("pcn", user.getPcn());
+                            intent.putExtra("className",user.getClassName());
+                            startActivity(intent);
                         } else {
                             //CreateUserActivity
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -195,8 +172,7 @@ public class WelcomeActivity extends AppCompatActivity  {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (this.getIntent()!=null && this.getIntent().getData()!=null) {
             Uri uri = getIntent().getData();
@@ -217,18 +193,18 @@ public class WelcomeActivity extends AppCompatActivity  {
             if (isLoggedIn(accessJSON)) {
                 try {
                     if (isValidAccessToken(accessToken)) {
-                        if (isExistingUser(person.getString("id")) ) {
-                            startActivity(new Intent(WelcomeActivity.this, HomeActivity.class));
+                        if (isExistingUser(person.getId()) ) {
+                            Intent intent = new Intent(WelcomeActivity.this,HomeActivity.class);
+                            intent.putExtra("firstName", user.getFirstName());
+                            intent.putExtra("lastName", user.getLastName());
+                            intent.putExtra("pcn", user.getPcn());
+                            startActivity(intent);
                         } else {
                             startActivity(new Intent(WelcomeActivity.this, CreateUserActivity.class));
                         }
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-                catch(JSONException q)
-                {
-                    q.printStackTrace();
                 }
             }
         }

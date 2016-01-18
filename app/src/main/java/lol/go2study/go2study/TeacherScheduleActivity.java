@@ -34,8 +34,9 @@ import FontysICT.Models.Schedule;
 import FontysICT.Models.ScheduleItem;
 import Go2Study.Models.Event;
 import lol.go2study.go2study.Models.ScheduleItemModel;
+import lol.go2study.go2study.Models.TeacherScheduleItemModel;
 
-public class CalendarActivity extends AppCompatActivity implements WeekView.MonthChangeListener,
+public class TeacherScheduleActivity extends AppCompatActivity implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener {
 
     //UI
@@ -46,7 +47,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_WEEK_VIEW;
     private WeekView mWeekView;
-    List<Event> schedule;
+    List<ScheduleItem> schedule;
 
     //FONTYS SCHEDULE
 
@@ -56,27 +57,20 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        Intent intent = getIntent();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarCalendar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fabEvent);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, CreateEventActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Get data from DB
         try {
-            schedule = ScheduleItemModel.getAllScheduleItems();
+            Bundle extras = getIntent().getExtras();
+            String teacherAbr = extras.getString("teacherAbr");
+            schedule = TeacherScheduleItemModel.getScheduleItemsForTeacher(teacherAbr);
         } catch (UnsupportedEncodingException | DecoderException e) {
             e.printStackTrace();
         }
-        Log.v("SCHEDUKLE",schedule.toString());
+        Log.v("SCHEDUKLE", schedule.toString());
 
         //UI
         mWeekView= (WeekView) findViewById(R.id.weekView);
@@ -178,9 +172,9 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-        for (Event item : schedule) {
-            String dateStringStart = item.getStartTime();
-            String dateStringEnd = item.getEndTime();
+        for (ScheduleItem item : schedule) {
+            String dateStringStart = item.getStart();
+            String dateStringEnd = item.getEnd();
             Date convertedStart = new Date();
             Date convertedEnd = new Date();
             try {
@@ -189,8 +183,6 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Log.v("Hours", String.valueOf(convertedStart.getHours()));
-            Log.v("Minutes", String.valueOf(convertedStart.getMinutes()));
 
             // Start time date -> Calendar
             Calendar start = Calendar.getInstance();
@@ -204,8 +196,8 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
             int month = (start).get(Calendar.MONTH);
             // Only show the events for this year and month
             if (year == newYear && month+1 == newMonth){
-
-                WeekViewEvent event = new WeekViewEvent(item.getId(), item.getTitle() + " " + item.getDescription(), start, end);
+                int randomID = 1 + (int)(Math.random() * 1000);
+                WeekViewEvent event = new WeekViewEvent(randomID, item.getSubject() + ", "+ item.getRoom(), start, end);
                 int color = Color.argb(255, 240, 100, 100);
                 event.setColor(color);
                 events.add(event);
@@ -220,11 +212,11 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-       // Toast.makeText(CalendarActivity.this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(CalendarActivity.this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-       // Toast.makeText(CalendarActivity.this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
+        // Toast.makeText(CalendarActivity.this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android Week View</string>
+    <string name="app_name"></string>
     <string name="title_activity_create_user">CreateUser</string>
 
     <!-- Strings related to Settings -->
@@ -14,6 +14,14 @@
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
+
+
+
+    <string name="Complete">Complete</string>
+    <string name="Error">Error</string>
+    <string name="Upload">Confirm</string>
+
+
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
 
@@ -62,7 +70,7 @@
     <string name="action_week_view">Week view</string>
     <string name="title_activity_people2">PeopleActivity2</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
-    <string name="title_activity_add_group">AddGroupActivity</string>
+    <string name="title_activity_add_group"></string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_test">TEST</string>
     <string name="title_activity_chat">ChatActivity</string>
@@ -100,4 +108,11 @@
     <string name="ptr_release_to_refresh">ptr_release_to_refresh</string>
     <string name="ptr_refreshing">ptr_refreshing</string>
     <string name="ptr_last_updated">ptr_last_updated</string>
+    <string name="hint_email">hint_email</string>
+    <string name="hint_name">hint_name</string>
+    <string name="hint_description">hint_description</string>
+    <string name="Description">Description</string>
+    <string name="Name">Name</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="title_activity_teacher_schedule">TeacherScheduleActivity</string>
 </resources>
