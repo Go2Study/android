@@ -74,12 +74,12 @@ public class UsersFragment extends android.support.v4.app.Fragment {
                 }
                 else
                 {
-                    Drawable d = getResources().getDrawable(R.drawable.profile);
+                  /*  Drawable d = getResources().getDrawable(R.drawable.profile);
                     Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] bitmapData = stream.toByteArray();
-                    listOfImages.add(bitmapData);
+                    listOfImages.add(bitmapData);*/
                 }
             }
             catch (Exception e){
@@ -313,11 +313,11 @@ public class UsersFragment extends android.support.v4.app.Fragment {
 
                 if(image != null)
                 {
-                    Bitmap bitmap = images.get(position);
+                 /*   Bitmap bitmap = images.get(position);
                     if(  bitmap != null) {
                          Bitmap roundedImage = roundedImageView.getCroppedBitmap(images.get(position), 90);
                         image.setImageBitmap(roundedImage);
-                    }
+                    }*/
                 }
 
             }

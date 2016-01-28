@@ -98,10 +98,9 @@ public class CreateGroupFragment extends android.support.v4.app.Fragment {
                 for (int j = 0; j < parent.getChildCount(); j++)
                     parent.getChildAt(j).setBackgroundColor(Color.TRANSPARENT);
 
-                view.setBackgroundColor(Color.RED);
-                itemPosition = position;
+             //   view.setBackgroundColor(Color.parseColor("#C66B6B"));
 
-                //view.setSelected(true);
+
                 //GET user and PCN to list
                 User t = (User) parent.getItemAtPosition(position);
                 pcnList.add(t.getPcn());
@@ -125,12 +124,12 @@ public class CreateGroupFragment extends android.support.v4.app.Fragment {
         LinearLayout ll = (LinearLayout)view.findViewById(R.id.linearlayout);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT,0.5f);
-        lp.setMargins(-10, 0, -5, 0);
+        lp.setMargins(0, 0, 0, 0);
 
         ImageView  image = new ImageView(getContext());
         image.setPadding(10,10,10,10);
         Drawable myDrawable = getResources().getDrawable(
-                    R.drawable.logo);
+                    R.drawable.profile);
 
         image.setImageDrawable(myDrawable);
         image.setScaleType(ImageView.ScaleType.FIT_START);
@@ -179,8 +178,6 @@ public class CreateGroupFragment extends android.support.v4.app.Fragment {
         private Context context;
         private List<User> userList;
         private MLRoundedImageView roundedImageView;
-        List<Bitmap> bitMapList = new ArrayList<>();
-        private int selectedItem = -1;
 
 
         public YourRecyclerAdapter(Context context, int resource, List<User> userList) {

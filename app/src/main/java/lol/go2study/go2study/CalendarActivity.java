@@ -12,13 +12,10 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-
 import org.apache.commons.codec.DecoderException;
-
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,11 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
-
-import FontysICT.Api.ScheduleApi;
-import FontysICT.Models.Schedule;
-import FontysICT.Models.ScheduleItem;
 import Go2Study.Models.Event;
 import lol.go2study.go2study.Models.ScheduleItemModel;
 
@@ -49,9 +41,6 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Mont
     List<Event> schedule;
 
     //FONTYS SCHEDULE
-
-    // public Callback GetSchedulecCallBack = new CallBack
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

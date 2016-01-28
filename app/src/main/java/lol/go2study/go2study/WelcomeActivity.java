@@ -70,8 +70,6 @@ public class WelcomeActivity extends AppCompatActivity  {
                  String responseRaw = response.body().string();
                  try {
                      user = (User)ApiInvoker.deserialize(responseRaw,"",User.class);
-                     Log.v("USERR::::",user.toString());
-
                  } catch (Go2Study.Invoker.ApiException e) {
                      e.printStackTrace();
                  }
@@ -157,6 +155,7 @@ public class WelcomeActivity extends AppCompatActivity  {
                             intent.putExtra("lastName", user.getLastName());
                             intent.putExtra("pcn", user.getPcn());
                             intent.putExtra("className",user.getClassName());
+
                             startActivity(intent);
                         } else {
                             //CreateUserActivity

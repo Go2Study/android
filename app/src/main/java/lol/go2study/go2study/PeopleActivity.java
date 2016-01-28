@@ -1,6 +1,7 @@
 package lol.go2study.go2study;
 
 import android.app.SearchManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,6 +17,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Toast;
+
 import Go2Study.Api.UsersApi;
 
 /**
@@ -23,19 +26,13 @@ import Go2Study.Api.UsersApi;
  */
 
 public class  PeopleActivity extends AppCompatActivity {
-    // Need this to link with the Snackbar
     private CoordinatorLayout mCoordinator;
-    //Need this to set the title of the app bar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    // private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-
+    private final int nmTabs = 3;
     private ViewPager mPager;
     private PagerAdapter mAdapter;
     private TabLayout mTabLayout;
-    private UsersApi userApi;
-    private int[] icons = {R.drawable.people, R.drawable.calendar, R.drawable.g2slogo};
+    private static int[] icons = {R.drawable.people, R.drawable.calendar, R.drawable.g2slogo};
 
 
     @Override
@@ -59,37 +56,40 @@ public class  PeopleActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mPager);
 
 
-        for (int i = 0;i< mTabLayout.getTabCount();i++) {
+     /*   for (int i = 0;i< mTabLayout.getTabCount();i++) {
             switch (i) {
                 case 0:
-                    mTabLayout.getTabAt(i).setIcon(R.drawable.message);
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.userphoto);
                     break;
                 case 1:
-                    mTabLayout.getTabAt(i).setIcon(R.drawable.logo);
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.teacher);
                     break;
                 case 2:
-                    mTabLayout.getTabAt(i).setIcon(R.drawable.settings1);
+                    mTabLayout.getTabAt(i).setIcon(R.drawable.group);
                     break;
             }
-        }
+        }*/
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        userApi = new UsersApi();
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor("#330033"));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+          //      tab.getCustomView().setBackgroundColor(Color.parseColor("#330033"));
+                //mTabLayout.getTabAt(tab.getPosition()).().setBackgroundColor(Color.parseColor("#000099"));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
-
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        // Retrieve the SearchView and plug it into SearchManager
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        return true;
-    }
-*/
-
-
-
 
 
     class PagerAdapter extends FragmentStatePagerAdapter {
@@ -117,18 +117,27 @@ public class  PeopleActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return nmTabs;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "";
+
+            switch (position) {
+                case 0:
+                   return  "USERS";
+                case 1:
+                    return "TEACHERS";
+
+                case 2:
+                   return  "GROUPS";
 
         }
+            return  null;
 
     }
 
-}
+}}
 
 
 

@@ -59,7 +59,7 @@ public class CreateUserActivity extends AppCompatActivity {
     private static Bitmap Image = null;
     private static Bitmap rotateImage = null;
 
-
+    private String className;
 
 
 
@@ -164,8 +164,9 @@ public class CreateUserActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Spinner classSpinner = (Spinner)findViewById(R.id.classesSelector);
-                String className = classSpinner.getSelectedItem().toString();
+                 className = classSpinner.getSelectedItem().toString();
                 Person p = dbHandler.getPerson();
+
                 //Log.v("PersonModel from DB:", p.toString());
                 try {
                    // UsersApi apiUser = new UsersApi();

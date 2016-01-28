@@ -73,12 +73,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         public void onResponse(Response response) throws IOException {
             if (response.isSuccessful()) {
                 byte[] responseRaw = response.body().bytes();
-                //Bitmap bitmap = BitmapFactory.decodeStream( (byte[])response.body().bytes());
-               // Bitmap bitmap = BitmapFactory.decodeStream((InputStream) responseRaw.());
-                //bmp=BitmapFactory.decodeByteArray(  (byte[])responseRaw, 0,   ((byte[]) responseRaw).length);
-               // byte[] bite = responseRaw("UTF-8");
+
                 bitmap = BitmapFactory.decodeByteArray(responseRaw, 0, responseRaw.length);
-               // Bitmap bitmap = BitmapFactory.decodeStream((InputStream) responseRaw);
                 Log.v("IMAAGE", bitmap.toString());
              final    Bitmap roundedImage = roundedImageView.getCroppedBitmap(bitmap,90);
                 runOnUiThread(new Runnable() {
@@ -87,14 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         imageView.setImageBitmap(roundedImage);
                     }
                 });
-
-
-
             }
-            else{
-                Log.v("TOTOTO","TOTOTO");
-            }
-
         }
     };
     private String className;
@@ -166,6 +155,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     // Clear the schedule db cache and get new one
                     ScheduleItemModel.deleteAll();
+
                     scheduleApi.scheduleForQuery(accessToken, fontysScheduleCallback,"class","ei14", 31, true, null, false, false);
 
 
@@ -197,11 +187,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -218,8 +204,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = null;
 
         if (id == R.id.navigation_itemHOME) {
-            // Handle the camera action
-        } else if (id == R.id.navigation_itemPEOPLE) {
+
+        }
+        else if (id == R.id.navigation_itemPEOPLE) {
             intent = new Intent(this, PeopleActivity.class);
             startActivity(intent);
 
@@ -237,4 +224,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
